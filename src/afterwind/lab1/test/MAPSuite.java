@@ -1,8 +1,11 @@
 package afterwind.lab1.test;
 
+import org.junit.runner.RunWith;
+
+@RunWith(org.junit.runners.Suite.class)
 @org.junit.runners.Suite.SuiteClasses({
         SectionTest.class,
         CandidateTest.class
 })
-public class Suite {
+public class MAPSuite {
 }

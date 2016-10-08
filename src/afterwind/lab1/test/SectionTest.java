@@ -37,16 +37,16 @@ public class SectionTest {
     public void controllerTest() {
         SectionController controller = new SectionController();
         Section c1 = new Section(5, "Info", 100);
-        controller.addSection(c1);
-        Assert.assertEquals("Failed to save a section to repository through controller", c1, controller.getSection(5));
+        controller.add(c1);
+        Assert.assertEquals("Failed to save a section to repository through controller", c1, controller.get(5));
         Section c2 = new Section(6, "Mate", 20);
-        controller.addSection(c2);
-        Assert.assertEquals("Failed to save a section to repository through controller", c2, controller.getSection(6));
+        controller.add(c2);
+        Assert.assertEquals("Failed to save a section to repository through controller", c2, controller.get(6));
 
-        controller.removeSection(5);
-        Assert.assertEquals("Failed to remove a section from repository through controller", null, controller.getSection(5));
-        Assert.assertEquals("Failed to remove a section from repository through controller", c2, controller.getSection(6));
-        controller.removeSection(c2);
-        Assert.assertEquals("Failed to remove a section from repository through controller", null, controller.getSection(6));
+        controller.remove(5);
+        Assert.assertEquals("Failed to remove a section from repository through controller", null, controller.get(5));
+        Assert.assertEquals("Failed to remove a section from repository through controller", c2, controller.get(6));
+        controller.remove(c2);
+        Assert.assertEquals("Failed to remove a section from repository through controller", null, controller.get(6));
     }
 }

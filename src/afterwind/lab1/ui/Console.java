@@ -53,7 +53,7 @@ public class Console {
             print("Nu exista candidati!");
         } else {
             print(String.format("%3s | %20s | %15s | %15s", "ID", "Nume", "Telefon", "Adresa"));
-            for (Candidate c : candidateController.getCandidates()) {
+            for (Candidate c : candidateController.getData()) {
                 if (c != null) {
                     print(c.toString());
                 }
@@ -70,7 +70,7 @@ public class Console {
             print("Nu exista sectii!");
         } else {
             print(String.format("%3s | %20s | %5s", "ID", "Nume", "Numar locuri"));
-            for (Section s : sectionController.getSections()) {
+            for (Section s : sectionController.getData()) {
                 if (s != null) {
                     print(s.toString());
                 }
@@ -100,7 +100,7 @@ public class Console {
             print("Adresa invalida!");
             return;
         }
-        candidateController.addCandidate(new Candidate(candidateController.getNextId(), name, tel, address));
+        candidateController.add(new Candidate(candidateController.getNextId(), name, tel, address));
     }
 
     /**
@@ -121,7 +121,7 @@ public class Console {
             return;
         }
         nrLoc = Integer.parseInt(nrLoc_string);
-        sectionController.addSection(new Section(sectionController.getNextId(), name, nrLoc));
+        sectionController.add(new Section(sectionController.getNextId(), name, nrLoc));
     }
 
     /**
@@ -135,11 +135,11 @@ public class Console {
             return;
         }
         int id = Integer.parseInt(id_string);
-        if (candidateController.getCandidate(id) == null) {
+        if (candidateController.get(id) == null) {
             print("Candidatul cu id-ul dat nu exista!");
             return;
         }
-        candidateController.removeCandidate(id);
+        candidateController.remove(id);
     }
 
     /**
@@ -153,11 +153,11 @@ public class Console {
             return;
         }
         int id = Integer.parseInt(id_string);
-        if (sectionController.getSection(id) == null) {
+        if (sectionController.get(id) == null) {
             print("Sectiunea cu id-ul dat nu exista!");
             return;
         }
-        sectionController.removeSection(id);
+        sectionController.remove(id);
     }
 
     /**
@@ -171,7 +171,7 @@ public class Console {
             return;
         }
         int id = Integer.parseInt(id_string);
-        Candidate candidate = candidateController.getCandidate(id);
+        Candidate candidate = candidateController.get(id);
         if (candidate == null) {
             print("Candidatul cu id-ul dat nu exista!");
             return;
@@ -209,7 +209,7 @@ public class Console {
             return;
         }
         int id = Integer.parseInt(id_string);
-        Section section = sectionController.getSection(id);
+        Section section = sectionController.get(id);
         if (section == null) {
             print("Sectiunea cu id-ul dat nu exista!");
             return;

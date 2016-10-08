@@ -41,16 +41,16 @@ public class CandidateTest {
     public void controllerTest() {
         CandidateController controller = new CandidateController();
         Candidate c1 = new Candidate(10, "Sergiu", "000111222", "Kappa");
-        controller.addCandidate(c1);
-        Assert.assertEquals("Failed to save a candidate to repository through controller", c1, controller.getCandidate(10));
+        controller.add(c1);
+        Assert.assertEquals("Failed to save a candidate to repository through controller", c1, controller.get(10));
         Candidate c2 = new Candidate(11, "Victor", "000111222", "Kappa");
-        controller.addCandidate(c2);
-        Assert.assertEquals("Failed to save a candidate to repository through controller", c2, controller.getCandidate(11));
+        controller.add(c2);
+        Assert.assertEquals("Failed to save a candidate to repository through controller", c2, controller.get(11));
 
-        controller.removeCandidate(10);
-        Assert.assertEquals("Failed to remove a candidate from repository through controller", null, controller.getCandidate(10));
-        Assert.assertEquals("Failed to remove a candidate from repository through controller", c2, controller.getCandidate(11));
-        controller.removeCandidate(c2);
-        Assert.assertEquals("Failed to remove a candidate from repository through controller", null, controller.getCandidate(11));
+        controller.remove(10);
+        Assert.assertEquals("Failed to remove a candidate from repository through controller", null, controller.get(10));
+        Assert.assertEquals("Failed to remove a candidate from repository through controller", c2, controller.get(11));
+        controller.remove(c2);
+        Assert.assertEquals("Failed to remove a candidate from repository through controller", null, controller.get(11));
     }
 }
