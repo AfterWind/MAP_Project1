@@ -1,6 +1,5 @@
 package afterwind.lab1.controller;
 
-import afterwind.lab1.repository.Repository;
 import afterwind.lab1.entity.Section;
 
 /**
@@ -9,6 +8,9 @@ import afterwind.lab1.entity.Section;
  */
 public class SectionController extends AbstractController<Section> {
 
+    /**
+     * Constructor pentru SectionController
+     */
     public SectionController() {
         super(Section.class);
     }

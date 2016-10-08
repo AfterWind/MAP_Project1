@@ -7,6 +7,10 @@ import afterwind.lab1.entity.Candidate;
  * Folosita pentru schimbul de informatii dintre Repository si UI
  */
 public class CandidateController extends AbstractController<Candidate> {
+
+    /**
+     * Constructor pentru CandidateController
+     */
     public CandidateController() {
         super(Candidate.class);
     }

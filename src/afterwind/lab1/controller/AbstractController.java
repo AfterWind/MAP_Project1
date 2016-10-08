@@ -6,6 +6,10 @@ import afterwind.lab1.repository.Repository;
 public abstract class AbstractController<T extends IIdentifiable> {
     protected Repository<T> repo;
 
+    /**
+     * Contructor pentru AbstractController
+     * @param clazz tipul de date retinut in Repository-ul din Controller
+     */
     public AbstractController(Class<T> clazz) {
         repo = new Repository<>(clazz);
     }

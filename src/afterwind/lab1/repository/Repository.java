@@ -9,6 +9,10 @@ public class Repository<T extends IIdentifiable> {
     public T[] data;
     protected int size = 0;
 
+    /**
+     * Constructor pentru Repository
+     * @param clazz tipul de date retinut in Repository
+     */
     @SuppressWarnings("unchecked")
     public Repository(Class<T> clazz) {
         data = (T[]) Array.newInstance(clazz, 100);
