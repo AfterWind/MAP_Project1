@@ -1,14 +1,14 @@
 package afterwind.lab1.controller;
 
-import afterwind.lab1.repository.CandidateRepository;
 import afterwind.lab1.entity.Candidate;
+import afterwind.lab1.repository.Repository;
 
 /**
  * Stratul de "Controller" pentru entitatea "Candidate"
  * Folosita pentru schimbul de informatii dintre Repository si UI
  */
 public class CandidateController {
-    private CandidateRepository repo = new CandidateRepository();
+    private Repository<Candidate> repo = new Repository<>(Candidate.class);
 
     /**
      * Adauga un candidat in repository

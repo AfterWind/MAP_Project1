@@ -1,6 +1,6 @@
 package afterwind.lab1.controller;
 
-import afterwind.lab1.repository.SectionRepository;
+import afterwind.lab1.repository.Repository;
 import afterwind.lab1.entity.Section;
 
 /**
@@ -8,7 +8,7 @@ import afterwind.lab1.entity.Section;
  * Folosita pentru schimbul de informatii dintre Repository si UI
  */
 public class SectionController {
-    private final SectionRepository repo = new SectionRepository();
+    private final Repository<Section> repo = new Repository<>(Section.class);
 
     /**
      * Adauga o sectiune in repository

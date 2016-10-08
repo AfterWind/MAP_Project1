@@ -2,7 +2,7 @@ package afterwind.lab1.test;
 
 import afterwind.lab1.entity.Section;
 import afterwind.lab1.controller.SectionController;
-import afterwind.lab1.repository.SectionRepository;
+import afterwind.lab1.repository.Repository;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -21,7 +21,7 @@ public class SectionTest {
 
     @Test
     public void repositoryTest() {
-        SectionRepository repo = new SectionRepository();
+        Repository<Section> repo = new Repository<>(Section.class);
         Section s1 = new Section(5, "Info", 100);
         repo.add(s1);
         Assert.assertEquals("Failed to save a section to repository", s1, repo.get(5));

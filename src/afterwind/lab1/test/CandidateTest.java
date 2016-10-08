@@ -2,7 +2,7 @@ package afterwind.lab1.test;
 
 import afterwind.lab1.entity.Candidate;
 import afterwind.lab1.controller.CandidateController;
-import afterwind.lab1.repository.CandidateRepository;
+import afterwind.lab1.repository.Repository;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -25,7 +25,7 @@ public class CandidateTest {
 
     @Test
     public void repositoryTest() {
-        CandidateRepository repo = new CandidateRepository();
+        Repository<Candidate> repo = new Repository<>(Candidate.class);
         Candidate c1 = new Candidate(10, "Sergiu", "000111222", "Kappa");
         repo.add(c1);
         Assert.assertEquals("Failed to save a candidate to repository" ,c1, repo.get(10));

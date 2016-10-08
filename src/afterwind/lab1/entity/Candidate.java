@@ -3,7 +3,7 @@ package afterwind.lab1.entity;
 /**
  * Clasa pentru a retine si gestiona datele unui candidat
  */
-public class Candidate {
+public class Candidate implements IIdentifiable {
     private int id;
     private String name;
     private String tel;
@@ -35,6 +35,7 @@ public class Candidate {
      * Getter pentru id
      * @return id-ul candidatului
      */
+    @Override
     public int getId() {
         return id;
     }
