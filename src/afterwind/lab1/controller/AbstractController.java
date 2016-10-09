@@ -3,6 +3,8 @@ package afterwind.lab1.controller;
 import afterwind.lab1.entity.IIdentifiable;
 import afterwind.lab1.repository.Repository;
 
+import java.util.List;
+
 public abstract class AbstractController<T extends IIdentifiable> {
     protected Repository<T> repo;
 
@@ -64,7 +66,7 @@ public abstract class AbstractController<T extends IIdentifiable> {
      */
     public int getNextId() {
         int max = -1;
-        for (T e : repo.data) {
+        for (T e : repo.getData()) {
             if (e != null && e.getId() > max) {
                 max = e.getId();
             }
@@ -76,6 +78,6 @@ public abstract class AbstractController<T extends IIdentifiable> {
      * @return vectorul de entitati din repository
      */
     public T[] getData() {
-        return repo.data;
+        return repo.getData();
     }
 }

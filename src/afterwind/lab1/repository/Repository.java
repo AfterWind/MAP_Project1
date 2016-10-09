@@ -6,7 +6,7 @@ import java.lang.reflect.Array;
 
 public class Repository<T extends IIdentifiable> {
 
-    public T[] data;
+    protected T[] data;
     protected int size = 0;
 
     /**
@@ -74,5 +74,12 @@ public class Repository<T extends IIdentifiable> {
             }
         }
         return null;
+    }
+
+    /**
+     * @return vectorul de entitati
+     */
+    public T[] getData() {
+        return data;
     }
 }
