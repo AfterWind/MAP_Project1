@@ -28,6 +28,7 @@ public class SectionTest {
         Section s2 = new Section(6, "Mate", 20);
         repo.add(s2);
         Assert.assertEquals("Failed to save section to repository", s2, repo.get(6));
+        Assert.assertEquals("Failed to get proper size of the repository", 2, repo.getSize());
         repo.remove(s1);
         Assert.assertEquals("Failed to remove section from repository", null, repo.get(5));
         Assert.assertEquals("Failed to remove proper section from repository", s2, repo.get(6));
@@ -42,7 +43,12 @@ public class SectionTest {
         Section c2 = new Section(6, "Mate", 20);
         controller.add(c2);
         Assert.assertEquals("Failed to save a section to repository through controller", c2, controller.get(6));
-
+        Assert.assertEquals("Failed to get proper amount of candidates", 2, controller.getSize());
+        int nextId = controller.getNextId();
+        Assert.assertFalse("Failed to get new unique id", nextId == 10 || nextId == 11);
+        controller.updateSection(c1, "Romana", 200);
+        Assert.assertEquals("Failed to update section", "Romana", c1.getName());
+        Assert.assertEquals("Failed to update section", 200, c1.getNrLoc());
         controller.remove(5);
         Assert.assertEquals("Failed to remove a section from repository through controller", null, controller.get(5));
         Assert.assertEquals("Failed to remove a section from repository through controller", c2, controller.get(6));
