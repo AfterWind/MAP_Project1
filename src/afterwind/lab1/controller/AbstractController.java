@@ -3,8 +3,6 @@ package afterwind.lab1.controller;
 import afterwind.lab1.entity.IIdentifiable;
 import afterwind.lab1.repository.Repository;
 
-import java.util.List;
-
 public abstract class AbstractController<T extends IIdentifiable> {
     protected Repository<T> repo;
 
@@ -51,6 +49,15 @@ public abstract class AbstractController<T extends IIdentifiable> {
      */
     public T get(int id) {
         return repo.get(id);
+    }
+
+    /**
+     * Verifica daca o entitate cu id-ul dat exista
+     * @param id identificatorul unic al entitatii
+     * @return daca entitatea cu id-ul dat exista in repository
+     */
+    public boolean contains(int id) {
+        return repo.contains(id);
     }
 
     /**

@@ -77,6 +77,15 @@ public class Repository<T extends IIdentifiable> {
     }
 
     /**
+     * Verifica daca o entitate cu id-ul dat exista
+     * @param id identificatorul unic al entitatii
+     * @return daca acesta exista in repository
+     */
+    public boolean contains(int id) {
+        return get(id) != null;
+    }
+
+    /**
      * @return vectorul de entitati
      */
     public T[] getData() {
