@@ -142,21 +142,24 @@ public class Console {
             return;
         }
         System.out.print("Dati numarul de locuri al sectiei: ");
-        int nrLoc = scanner.nextInt();
+        int nrLoc = scanner.nextInt(); scanner.nextLine();
         sectionController.add(new Section(sectionController.getNextId(), name, nrLoc));
     }
 
+    /**
+     * Meniul ui pentru adaugarea unei optiuni
+     */
     public void uiAddOption() {
         System.out.print("Dati id-ul candidatului: ");
-        int candidateId = scanner.nextInt();
+        int candidateId = scanner.nextInt(); scanner.nextLine();
         Candidate candidate = candidateController.get(candidateId);
         if (candidate == null) {
             print("Candidatul cu id-ul dat nu exista!");
             return;
         }
 
-        System.out.println("Dati id-ul sectiunii: ");
-        int sectionId = scanner.nextInt();
+        System.out.print("Dati id-ul sectiunii: ");
+        int sectionId = scanner.nextInt(); scanner.nextLine();
         Section section = sectionController.get(sectionId);
         if (section == null) {
             print("Sectiunea cu id-ul dat nu exista!");
@@ -171,7 +174,7 @@ public class Console {
      */
     public void uiDeleteCandidate() {
         System.out.print("Dati id-ul candidatului: ");
-        int id = scanner.nextInt();
+        int id = scanner.nextInt(); scanner.nextLine();
         if (candidateController.get(id) == null) {
             print("Candidatul cu id-ul dat nu exista!");
             return;
@@ -184,7 +187,7 @@ public class Console {
      */
     public void uiDeleteSection() {
         System.out.print("Dati id-ul sectiei: ");
-        int id = scanner.nextInt();
+        int id = scanner.nextInt(); scanner.nextLine();
         if (sectionController.get(id) == null) {
             print("Sectiunea cu id-ul dat nu exista!");
             return;
@@ -197,7 +200,7 @@ public class Console {
      */
     public void uiDeleteOption() {
         System.out.print("Dati id-ul optiunii: ");
-        int id = scanner.nextInt();
+        int id = scanner.nextInt(); scanner.nextLine();
         if (sectionController.contains(id)) {
             print("Optiunea cu id-ul dat nu exista!");
             return;
@@ -210,13 +213,12 @@ public class Console {
      */
     public void uiUpdateCandidate() {
         System.out.print("Dati id-ul candidatului: ");
-        int id = scanner.nextInt();
+        int id = scanner.nextInt(); scanner.nextLine();
         Candidate candidate = candidateController.get(id);
         if (candidate == null) {
             print("Candidatul cu id-ul dat nu exista!");
             return;
         }
-
         System.out.print("Dati numele candidatului: ");
         String name = scanner.nextLine();
         if (name.equals("")) {
@@ -243,7 +245,7 @@ public class Console {
      */
     public void uiUpdateSection() {
         System.out.print("Dati id-ul sectiei: ");
-        int id = scanner.nextInt();
+        int id = scanner.nextInt(); scanner.nextLine();
         Section section = sectionController.get(id);
         if (section == null) {
             print("Sectiunea cu id-ul dat nu exista!");
@@ -256,7 +258,7 @@ public class Console {
             return;
         }
         System.out.print("Dati numarul de locuri al sectiei: ");
-        int nrLoc = scanner.nextInt();
+        int nrLoc = scanner.nextInt(); scanner.nextLine();
         sectionController.updateSection(section, name, nrLoc);
     }
 
@@ -265,14 +267,15 @@ public class Console {
      */
     public void uiUpdateOption() {
         System.out.println("Dati id-ul optiunii: ");
-        int optionId = scanner.nextInt();
+        int optionId = scanner.nextInt(); scanner.nextLine();
         Option option = optionController.get(optionId);
+
         if (option == null) {
             print("Nu exista optiunea cu acel ID");
             return;
         }
         System.out.print("Dati id-ul candidatului: ");
-        int candidateId = scanner.nextInt();
+        int candidateId = scanner.nextInt(); scanner.nextLine();
         Candidate candidate = candidateController.get(candidateId);
         if (candidate == null) {
             print("Candidatul cu id-ul dat nu exista!");
@@ -280,7 +283,7 @@ public class Console {
         }
 
         System.out.println("Dati id-ul sectiunii: ");
-        int sectionId = scanner.nextInt();
+        int sectionId = scanner.nextInt(); scanner.nextLine();
         Section section = sectionController.get(sectionId);
         if (section == null) {
             print("Sectiunea cu id-ul dat nu exista!");
