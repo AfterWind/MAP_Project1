@@ -33,13 +33,13 @@ public class SectionController extends AbstractController<Section> {
      * @return un repository care contine toate datele filtrate
      */
     public Repository<Section> filterByName(String name) {
-        Repository<Section> repo = new Repository<>(Section.class);
-        for (Section s : repo.getData()) {
+        Repository<Section> result = new Repository<>(Section.class);
+        for (Section s : this.repo.getData()) {
             if (s != null && s.getName().startsWith(name)) {
-                repo.add(s);
+                result.add(s);
             }
         }
-        return repo;
+        return result;
     }
 
     /**
@@ -49,14 +49,14 @@ public class SectionController extends AbstractController<Section> {
      * @return un repository care contine toate datele filtrate
      */
     public Repository<Section> filterByNrLoc(int nrLoc, boolean lower) {
-        Repository<Section> repo = new Repository<>(Section.class);
+        Repository<Section> result = new Repository<>(Section.class);
         for (Section s : repo.getData()) {
             if (s != null) {
                 if (lower && s.getNrLoc() <= nrLoc || !lower && s.getNrLoc() >= nrLoc) {
-                    repo.add(s);
+                    result.add(s);
                 }
             }
         }
-        return repo;
+        return result;
     }
 }

@@ -33,4 +33,25 @@ public class CandidateTest {
         Assert.assertEquals("Failed to update candidate", "idk", c1.getAddress());
         Assert.assertEquals("Failed to update candidate", 10, c1.getId());
     }
+
+    @Test
+    public void filterTest() {
+        CandidateController controller = new CandidateController();
+        Candidate c1 = new Candidate(10, "Sergiu", "000111222", "Kappa");
+        Candidate c2 = new Candidate(11, "Andrei", "111", "IDK");
+        Candidate c3 = new Candidate(12, "Vlad", "222", "Task");
+        Candidate c4 = new Candidate(13, "Vlad", "222", "Task");
+        controller.add(c1);
+        controller.add(c2);
+        controller.add(c3);
+        controller.add(c4);
+
+        Repository<Candidate> filter1 = controller.filterByName("Sergiu");
+        Assert.assertTrue(filter1.get(10) == c1);
+        Repository<Candidate> filter2 = controller.filterByTelephone("111");
+        Assert.assertTrue(filter2.get(11) == c2);
+        Repository<Candidate> filter3 = controller.filterByAddress("Task");
+        Assert.assertTrue(filter3.get(12) == c3);
+        Assert.assertTrue(filter3.get(13) == c4);
+    }
 }

@@ -28,4 +28,27 @@ public class SectionTest {
         Assert.assertEquals("Failed to update section", 200, c1.getNrLoc());
         Assert.assertEquals("Failed to update section", 0, c1.getId());
     }
+
+    @Test
+    public void filterTest() {
+        SectionController controller = new SectionController();
+        Section c1 = new Section(1, "Info", 100);
+        Section c2 = new Section(2, "Mate", 100);
+        Section c3 = new Section(3, "Romana", 50);
+        Section c4 = new Section(4, "Marketing", 40);
+        controller.add(c1);
+        controller.add(c2);
+        controller.add(c3);
+        controller.add(c4);
+
+        Repository<Section> filter1 = controller.filterByName("Info");
+        Assert.assertTrue(filter1.get(1) == c1);
+        Repository<Section> filter2 = controller.filterByNrLoc(99, true);
+        Assert.assertTrue(filter2.get(3) == c3);
+        Assert.assertTrue(filter2.get(4) == c4);
+        Repository<Section> filter3 = controller.filterByNrLoc(99, false);
+        Assert.assertTrue(filter3.get(1) == c1);
+        Assert.assertTrue(filter3.get(2) == c2);
+    }
+
 }

@@ -35,13 +35,13 @@ public class CandidateController extends AbstractController<Candidate> {
      * @return un repository care contine toate datele filtrate
      */
     public Repository<Candidate> filterByName(String name) {
-        Repository<Candidate> repo = new Repository<>(Candidate.class);
+        Repository<Candidate> result = new Repository<>(Candidate.class);
         for (Candidate c : repo.getData()) {
             if (c != null && c.getName().startsWith(name)) {
-                repo.add(c);
+                result.add(c);
             }
         }
-        return repo;
+        return result;
     }
 
     /**
@@ -50,13 +50,13 @@ public class CandidateController extends AbstractController<Candidate> {
      * @return un repository care contine toate datele filtrate
      */
     public Repository<Candidate> filterByTelephone(String telephone) {
-        Repository<Candidate> repo = new Repository<>(Candidate.class);
+        Repository<Candidate> result = new Repository<>(Candidate.class);
         for (Candidate c : repo.getData()) {
             if (c != null && c.getTel().startsWith(telephone)) {
-                repo.add(c);
+                result.add(c);
             }
         }
-        return repo;
+        return result;
     }
 
     /**
@@ -65,12 +65,12 @@ public class CandidateController extends AbstractController<Candidate> {
      * @return un repository care contine toate datele filtrate
      */
     public Repository<Candidate> filterByAddress(String address) {
-        Repository<Candidate> repo = new Repository<>(Candidate.class);
+        Repository<Candidate> result = new Repository<>(Candidate.class);
         for (Candidate c : repo.getData()) {
             if (c != null && c.getAddress().startsWith(address)) {
-                repo.add(c);
+                result.add(c);
             }
         }
-        return repo;
+        return result;
     }
 }
