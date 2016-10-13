@@ -14,6 +14,7 @@ public class CandidateController extends AbstractController<Candidate> {
      */
     public CandidateController() {
         super(Candidate.class);
+        repo.setTableHeader(String.format("%3s | %20s | %15s | %15s", "ID", "Nume", "Telefon", "Adresa"));
     }
 
     /**
@@ -41,6 +42,7 @@ public class CandidateController extends AbstractController<Candidate> {
                 result.add(c);
             }
         }
+        result.setTableHeader(repo.getTableHeader());
         return result;
     }
 
@@ -56,6 +58,7 @@ public class CandidateController extends AbstractController<Candidate> {
                 result.add(c);
             }
         }
+        result.setTableHeader(repo.getTableHeader());
         return result;
     }
 
@@ -71,6 +74,12 @@ public class CandidateController extends AbstractController<Candidate> {
                 result.add(c);
             }
         }
+        result.setTableHeader(repo.getTableHeader());
         return result;
+    }
+
+    @Override
+    public String toString() {
+        return repo.toString();
     }
 }

@@ -6,6 +6,7 @@ import java.lang.reflect.Array;
 
 public class Repository<T extends IIdentifiable> {
 
+    protected String tableHeader = "";
     protected T[] data;
     protected int size = 0;
 
@@ -24,6 +25,22 @@ public class Repository<T extends IIdentifiable> {
      */
     public int getSize() {
         return size;
+    }
+
+    /**
+     * Setter pentru tableHeader
+     * @param tableHeader noul tableHeader
+     */
+    public void setTableHeader(String tableHeader) {
+        this.tableHeader = tableHeader;
+    }
+
+    /**
+     * Getter pentru tableHeader
+     * @return tableHeader-ul curent
+     */
+    public String getTableHeader() {
+        return tableHeader;
     }
 
     /**
@@ -90,5 +107,20 @@ public class Repository<T extends IIdentifiable> {
      */
     public T[] getData() {
         return data;
+    }
+
+    @Override
+    public String toString() {
+        String result = "";
+        if (size == 0) {
+            result += "Nu exista entitati!";
+        } else {
+            result += tableHeader + "\n";
+            for (int i = 0; i < size; i++) {
+                if (i != size - 1) result += "\n";
+                result += data[i].toString();
+            }
+        }
+        return result;
     }
 }

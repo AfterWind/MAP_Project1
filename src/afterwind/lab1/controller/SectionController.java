@@ -14,6 +14,7 @@ public class SectionController extends AbstractController<Section> {
      */
     public SectionController() {
         super(Section.class);
+        repo.setTableHeader(String.format("%3s | %20s | %5s", "ID", "Nume", "Numar locuri"));
     }
 
     /**
@@ -39,6 +40,7 @@ public class SectionController extends AbstractController<Section> {
                 result.add(s);
             }
         }
+        result.setTableHeader(repo.getTableHeader());
         return result;
     }
 
@@ -57,6 +59,7 @@ public class SectionController extends AbstractController<Section> {
                 }
             }
         }
+        result.setTableHeader(repo.getTableHeader());
         return result;
     }
 }

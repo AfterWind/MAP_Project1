@@ -7,6 +7,7 @@ import afterwind.lab1.controller.SectionController;
 import afterwind.lab1.entity.Candidate;
 import afterwind.lab1.entity.Option;
 import afterwind.lab1.entity.Section;
+import afterwind.lab1.repository.Repository;
 
 import java.lang.reflect.Method;
 import java.util.HashMap;
@@ -51,6 +52,13 @@ public class Console {
         print("11. Update section");
         print("12. Update option");
 
+        print("13. Filter candidates by name");
+        print("14. Filter candidates by telephone");
+        print("15. Filter candidates by address");
+
+        print("16. Filter sections by name");
+        print("17. Filter sections by nrLoc");
+
         print("0. Exit");
         System.out.print("Choose an option: ");
     }
@@ -59,51 +67,21 @@ public class Console {
      * Afiseaza toti candidatii
      */
     public void uiShowCandidates() {
-        print("The list of candidates: ");
-        if (candidateController.getSize() == 0) {
-            print("Nu exista candidati!");
-        } else {
-            print(String.format("%3s | %20s | %15s | %15s", "ID", "Nume", "Telefon", "Adresa"));
-            for (Candidate c : candidateController.getData()) {
-                if (c != null) {
-                    print(c.toString());
-                }
-            }
-        }
+        print(candidateController.toString());
     }
 
     /**
      * Afiseaza toate sectiunile
      */
     public void uiShowSections() {
-        print("The list of sections: ");
-        if (sectionController.getSize() == 0) {
-            print("Nu exista sectii!");
-        } else {
-            print(String.format("%3s | %20s | %5s", "ID", "Nume", "Numar locuri"));
-            for (Section s : sectionController.getData()) {
-                if (s != null) {
-                    print(s.toString());
-                }
-            }
-        }
+        print(sectionController.toString());
     }
 
     /**
      * Afiseaza toate optiunile
      */
     public void uiShowOptions() {
-        print("The list of options: ");
-        if (optionController.getSize() == 0) {
-            print("Nu exista optiuni!");
-        } else {
-            print(String.format("%3s | %20s | %20s", "ID", "Candidat", "Sectiune"));
-            for (Option o : optionController.getData()) {
-                if (o != null) {
-                    print(o.toString());
-                }
-            }
-        }
+        print(optionController.toString());
     }
 
     /**
@@ -294,6 +272,58 @@ public class Console {
     }
 
     /**
+     * Meniul ui pentru filtrarea candidatilor dupa nume
+     */
+    public void uiFilterCandidatesByName() {
+        System.out.print("Dati numele cautat: ");
+        String name = scanner.nextLine();
+        Repository<Candidate> result = candidateController.filterByName(name);
+        print("Rezultatul filtrarii:\n" + result);
+    }
+
+    /**
+     * Meniul ui pentru filtrarea candidatilor dupa numarul de telefon
+     */
+    public void uiFilterCandidatesByTelephone() {
+        System.out.print("Dati numarul de telefon cautat: ");
+        String tel = scanner.nextLine();
+        Repository<Candidate> result = candidateController.filterByTelephone(tel);
+        print("Rezultatul filtrarii:\n" + result);
+    }
+
+    /**
+     * Meniul ui pentru filtrarea candidatilor dupa adresa
+     */
+    public void uiFilterCandidatesByAddress() {
+        System.out.print("Dati adresa cautata: ");
+        String address = scanner.nextLine();
+        Repository<Candidate> result = candidateController.filterByAddress(address);
+        print("Rezultatul filtrarii:\n" + result);
+    }
+
+    /**
+     * Meniul ui pentru filtrarea sectiilor dupa nume
+     */
+    public void uiFilterSectionsByName() {
+        System.out.print("Dati numele cautat: ");
+        String name = scanner.nextLine();
+        Repository<Section> result = sectionController.filterByName(name);
+        print("Rezultatul filtrarii:\n" + result);
+    }
+
+    /**
+     * Meniul ui pentru filtrarea sectiilor dupa numarul de locuri
+     */
+    public void uiFilterSectionsByNrLoc() {
+        System.out.print("Dati transa de numar de locuri: ");
+        int nrLoc = scanner.nextInt(); scanner.nextLine();
+        System.out.print("Cautam sectii sub sau peste transa (true/false)? ");
+        boolean lower = scanner.nextBoolean();
+        Repository<Section> result = sectionController.filterByNrLoc(nrLoc, lower);
+        print("Rezultatul filtrarii:\n" + result);
+    }
+
+    /**
      * Locul de pornirea a zonei de ui
      */
     public void run() {
@@ -313,6 +343,11 @@ public class Console {
             uis.put(10, this.getClass().getDeclaredMethod("uiUpdateCandidate"));
             uis.put(11, this.getClass().getDeclaredMethod("uiUpdateSection"));
             uis.put(12, this.getClass().getDeclaredMethod("uiUpdateOption"));
+            uis.put(13, this.getClass().getDeclaredMethod("uiFilterCandidatesByName"));
+            uis.put(14, this.getClass().getDeclaredMethod("uiFilterCandidatesByTelephone"));
+            uis.put(15, this.getClass().getDeclaredMethod("uiFilterCandidatesByAddress"));
+            uis.put(16, this.getClass().getDeclaredMethod("uiFilterSectionsByName"));
+            uis.put(17, this.getClass().getDeclaredMethod("uiFilterSectionsByNrLoc"));
         } catch (Exception e) {
             e.printStackTrace();
         }
