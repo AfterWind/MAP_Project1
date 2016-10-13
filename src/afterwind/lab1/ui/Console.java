@@ -370,7 +370,6 @@ public class Console {
                 print("Eroare: Optiune invalida!");
             } catch (Exception ex3) {
                 ex3.printStackTrace();
-                print("eroare");
             }
         }
         print("Goodbye!");

@@ -3,8 +3,9 @@ package afterwind.lab1.repository;
 import afterwind.lab1.entity.IIdentifiable;
 
 import java.lang.reflect.Array;
+import java.time.LocalDateTime;
 
-public class Repository<T extends IIdentifiable> {
+public class Repository<T extends IIdentifiable> implements IRepository<T> {
 
     protected String tableHeader = "";
     protected T[] data;
