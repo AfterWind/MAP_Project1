@@ -6,8 +6,8 @@ import afterwind.lab1.repository.Repository;
 
 import java.util.List;
 
-public abstract class AbstractController<T extends IIdentifiable> {
-    protected IRepository<T> repo = new Repository<T>();
+public abstract class AbstractController<T extends IIdentifiable<Integer>> {
+    protected IRepository<T, Integer> repo = new Repository<>();
 
     /**
      * Adauga o entitate in repository

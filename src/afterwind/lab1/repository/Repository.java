@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-public class Repository<T extends IIdentifiable> implements IRepository<T> {
+public class Repository<T extends IIdentifiable<K>, K> implements IRepository<T, K> {
 
     protected String tableHeader = "";
     protected List<T> data = new ArrayList<>();
@@ -57,7 +57,7 @@ public class Repository<T extends IIdentifiable> implements IRepository<T> {
     public void remove(T e) {
         Iterator<T> it = data.iterator();
         while (it.hasNext()) {
-            if (it.equals(e)) {
+            if (it.next().equals(e)) {
                 it.remove();
                 return;
             }
@@ -70,9 +70,9 @@ public class Repository<T extends IIdentifiable> implements IRepository<T> {
      * @return entitatea cu id-ul dat sau null daca aceasta nu exista
      */
     @Override
-    public T get(int id) {
+    public T get(K id) {
         for (T e : data) {
-            if (e.getId() == id) {
+            if (e.getId().equals(id)) {
                 return e;
             }
         }
@@ -85,7 +85,7 @@ public class Repository<T extends IIdentifiable> implements IRepository<T> {
      * @return daca acesta exista in repository
      */
     @Override
-    public boolean contains(int id) {
+    public boolean contains(K id) {
         return get(id) != null;
     }
 

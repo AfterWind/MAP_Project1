@@ -1,9 +1,9 @@
 package afterwind.lab1.entity;
 
-public interface IIdentifiable {
+public interface IIdentifiable<T> {
 
     /**
      * @return identificatorul unic al entitatii
      */
-    int getId();
+    T getId();
 }

@@ -2,7 +2,7 @@ package afterwind.lab1.repository;
 
 import afterwind.lab1.entity.IIdentifiable;
 
-public interface IRepository<T extends IIdentifiable> {
+public interface IRepository<T extends IIdentifiable<K>, K> {
 
     /**
      * Getter pentru size
@@ -15,14 +15,14 @@ public interface IRepository<T extends IIdentifiable> {
      * @param id id-ul entitatii cautate
      * @return entitatea cu id-ul dat sau null daca aceasta nu exista
      */
-    T get(int id);
+    T get(K id);
 
     /**
      * Verifica daca o entitate cu id-ul dat exista
      * @param id identificatorul unic al entitatii
      * @return daca acesta exista in repository
      */
-    boolean contains(int id);
+    boolean contains(K id);
 
     /**
      * Adauga o entitate in repository

@@ -1,6 +1,7 @@
 package afterwind.lab1.controller;
 
 import afterwind.lab1.entity.Section;
+import afterwind.lab1.repository.IRepository;
 import afterwind.lab1.repository.Repository;
 
 /**
@@ -32,8 +33,8 @@ public class SectionController extends AbstractController<Section> {
      * @param name stringul cu care este comparat numele prin startsWith
      * @return un repository care contine toate datele filtrate
      */
-    public Repository<Section> filterByName(String name) {
-        Repository<Section> result = new Repository<>();
+    public IRepository<Section, Integer> filterByName(String name) {
+        IRepository<Section, Integer> result = new Repository<>();
         for (Section s : repo.getData()) {
             if (s.getName().startsWith(name)) {
                 result.add(s);
@@ -49,8 +50,8 @@ public class SectionController extends AbstractController<Section> {
      * @param lower daca verifica daca e mai mic sau mai mare decat transa
      * @return un repository care contine toate datele filtrate
      */
-    public Repository<Section> filterByNrLoc(int nrLoc, boolean lower) {
-        Repository<Section> result = new Repository<>();
+    public IRepository<Section, Integer> filterByNrLoc(int nrLoc, boolean lower) {
+        IRepository<Section, Integer> result = new Repository<>();
         for (Section s : repo.getData()) {
             if (lower && s.getNrLoc() <= nrLoc || !lower && s.getNrLoc() >= nrLoc) {
                 result.add(s);

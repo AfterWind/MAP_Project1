@@ -1,6 +1,7 @@
 package afterwind.lab1.controller;
 
 import afterwind.lab1.entity.Candidate;
+import afterwind.lab1.repository.IRepository;
 import afterwind.lab1.repository.Repository;
 
 /**
@@ -34,8 +35,8 @@ public class CandidateController extends AbstractController<Candidate> {
      * @param name stringul cu care este comparat numele prin startsWith
      * @return un repository care contine toate datele filtrate
      */
-    public Repository<Candidate> filterByName(String name) {
-        Repository<Candidate> result = new Repository<>();
+    public IRepository<Candidate, Integer> filterByName(String name) {
+        IRepository<Candidate, Integer> result = new Repository<>();
         for (Candidate c : repo.getData()) {
             if (c.getName().startsWith(name)) {
                 result.add(c);
@@ -50,8 +51,8 @@ public class CandidateController extends AbstractController<Candidate> {
      * @param telephone stringul cu care este comparat numele prin startsWith
      * @return un repository care contine toate datele filtrate
      */
-    public Repository<Candidate> filterByTelephone(String telephone) {
-        Repository<Candidate> result = new Repository<>();
+    public IRepository<Candidate, Integer> filterByTelephone(String telephone) {
+        IRepository<Candidate, Integer> result = new Repository<>();
         for (Candidate c : repo.getData()) {
             if (c.getTel().startsWith(telephone)) {
                 result.add(c);
@@ -66,8 +67,8 @@ public class CandidateController extends AbstractController<Candidate> {
      * @param address stringul cu care este comparat numele prin startsWith
      * @return un repository care contine toate datele filtrate
      */
-    public Repository<Candidate> filterByAddress(String address) {
-        Repository<Candidate> result = new Repository<>();
+    public Repository<Candidate, Integer> filterByAddress(String address) {
+        Repository<Candidate, Integer> result = new Repository<>();
         for (Candidate c : repo.getData()) {
             if (c.getAddress().startsWith(address)) {
                 result.add(c);

@@ -1,8 +1,8 @@
 package afterwind.lab1.test;
 
-import afterwind.lab1.entity.Candidate;
 import afterwind.lab1.controller.CandidateController;
-import afterwind.lab1.repository.Repository;
+import afterwind.lab1.entity.Candidate;
+import afterwind.lab1.repository.IRepository;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -11,7 +11,7 @@ public class CandidateTest {
     @Test
     public void entityTest() {
         Candidate c = new Candidate(10, "Sergiu", "000111222", "Kappa");
-        Assert.assertEquals("Failed to get proper ID", 10, c.getId());
+        Assert.assertEquals("Failed to get proper ID", 10, (int) c.getId());
         Assert.assertEquals("Failed to get proper name", "Sergiu", c.getName());
         Assert.assertEquals("Failed to get proper telephone number", "000111222", c.getTel());
         Assert.assertEquals("Failed to get proper address", "Kappa", c.getAddress());
@@ -31,7 +31,7 @@ public class CandidateTest {
         Assert.assertEquals("Failed to update candidate", "Andrei", c1.getName());
         Assert.assertEquals("Failed to update candidate", "111", c1.getTel());
         Assert.assertEquals("Failed to update candidate", "idk", c1.getAddress());
-        Assert.assertEquals("Failed to update candidate", 10, c1.getId());
+        Assert.assertEquals("Failed to update candidate", 10, (int) c1.getId());
     }
 
     @Test
@@ -46,11 +46,11 @@ public class CandidateTest {
         controller.add(c3);
         controller.add(c4);
 
-        Repository<Candidate> filter1 = controller.filterByName("Sergiu");
+        IRepository<Candidate, Integer> filter1 = controller.filterByName("Sergiu");
         Assert.assertTrue(filter1.get(10) == c1);
-        Repository<Candidate> filter2 = controller.filterByTelephone("111");
+        IRepository<Candidate, Integer> filter2 = controller.filterByTelephone("111");
         Assert.assertTrue(filter2.get(11) == c2);
-        Repository<Candidate> filter3 = controller.filterByAddress("Task");
+        IRepository<Candidate, Integer> filter3 = controller.filterByAddress("Task");
         Assert.assertTrue(filter3.get(12) == c3);
         Assert.assertTrue(filter3.get(13) == c4);
     }

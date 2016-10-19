@@ -3,7 +3,7 @@ package afterwind.lab1.entity;
 /**
  * O legatura intre candidat si sectiune
  */
-public class Option implements IIdentifiable {
+public class Option implements IIdentifiable<Integer> {
 
     private int id;
     private Section section;
@@ -58,7 +58,7 @@ public class Option implements IIdentifiable {
      * @return identificatorul unic al optiunii
      */
     @Override
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 

@@ -7,6 +7,7 @@ import afterwind.lab1.controller.SectionController;
 import afterwind.lab1.entity.Candidate;
 import afterwind.lab1.entity.Option;
 import afterwind.lab1.entity.Section;
+import afterwind.lab1.repository.IRepository;
 import afterwind.lab1.repository.Repository;
 
 import java.lang.reflect.Method;
@@ -277,7 +278,7 @@ public class Console {
     public void uiFilterCandidatesByName() {
         System.out.print("Dati numele cautat: ");
         String name = scanner.nextLine();
-        Repository<Candidate> result = candidateController.filterByName(name);
+        IRepository<Candidate, Integer> result = candidateController.filterByName(name);
         print("Rezultatul filtrarii:\n" + result);
     }
 
@@ -287,7 +288,7 @@ public class Console {
     public void uiFilterCandidatesByTelephone() {
         System.out.print("Dati numarul de telefon cautat: ");
         String tel = scanner.nextLine();
-        Repository<Candidate> result = candidateController.filterByTelephone(tel);
+        IRepository<Candidate, Integer> result = candidateController.filterByTelephone(tel);
         print("Rezultatul filtrarii:\n" + result);
     }
 
@@ -297,7 +298,7 @@ public class Console {
     public void uiFilterCandidatesByAddress() {
         System.out.print("Dati adresa cautata: ");
         String address = scanner.nextLine();
-        Repository<Candidate> result = candidateController.filterByAddress(address);
+        IRepository<Candidate, Integer> result = candidateController.filterByAddress(address);
         print("Rezultatul filtrarii:\n" + result);
     }
 
@@ -307,7 +308,7 @@ public class Console {
     public void uiFilterSectionsByName() {
         System.out.print("Dati numele cautat: ");
         String name = scanner.nextLine();
-        Repository<Section> result = sectionController.filterByName(name);
+        IRepository<Section, Integer> result = sectionController.filterByName(name);
         print("Rezultatul filtrarii:\n" + result);
     }
 
@@ -319,7 +320,7 @@ public class Console {
         int nrLoc = scanner.nextInt(); scanner.nextLine();
         System.out.print("Cautam sectii sub sau peste transa (true/false)? ");
         boolean lower = scanner.nextBoolean();
-        Repository<Section> result = sectionController.filterByNrLoc(nrLoc, lower);
+        IRepository<Section, Integer> result = sectionController.filterByNrLoc(nrLoc, lower);
         print("Rezultatul filtrarii:\n" + result);
     }
 

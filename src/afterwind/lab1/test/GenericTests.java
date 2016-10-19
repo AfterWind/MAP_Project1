@@ -3,6 +3,7 @@ package afterwind.lab1.test;
 import afterwind.lab1.controller.SectionController;
 import afterwind.lab1.entity.Candidate;
 import afterwind.lab1.entity.Section;
+import afterwind.lab1.repository.IRepository;
 import afterwind.lab1.repository.Repository;
 import org.junit.Assert;
 import org.junit.Test;
@@ -11,7 +12,7 @@ public class GenericTests {
 
     @Test
     public void repositoryTest() {
-        Repository<Candidate> repo = new Repository<>();
+        IRepository<Candidate, Integer> repo = new Repository<>();
         Candidate c1 = new Candidate(10, "Sergiu", "000111222", "Kappa");
         repo.add(c1);
         Assert.assertEquals("Failed to save an entity to repository" ,c1, repo.get(10));

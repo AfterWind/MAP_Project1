@@ -17,7 +17,7 @@ public class OptionTest {
         Section s2 = new Section(3, "Matematica", 100);
 
         Option o = new Option(0, s1, c2);
-        Assert.assertEquals("Failed to get proper ID", 0, o.getId());
+        Assert.assertEquals("Failed to get proper ID", 0, (int) o.getId());
         Assert.assertEquals("Failed to get proper section", s1, o.getSection());
         Assert.assertEquals("Failed to get proper candidate", c2, o.getCandidate());
         o.setCandidate(c1);
@@ -38,7 +38,7 @@ public class OptionTest {
         controller.updateOption(o, c1, s2);
         Assert.assertEquals("Failed to update option", c1, o.getCandidate());
         Assert.assertEquals("Failed to update option", s2, o.getSection());
-        Assert.assertEquals("Failed to update option", 0, o.getId());
+        Assert.assertEquals("Failed to update option", 0, (int) o.getId());
     }
 
 }

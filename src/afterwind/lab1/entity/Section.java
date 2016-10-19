@@ -3,7 +3,7 @@ package afterwind.lab1.entity;
 /**
  * Retine si gestioneaza datele unei sectiuni
  */
-public class Section implements IIdentifiable {
+public class Section implements IIdentifiable<Integer> {
     private int id;
     private String name;
     private int nrLoc;
@@ -33,7 +33,7 @@ public class Section implements IIdentifiable {
      * @return id-ul sectiunii
      */
     @Override
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
