@@ -3,14 +3,22 @@ package afterwind.lab1.controller;
 import afterwind.lab1.entity.Candidate;
 import afterwind.lab1.entity.Option;
 import afterwind.lab1.entity.Section;
+import afterwind.lab1.repository.IRepository;
+import afterwind.lab1.repository.Repository;
+import afterwind.lab1.validator.OptionValidator;
 
 public class OptionController extends AbstractController<Option> {
 
     /**
      * Contructor pentru OptionController
      */
-    public OptionController() {
+    public OptionController(IRepository<Option, Integer> repo) {
+        super(repo);
         repo.setTableHeader(String.format("%3s | %20s | %20s", "ID", "Candidat", "Sectiune"));
+    }
+
+    public OptionController() {
+        this(new Repository<>(new OptionValidator()));
     }
 
     /**

@@ -3,6 +3,7 @@ package afterwind.lab1.controller;
 import afterwind.lab1.entity.Section;
 import afterwind.lab1.repository.IRepository;
 import afterwind.lab1.repository.Repository;
+import afterwind.lab1.validator.SectionValidator;
 
 /**
  * Stratul de "Controller" pentru entitatea "Section"
@@ -13,8 +14,13 @@ public class SectionController extends AbstractController<Section> {
     /**
      * Constructor pentru SectionController
      */
-    public SectionController() {
+    public SectionController(IRepository<Section, Integer> repo) {
+        super(repo);
         repo.setTableHeader(String.format("%3s | %20s | %5s", "ID", "Nume", "Numar locuri"));
+    }
+
+    public SectionController() {
+        this(new Repository<>(new SectionValidator()));
     }
 
     /**
@@ -34,7 +40,7 @@ public class SectionController extends AbstractController<Section> {
      * @return un repository care contine toate datele filtrate
      */
     public IRepository<Section, Integer> filterByName(String name) {
-        IRepository<Section, Integer> result = new Repository<>();
+        IRepository<Section, Integer> result = new Repository<>(new SectionValidator());
         for (Section s : repo.getData()) {
             if (s.getName().startsWith(name)) {
                 result.add(s);
@@ -51,7 +57,7 @@ public class SectionController extends AbstractController<Section> {
      * @return un repository care contine toate datele filtrate
      */
     public IRepository<Section, Integer> filterByNrLoc(int nrLoc, boolean lower) {
-        IRepository<Section, Integer> result = new Repository<>();
+        IRepository<Section, Integer> result = new Repository<>(new SectionValidator());
         for (Section s : repo.getData()) {
             if (lower && s.getNrLoc() <= nrLoc || !lower && s.getNrLoc() >= nrLoc) {
                 result.add(s);

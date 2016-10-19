@@ -3,12 +3,14 @@ package afterwind.lab1.controller;
 import afterwind.lab1.entity.IIdentifiable;
 import afterwind.lab1.repository.IRepository;
 import afterwind.lab1.repository.Repository;
-
-import java.util.List;
+import afterwind.lab1.validator.IValidator;
 
 public abstract class AbstractController<T extends IIdentifiable<Integer>> {
-    protected IRepository<T, Integer> repo = new Repository<>();
+    protected IRepository<T, Integer> repo;
 
+    public AbstractController(IRepository<T, Integer> repo) {
+        this.repo = repo;
+    }
     /**
      * Adauga o entitate in repository
      * @param e entitatea care va fi adaugata

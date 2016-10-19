@@ -3,6 +3,8 @@ package afterwind.lab1.controller;
 import afterwind.lab1.entity.Candidate;
 import afterwind.lab1.repository.IRepository;
 import afterwind.lab1.repository.Repository;
+import afterwind.lab1.validator.CandidateValidator;
+import afterwind.lab1.validator.IValidator;
 
 /**
  * Stratul de "Controller" pentru entitatea "Candidate"
@@ -13,8 +15,13 @@ public class CandidateController extends AbstractController<Candidate> {
     /**
      * Constructor pentru CandidateController
      */
-    public CandidateController() {
+    public CandidateController(IRepository<Candidate, Integer> repo) {
+        super(repo);
         repo.setTableHeader(String.format("%3s | %20s | %15s | %15s", "ID", "Nume", "Telefon", "Adresa"));
+    }
+
+    public CandidateController() {
+        this(new Repository<>(new CandidateValidator()));
     }
 
     /**
@@ -36,7 +43,7 @@ public class CandidateController extends AbstractController<Candidate> {
      * @return un repository care contine toate datele filtrate
      */
     public IRepository<Candidate, Integer> filterByName(String name) {
-        IRepository<Candidate, Integer> result = new Repository<>();
+        IRepository<Candidate, Integer> result = new Repository<>(new CandidateValidator());
         for (Candidate c : repo.getData()) {
             if (c.getName().startsWith(name)) {
                 result.add(c);
@@ -52,7 +59,7 @@ public class CandidateController extends AbstractController<Candidate> {
      * @return un repository care contine toate datele filtrate
      */
     public IRepository<Candidate, Integer> filterByTelephone(String telephone) {
-        IRepository<Candidate, Integer> result = new Repository<>();
+        IRepository<Candidate, Integer> result = new Repository<>(new CandidateValidator());
         for (Candidate c : repo.getData()) {
             if (c.getTel().startsWith(telephone)) {
                 result.add(c);
@@ -68,7 +75,7 @@ public class CandidateController extends AbstractController<Candidate> {
      * @return un repository care contine toate datele filtrate
      */
     public Repository<Candidate, Integer> filterByAddress(String address) {
-        Repository<Candidate, Integer> result = new Repository<>();
+        Repository<Candidate, Integer> result = new Repository<>(new CandidateValidator());
         for (Candidate c : repo.getData()) {
             if (c.getAddress().startsWith(address)) {
                 result.add(c);

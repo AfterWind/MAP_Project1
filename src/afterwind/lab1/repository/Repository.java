@@ -1,6 +1,7 @@
 package afterwind.lab1.repository;
 
 import afterwind.lab1.entity.IIdentifiable;
+import afterwind.lab1.validator.IValidator;
 
 import java.lang.reflect.Array;
 import java.time.LocalDateTime;
@@ -12,6 +13,11 @@ public class Repository<T extends IIdentifiable<K>, K> implements IRepository<T,
 
     protected String tableHeader = "";
     protected List<T> data = new ArrayList<>();
+    protected IValidator<T> validator;
+
+    public Repository(IValidator<T> validator) {
+        this.validator = validator;
+    }
 
     /**
      * Getter pentru size
