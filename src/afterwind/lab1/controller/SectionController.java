@@ -13,7 +13,6 @@ public class SectionController extends AbstractController<Section> {
      * Constructor pentru SectionController
      */
     public SectionController() {
-        super(Section.class);
         repo.setTableHeader(String.format("%3s | %20s | %5s", "ID", "Nume", "Numar locuri"));
     }
 
@@ -34,9 +33,9 @@ public class SectionController extends AbstractController<Section> {
      * @return un repository care contine toate datele filtrate
      */
     public Repository<Section> filterByName(String name) {
-        Repository<Section> result = new Repository<>(Section.class);
-        for (Section s : this.repo.getData()) {
-            if (s != null && s.getName().startsWith(name)) {
+        Repository<Section> result = new Repository<>();
+        for (Section s : repo.getData()) {
+            if (s.getName().startsWith(name)) {
                 result.add(s);
             }
         }
@@ -51,15 +50,18 @@ public class SectionController extends AbstractController<Section> {
      * @return un repository care contine toate datele filtrate
      */
     public Repository<Section> filterByNrLoc(int nrLoc, boolean lower) {
-        Repository<Section> result = new Repository<>(Section.class);
+        Repository<Section> result = new Repository<>();
         for (Section s : repo.getData()) {
-            if (s != null) {
-                if (lower && s.getNrLoc() <= nrLoc || !lower && s.getNrLoc() >= nrLoc) {
-                    result.add(s);
-                }
+            if (lower && s.getNrLoc() <= nrLoc || !lower && s.getNrLoc() >= nrLoc) {
+                result.add(s);
             }
         }
         result.setTableHeader(repo.getTableHeader());
         return result;
+    }
+
+    @Override
+    public String toString() {
+        return repo.toString();
     }
 }

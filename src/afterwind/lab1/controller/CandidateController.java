@@ -13,7 +13,6 @@ public class CandidateController extends AbstractController<Candidate> {
      * Constructor pentru CandidateController
      */
     public CandidateController() {
-        super(Candidate.class);
         repo.setTableHeader(String.format("%3s | %20s | %15s | %15s", "ID", "Nume", "Telefon", "Adresa"));
     }
 
@@ -36,9 +35,9 @@ public class CandidateController extends AbstractController<Candidate> {
      * @return un repository care contine toate datele filtrate
      */
     public Repository<Candidate> filterByName(String name) {
-        Repository<Candidate> result = new Repository<>(Candidate.class);
+        Repository<Candidate> result = new Repository<>();
         for (Candidate c : repo.getData()) {
-            if (c != null && c.getName().startsWith(name)) {
+            if (c.getName().startsWith(name)) {
                 result.add(c);
             }
         }
@@ -52,9 +51,9 @@ public class CandidateController extends AbstractController<Candidate> {
      * @return un repository care contine toate datele filtrate
      */
     public Repository<Candidate> filterByTelephone(String telephone) {
-        Repository<Candidate> result = new Repository<>(Candidate.class);
+        Repository<Candidate> result = new Repository<>();
         for (Candidate c : repo.getData()) {
-            if (c != null && c.getTel().startsWith(telephone)) {
+            if (c.getTel().startsWith(telephone)) {
                 result.add(c);
             }
         }
@@ -68,9 +67,9 @@ public class CandidateController extends AbstractController<Candidate> {
      * @return un repository care contine toate datele filtrate
      */
     public Repository<Candidate> filterByAddress(String address) {
-        Repository<Candidate> result = new Repository<>(Candidate.class);
+        Repository<Candidate> result = new Repository<>();
         for (Candidate c : repo.getData()) {
-            if (c != null && c.getAddress().startsWith(address)) {
+            if (c.getAddress().startsWith(address)) {
                 result.add(c);
             }
         }

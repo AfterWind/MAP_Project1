@@ -1,18 +1,13 @@
 package afterwind.lab1.controller;
 
 import afterwind.lab1.entity.IIdentifiable;
+import afterwind.lab1.repository.IRepository;
 import afterwind.lab1.repository.Repository;
 
-public abstract class AbstractController<T extends IIdentifiable> {
-    protected Repository<T> repo;
+import java.util.List;
 
-    /**
-     * Contructor pentru AbstractController
-     * @param clazz tipul de date retinut in Repository-ul din Controller
-     */
-    public AbstractController(Class<T> clazz) {
-        repo = new Repository<>(clazz);
-    }
+public abstract class AbstractController<T extends IIdentifiable> {
+    protected IRepository<T> repo = new Repository<T>();
 
     /**
      * Adauga o entitate in repository
@@ -74,7 +69,7 @@ public abstract class AbstractController<T extends IIdentifiable> {
     public int getNextId() {
         int max = -1;
         for (T e : repo.getData()) {
-            if (e != null && e.getId() > max) {
+            if (e.getId() > max) {
                 max = e.getId();
             }
         }
@@ -84,7 +79,7 @@ public abstract class AbstractController<T extends IIdentifiable> {
     /**
      * @return vectorul de entitati din repository
      */
-    public T[] getData() {
+    public Iterable<T> getData() {
         return repo.getData();
     }
 }

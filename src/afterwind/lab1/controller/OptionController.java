@@ -10,7 +10,6 @@ public class OptionController extends AbstractController<Option> {
      * Contructor pentru OptionController
      */
     public OptionController() {
-        super(Option.class);
         repo.setTableHeader(String.format("%3s | %20s | %20s", "ID", "Candidat", "Sectiune"));
     }
 

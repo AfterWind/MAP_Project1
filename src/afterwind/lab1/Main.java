@@ -1,5 +1,7 @@
 package afterwind.lab1;
 
+import afterwind.lab1.entity.Candidate;
+import afterwind.lab1.entity.Section;
 import afterwind.lab1.ui.Console;
 
 public class Main {
@@ -16,6 +18,12 @@ public class Main {
      */
     public static void main(String[] args) {
         Console c = new Console();
+        c.candidateController.add(new Candidate(0, "Sergiu", "000111", "Dunarii 12"));
+        c.candidateController.add(new Candidate(1, "Catalin", "100", "Centru"));
+        c.candidateController.add(new Candidate(2, "Andrei", "0259888888", "Napoca 100"));
+        c.sectionController.add(new Section(0, "Info", 120));
+        c.sectionController.add(new Section(1, "Mate", 60));
+        c.sectionController.add(new Section(2, "Engleza", 100));
         c.run();
     }
 }

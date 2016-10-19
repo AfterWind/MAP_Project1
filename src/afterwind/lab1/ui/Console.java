@@ -19,9 +19,9 @@ import java.util.Scanner;
  * Stratul de "UI"
  */
 public class Console {
-    private CandidateController candidateController = new CandidateController();
-    private SectionController sectionController = new SectionController();
-    private OptionController optionController = new OptionController();
+    public final CandidateController candidateController = new CandidateController();
+    public final SectionController sectionController = new SectionController();
+    public final OptionController optionController = new OptionController();
     private Scanner scanner = new Scanner(System.in);
 
     /**

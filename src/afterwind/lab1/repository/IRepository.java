@@ -37,9 +37,20 @@ public interface IRepository<T extends IIdentifiable> {
     void remove(T e);
 
     /**
-     * Sterge elementul de pe pozitia data din repository
-     * @param pos pozitia entitatii in repository
-     * @return entitatea stearsa
+     * Returneaza elementele
+     * @return un obiect iterabil care contine toate elementele
      */
-    T remove(int pos);
+    Iterable<T> getData();
+
+    /**
+     * Getter pentru tableHeader
+     * @return tableHeader-ul
+     */
+    String getTableHeader();
+
+    /**
+     * Setter pentru tableHeader
+     * @param tableHeader noul tableHeader
+     */
+    void setTableHeader(String tableHeader);
 }

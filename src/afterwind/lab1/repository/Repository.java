@@ -4,34 +4,29 @@ import afterwind.lab1.entity.IIdentifiable;
 
 import java.lang.reflect.Array;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 public class Repository<T extends IIdentifiable> implements IRepository<T> {
 
     protected String tableHeader = "";
-    protected T[] data;
-    protected int size = 0;
-
-    /**
-     * Constructor pentru Repository
-     * @param clazz tipul de date retinut in Repository
-     */
-    @SuppressWarnings("unchecked")
-    public Repository(Class<T> clazz) {
-        data = (T[]) Array.newInstance(clazz, 100);
-    }
+    protected List<T> data = new ArrayList<>();
 
     /**
      * Getter pentru size
      * @return numarul de elemente din repository
      */
+    @Override
     public int getSize() {
-        return size;
+        return data.size();
     }
 
     /**
      * Setter pentru tableHeader
      * @param tableHeader noul tableHeader
      */
+    @Override
     public void setTableHeader(String tableHeader) {
         this.tableHeader = tableHeader;
     }
@@ -40,6 +35,7 @@ public class Repository<T extends IIdentifiable> implements IRepository<T> {
      * Getter pentru tableHeader
      * @return tableHeader-ul curent
      */
+    @Override
     public String getTableHeader() {
         return tableHeader;
     }
@@ -48,36 +44,24 @@ public class Repository<T extends IIdentifiable> implements IRepository<T> {
      * Adauga o entitate in repository
      * @param e entitatea care va fi adaugata
      */
+    @Override
     public void add(T e) {
-        if (size < data.length) {
-            data[size++] = e;
-        }
+        data.add(e);
     }
 
     /**
      * Sterge o entitate din repository
      * @param e entitatea care va fi stearsa
      */
+    @Override
     public void remove(T e) {
-        for (int i = 0; i < size; i++) {
-            if (e.equals(data[i])) {
-                remove(i);
+        Iterator<T> it = data.iterator();
+        while (it.hasNext()) {
+            if (it.equals(e)) {
+                it.remove();
                 return;
             }
         }
-    }
-    /**
-     * Sterge elementul de pe pozitia data din repository
-     * @param pos pozitia entitatii in repository
-     * @return entitatea stearsa
-     */
-    public T remove(int pos) {
-        T e = data[pos];
-        for (int i = pos + 1; i < size; i++) {
-            data[i - 1] = data[i];
-        }
-        size--;
-        return e;
     }
 
     /**
@@ -85,10 +69,11 @@ public class Repository<T extends IIdentifiable> implements IRepository<T> {
      * @param id id-ul entitatii cautate
      * @return entitatea cu id-ul dat sau null daca aceasta nu exista
      */
+    @Override
     public T get(int id) {
-        for (int i = 0; i < size; i++) {
-            if (data[i].getId() == id) {
-                return data[i];
+        for (T e : data) {
+            if (e.getId() == id) {
+                return e;
             }
         }
         return null;
@@ -99,6 +84,7 @@ public class Repository<T extends IIdentifiable> implements IRepository<T> {
      * @param id identificatorul unic al entitatii
      * @return daca acesta exista in repository
      */
+    @Override
     public boolean contains(int id) {
         return get(id) != null;
     }
@@ -106,20 +92,22 @@ public class Repository<T extends IIdentifiable> implements IRepository<T> {
     /**
      * @return vectorul de entitati
      */
-    public T[] getData() {
+    @Override
+    public List<T> getData() {
         return data;
     }
 
     @Override
     public String toString() {
         String result = "";
-        if (size == 0) {
+        if (getSize() == 0) {
             result += "Nu exista entitati!";
         } else {
             result += tableHeader + "\n";
+            int size = getSize();
             for (int i = 0; i < size; i++) {
                 if (i != size - 1) result += "\n";
-                result += data[i].toString();
+                result += data.get(i).toString();
             }
         }
         return result;

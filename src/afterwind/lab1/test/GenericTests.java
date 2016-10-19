@@ -11,7 +11,7 @@ public class GenericTests {
 
     @Test
     public void repositoryTest() {
-        Repository<Candidate> repo = new Repository<>(Candidate.class);
+        Repository<Candidate> repo = new Repository<>();
         Candidate c1 = new Candidate(10, "Sergiu", "000111222", "Kappa");
         repo.add(c1);
         Assert.assertEquals("Failed to save an entity to repository" ,c1, repo.get(10));
