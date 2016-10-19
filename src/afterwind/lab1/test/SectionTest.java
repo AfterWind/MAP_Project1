@@ -2,6 +2,7 @@ package afterwind.lab1.test;
 
 import afterwind.lab1.controller.SectionController;
 import afterwind.lab1.entity.Section;
+import afterwind.lab1.exception.ValidationException;
 import afterwind.lab1.repository.IRepository;
 import org.junit.Assert;
 import org.junit.Test;
@@ -30,7 +31,7 @@ public class SectionTest {
     }
 
     @Test
-    public void filterTest() {
+    public void filterTest() throws ValidationException {
         SectionController controller = new SectionController();
         Section c1 = new Section(1, "Info", 100);
         Section c2 = new Section(2, "Mate", 100);

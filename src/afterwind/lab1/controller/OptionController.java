@@ -31,4 +31,9 @@ public class OptionController extends AbstractController<Option> {
         option.setCandidate(candidate);
         option.setSection(section);
     }
+
+    @Override
+    public String toString() {
+        return repo.toString();
+    }
 }

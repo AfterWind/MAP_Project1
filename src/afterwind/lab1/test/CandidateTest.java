@@ -2,6 +2,7 @@ package afterwind.lab1.test;
 
 import afterwind.lab1.controller.CandidateController;
 import afterwind.lab1.entity.Candidate;
+import afterwind.lab1.exception.ValidationException;
 import afterwind.lab1.repository.IRepository;
 import org.junit.Assert;
 import org.junit.Test;
@@ -35,7 +36,7 @@ public class CandidateTest {
     }
 
     @Test
-    public void filterTest() {
+    public void filterTest() throws ValidationException {
         CandidateController controller = new CandidateController();
         Candidate c1 = new Candidate(10, "Sergiu", "000111222", "Kappa");
         Candidate c2 = new Candidate(11, "Andrei", "111", "IDK");

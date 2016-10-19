@@ -1,6 +1,7 @@
 package afterwind.lab1.controller;
 
 import afterwind.lab1.entity.Section;
+import afterwind.lab1.exception.ValidationException;
 import afterwind.lab1.repository.IRepository;
 import afterwind.lab1.repository.Repository;
 import afterwind.lab1.validator.SectionValidator;
@@ -43,7 +44,11 @@ public class SectionController extends AbstractController<Section> {
         IRepository<Section, Integer> result = new Repository<>(new SectionValidator());
         for (Section s : repo.getData()) {
             if (s.getName().startsWith(name)) {
-                result.add(s);
+                try {
+                    result.add(s);
+                } catch (ValidationException ex) {
+                    System.out.print(ex.getMessage());
+                }
             }
         }
         result.setTableHeader(repo.getTableHeader());
@@ -60,7 +65,11 @@ public class SectionController extends AbstractController<Section> {
         IRepository<Section, Integer> result = new Repository<>(new SectionValidator());
         for (Section s : repo.getData()) {
             if (lower && s.getNrLoc() <= nrLoc || !lower && s.getNrLoc() >= nrLoc) {
-                result.add(s);
+                try {
+                    result.add(s);
+                } catch (ValidationException ex) {
+                    System.out.print(ex.getMessage());
+                }
             }
         }
         result.setTableHeader(repo.getTableHeader());

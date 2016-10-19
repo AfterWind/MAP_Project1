@@ -1,6 +1,7 @@
 package afterwind.lab1.repository;
 
 import afterwind.lab1.entity.IIdentifiable;
+import afterwind.lab1.exception.ValidationException;
 import afterwind.lab1.validator.IValidator;
 
 import java.lang.reflect.Array;
@@ -51,7 +52,8 @@ public class Repository<T extends IIdentifiable<K>, K> implements IRepository<T,
      * @param e entitatea care va fi adaugata
      */
     @Override
-    public void add(T e) {
+    public void add(T e) throws ValidationException {
+        validator.validate(e);
         data.add(e);
     }
 
@@ -99,7 +101,7 @@ public class Repository<T extends IIdentifiable<K>, K> implements IRepository<T,
      * @return vectorul de entitati
      */
     @Override
-    public List<T> getData() {
+    public Iterable<T> getData() {
         return data;
     }
 
@@ -112,8 +114,8 @@ public class Repository<T extends IIdentifiable<K>, K> implements IRepository<T,
             result += tableHeader + "\n";
             int size = getSize();
             for (int i = 0; i < size; i++) {
-                if (i != size - 1) result += "\n";
                 result += data.get(i).toString();
+                if (i != size - 1) result += "\n";
             }
         }
         return result;

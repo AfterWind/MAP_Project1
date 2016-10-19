@@ -3,6 +3,7 @@ package afterwind.lab1.test;
 import afterwind.lab1.controller.SectionController;
 import afterwind.lab1.entity.Candidate;
 import afterwind.lab1.entity.Section;
+import afterwind.lab1.exception.ValidationException;
 import afterwind.lab1.repository.IRepository;
 import afterwind.lab1.repository.Repository;
 import afterwind.lab1.validator.CandidateValidator;
@@ -12,7 +13,7 @@ import org.junit.Test;
 public class GenericTests {
 
     @Test
-    public void repositoryTest() {
+    public void repositoryTest() throws ValidationException {
         IRepository<Candidate, Integer> repo = new Repository<>(new CandidateValidator());
         Candidate c1 = new Candidate(10, "Sergiu", "000111222", "Kappa");
         repo.add(c1);
@@ -27,7 +28,7 @@ public class GenericTests {
     }
 
     @Test
-    public void controllerTest() {
+    public void controllerTest() throws ValidationException {
         SectionController controller = new SectionController();
         Section c1 = new Section(5, "Info", 100);
         controller.add(c1);

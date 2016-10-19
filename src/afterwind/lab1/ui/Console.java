@@ -1,15 +1,15 @@
 package afterwind.lab1.ui;
 
-import afterwind.lab1.Utils;
 import afterwind.lab1.controller.CandidateController;
 import afterwind.lab1.controller.OptionController;
 import afterwind.lab1.controller.SectionController;
 import afterwind.lab1.entity.Candidate;
 import afterwind.lab1.entity.Option;
 import afterwind.lab1.entity.Section;
+import afterwind.lab1.exception.ValidationException;
 import afterwind.lab1.repository.IRepository;
-import afterwind.lab1.repository.Repository;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.InputMismatchException;
@@ -88,7 +88,9 @@ public class Console {
     /**
      * Afiseaza meniul ui pentru adaugarea unui candidat
      */
-    public void uiAddCandidate() {
+    public void uiAddCandidate() throws ValidationException {
+        if (true)
+            throw new ValidationException("asdfg");
         System.out.print("Dati numele candidatului: ");
         String name = scanner.nextLine();
         if (name.equals("")) {
@@ -113,7 +115,7 @@ public class Console {
     /**
      * Afiseaza meniul ui pentru adaugarea unei sectii
      */
-    public void uiAddSection() {
+    public void uiAddSection() throws ValidationException {
         System.out.print("Dati numele sectiei: ");
         String name = scanner.nextLine();
         if (name.equals("")) {
@@ -128,7 +130,7 @@ public class Console {
     /**
      * Meniul ui pentru adaugarea unei optiuni
      */
-    public void uiAddOption() {
+    public void uiAddOption() throws ValidationException {
         System.out.print("Dati id-ul candidatului: ");
         int candidateId = scanner.nextInt(); scanner.nextLine();
         Candidate candidate = candidateController.get(candidateId);
@@ -369,8 +371,10 @@ public class Console {
                 print("Eroare: Tip de date invalid!");
             } catch (IndexOutOfBoundsException ex2) {
                 print("Eroare: Optiune invalida!");
-            } catch (Exception ex3) {
-                ex3.printStackTrace();
+            } catch (InvocationTargetException ex3) {
+                System.out.print(ex3.getTargetException().getMessage());
+            } catch (Exception ex4) {
+                ex4.printStackTrace();
             }
         }
         print("Goodbye!");

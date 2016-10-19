@@ -1,6 +1,7 @@
 package afterwind.lab1.controller;
 
 import afterwind.lab1.entity.IIdentifiable;
+import afterwind.lab1.exception.ValidationException;
 import afterwind.lab1.repository.IRepository;
 import afterwind.lab1.repository.Repository;
 import afterwind.lab1.validator.IValidator;
@@ -15,7 +16,7 @@ public abstract class AbstractController<T extends IIdentifiable<Integer>> {
      * Adauga o entitate in repository
      * @param e entitatea care va fi adaugata
      */
-    public void add(T e) {
+    public void add(T e) throws ValidationException {
         repo.add(e);
     }
 

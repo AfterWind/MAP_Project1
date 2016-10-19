@@ -1,6 +1,7 @@
 package afterwind.lab1.repository;
 
 import afterwind.lab1.entity.IIdentifiable;
+import afterwind.lab1.exception.ValidationException;
 
 public interface IRepository<T extends IIdentifiable<K>, K> {
 
@@ -28,7 +29,7 @@ public interface IRepository<T extends IIdentifiable<K>, K> {
      * Adauga o entitate in repository
      * @param e entitatea care va fi adaugata
      */
-    void add(T e);
+    void add(T e) throws ValidationException;
 
     /**
      * Sterge o entitate din repository

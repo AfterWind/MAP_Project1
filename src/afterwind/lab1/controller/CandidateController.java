@@ -1,6 +1,7 @@
 package afterwind.lab1.controller;
 
 import afterwind.lab1.entity.Candidate;
+import afterwind.lab1.exception.ValidationException;
 import afterwind.lab1.repository.IRepository;
 import afterwind.lab1.repository.Repository;
 import afterwind.lab1.validator.CandidateValidator;
@@ -46,7 +47,11 @@ public class CandidateController extends AbstractController<Candidate> {
         IRepository<Candidate, Integer> result = new Repository<>(new CandidateValidator());
         for (Candidate c : repo.getData()) {
             if (c.getName().startsWith(name)) {
-                result.add(c);
+                try {
+                    result.add(c);
+                } catch (ValidationException ex) {
+                    System.out.print(ex.getMessage());
+                }
             }
         }
         result.setTableHeader(repo.getTableHeader());
@@ -62,7 +67,11 @@ public class CandidateController extends AbstractController<Candidate> {
         IRepository<Candidate, Integer> result = new Repository<>(new CandidateValidator());
         for (Candidate c : repo.getData()) {
             if (c.getTel().startsWith(telephone)) {
-                result.add(c);
+                try {
+                    result.add(c);
+                } catch (ValidationException ex) {
+                    System.out.print(ex.getMessage());
+                }
             }
         }
         result.setTableHeader(repo.getTableHeader());
@@ -78,7 +87,11 @@ public class CandidateController extends AbstractController<Candidate> {
         Repository<Candidate, Integer> result = new Repository<>(new CandidateValidator());
         for (Candidate c : repo.getData()) {
             if (c.getAddress().startsWith(address)) {
-                result.add(c);
+                try {
+                    result.add(c);
+                } catch (ValidationException ex) {
+                    System.out.print(ex.getMessage());
+                }
             }
         }
         result.setTableHeader(repo.getTableHeader());
