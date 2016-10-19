@@ -89,8 +89,6 @@ public class Console {
      * Afiseaza meniul ui pentru adaugarea unui candidat
      */
     public void uiAddCandidate() throws ValidationException {
-        if (true)
-            throw new ValidationException("asdfg");
         System.out.print("Dati numele candidatului: ");
         String name = scanner.nextLine();
         if (name.equals("")) {
