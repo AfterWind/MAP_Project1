@@ -325,6 +325,17 @@ public class Console {
     }
 
     /**
+     * Meniul ui pentru afisarea celor mai solicitate sectii
+     */
+    public void uiMostOccupiedSections() {
+        System.out.println("Dati cate sectii doriti in top: ");
+        int amount = scanner.nextInt(); scanner.nextLine();
+        System.out.println("Sectiile din top: ");
+        IRepository<Section, Integer> result = sectionController.getMostOccupiedSections(optionController.getRepo(), amount);
+        System.out.print(result.toString());
+    }
+
+    /**
      * Locul de pornirea a zonei de ui
      */
     public void run() {
@@ -349,6 +360,7 @@ public class Console {
             uis.put(15, this.getClass().getDeclaredMethod("uiFilterCandidatesByAddress"));
             uis.put(16, this.getClass().getDeclaredMethod("uiFilterSectionsByName"));
             uis.put(17, this.getClass().getDeclaredMethod("uiFilterSectionsByNrLoc"));
+            uis.put(18, this.getClass().getDeclaredMethod("uiMostOccupiedSections"));
         } catch (Exception e) {
             e.printStackTrace();
         }

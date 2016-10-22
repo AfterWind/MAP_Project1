@@ -82,4 +82,18 @@ public class Section implements IIdentifiable<Integer> {
         }
         return false;
     }
+
+    public static class Serializer implements ISerializer<Section> {
+
+        @Override
+        public Section deserialize(String s) {
+            String[] data = s.split("\\|");
+            return new Section(Integer.parseInt(data[0]), data[1], Integer.parseInt(data[2]));
+        }
+
+        @Override
+        public String serialize(Section e) {
+            return String.format("%d|%s|%d", e.getId(), e.getName(), e.getNrLoc());
+        }
+    }
 }

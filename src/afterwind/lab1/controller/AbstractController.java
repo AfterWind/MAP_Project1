@@ -85,4 +85,11 @@ public abstract class AbstractController<T extends IIdentifiable<Integer>> {
     public Iterable<T> getData() {
         return repo.getData();
     }
+
+    /**
+     * @return repository-ul cu toate elementele
+     */
+    public IRepository<T, Integer> getRepo() {
+        return repo;
+    }
 }

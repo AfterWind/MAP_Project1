@@ -101,4 +101,18 @@ public class Candidate implements IIdentifiable<Integer> {
         }
         return false;
     }
+
+    public static class Serializer implements ISerializer<Candidate> {
+
+        @Override
+        public Candidate deserialize(String s) {
+            String[] data = s.split("\\|");
+            return new Candidate(Integer.parseInt(data[0]), data[1], data[2], data[3]);
+        }
+
+        @Override
+        public String serialize(Candidate e) {
+            return String.format("%d|%s|%s|%s", e.getId(), e.getName(), e.getTel(), e.getAddress());
+        }
+    }
 }
