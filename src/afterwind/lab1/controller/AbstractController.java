@@ -18,6 +18,7 @@ public abstract class AbstractController<T extends IIdentifiable<Integer>> {
      */
     public void add(T e) throws ValidationException {
         repo.add(e);
+        repo.markDirty();
     }
 
     /**
@@ -26,6 +27,7 @@ public abstract class AbstractController<T extends IIdentifiable<Integer>> {
      */
     public void remove(T e) {
         repo.remove(e);
+        repo.markDirty();
     }
 
     /**
@@ -37,6 +39,7 @@ public abstract class AbstractController<T extends IIdentifiable<Integer>> {
         if (e != null) {
             repo.remove(e);
         }
+        repo.markDirty();
         return e;
     }
 

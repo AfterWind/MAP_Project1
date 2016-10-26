@@ -30,6 +30,7 @@ public class OptionController extends AbstractController<Option> {
     public void updateOption(Option option, Candidate candidate, Section section) {
         option.setCandidate(candidate);
         option.setSection(section);
+        repo.markDirty();
     }
 
     @Override

@@ -7,7 +7,10 @@ import afterwind.lab1.entity.Candidate;
 import afterwind.lab1.entity.Option;
 import afterwind.lab1.entity.Section;
 import afterwind.lab1.exception.ValidationException;
+import afterwind.lab1.repository.FileRepository;
 import afterwind.lab1.repository.IRepository;
+import afterwind.lab1.validator.CandidateValidator;
+import afterwind.lab1.validator.SectionValidator;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -20,8 +23,8 @@ import java.util.Scanner;
  * Stratul de "UI"
  */
 public class Console {
-    public final CandidateController candidateController = new CandidateController();
-    public final SectionController sectionController = new SectionController();
+    public final CandidateController candidateController = new CandidateController(new FileRepository<>(new CandidateValidator(), new Candidate.Serializer(), "/home/afterwind/IdeaProjects/MAP_Lab1/res/candidates.txt"));
+    public final SectionController sectionController = new SectionController(new FileRepository<>(new SectionValidator(), new Section.Serializer(), "/home/afterwind/IdeaProjects/MAP_Lab1/res/sections.txt"));
     public final OptionController optionController = new OptionController();
     private Scanner scanner = new Scanner(System.in);
 
@@ -59,6 +62,9 @@ public class Console {
 
         print("16. Filter sections by name");
         print("17. Filter sections by nrLoc");
+
+        print("18. Most occupied sections");
+        print("19. Save");
 
         print("0. Exit");
         System.out.print("Choose an option: ");
@@ -335,6 +341,14 @@ public class Console {
         System.out.print(result.toString());
     }
 
+    public void uiForceUpdateLinks() {
+        System.out.print("Updating all file repository links... ");
+        candidateController.getRepo().updateLinks();
+        sectionController.getRepo().updateLinks();
+        optionController.getRepo().updateLinks();
+        System.out.println("Finished!");
+    }
+
     /**
      * Locul de pornirea a zonei de ui
      */
@@ -361,6 +375,7 @@ public class Console {
             uis.put(16, this.getClass().getDeclaredMethod("uiFilterSectionsByName"));
             uis.put(17, this.getClass().getDeclaredMethod("uiFilterSectionsByNrLoc"));
             uis.put(18, this.getClass().getDeclaredMethod("uiMostOccupiedSections"));
+            uis.put(19, this.getClass().getDeclaredMethod("uiForceUpdateLinks"));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -379,6 +394,7 @@ public class Console {
                     print(" ");
             } catch (InputMismatchException ex1) {
                 print("Eroare: Tip de date invalid!");
+                scanner.nextLine();
             } catch (IndexOutOfBoundsException ex2) {
                 print("Eroare: Optiune invalida!");
             } catch (InvocationTargetException ex3) {
@@ -387,6 +403,7 @@ public class Console {
                 ex4.printStackTrace();
             }
         }
+        uiForceUpdateLinks();
         print("Goodbye!");
     }
 }

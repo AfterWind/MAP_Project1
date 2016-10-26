@@ -17,6 +17,12 @@ public class CandidateValidator implements IValidator<Candidate> {
         if (e.getAddress().equals("")) {
             message += "Adresa invalida!\n";
         }
+        for (Character c : e.getTel().toCharArray()) {
+            if (!(c >= '0' && c <= '9')) {
+                message += "Telefon invalid!\n";
+                break;
+            }
+        }
         if (!message.equals("")) {
             throw new ValidationException(message);
         }

@@ -39,6 +39,7 @@ public class SectionController extends AbstractController<Section> {
     public void updateSection(Section section, String name, int nrLoc) {
         section.setName(name);
         section.setNrLoc(nrLoc);
+        repo.markDirty();
     }
 
     /**

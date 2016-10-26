@@ -55,5 +55,16 @@ public interface IRepository<T extends IIdentifiable<K>, K> {
      */
     void setTableHeader(String tableHeader);
 
+    /**
+     * Marks the repository as being dirty which means:
+     *  - The repository has been modified AND
+     *  - Linked objects haven't been notified OR
+     *  - Files haven't been updated
+     */
+    void markDirty();
 
+    /**
+     * If the Repository is dirty all the linked objects should be notified and updated
+     */
+    void updateLinks();
 }

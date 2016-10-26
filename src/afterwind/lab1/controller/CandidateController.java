@@ -2,6 +2,7 @@ package afterwind.lab1.controller;
 
 import afterwind.lab1.entity.Candidate;
 import afterwind.lab1.exception.ValidationException;
+import afterwind.lab1.repository.FileRepository;
 import afterwind.lab1.repository.IRepository;
 import afterwind.lab1.repository.Repository;
 import afterwind.lab1.validator.CandidateValidator;
@@ -36,6 +37,7 @@ public class CandidateController extends AbstractController<Candidate> {
         candidate.setName(name);
         candidate.setAddress(address);
         candidate.setTel(tel);
+        repo.markDirty();
     }
 
     /**

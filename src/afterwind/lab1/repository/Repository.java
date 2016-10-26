@@ -120,4 +120,14 @@ public class Repository<T extends IIdentifiable<K>, K> implements IRepository<T,
         }
         return result;
     }
+
+    @Override
+    public void markDirty() {
+        // No meaning. Has no links whatsoever.
+    }
+
+    @Override
+    public void updateLinks() {
+        // No meaning. Has no links whatsoever.
+    }
 }

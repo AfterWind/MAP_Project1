@@ -9,13 +9,14 @@ import java.io.*;
 
 /**
  * Represents a Repository that writes/reads data from a file
- * @param <T>
- * @param <K>
+ * @param <T> data
+ * @param <K> key
  */
 public class FileRepository<T extends IIdentifiable<K>, K> extends Repository<T, K> {
 
     private final ISerializer<T> serializer;
     private final String filename;
+    private boolean dirty = false;
 
     public FileRepository(IValidator<T> validator, ISerializer<T> serializer, String file) {
         super(validator);
@@ -29,7 +30,14 @@ public class FileRepository<T extends IIdentifiable<K>, K> extends Repository<T,
      */
     protected void read() {
         try(BufferedReader br = new BufferedReader(new FileReader(filename))) {
-            super.add(serializer.deserialize(br.readLine()));
+
+            String line = br.readLine();
+            while (line != null) {
+                if (!"".equals(line)) {
+                    super.add(serializer.deserialize(line));
+                }
+                line = br.readLine();
+            }
         } catch (IOException | ValidationException e) {
             e.printStackTrace();
         }
@@ -50,14 +58,14 @@ public class FileRepository<T extends IIdentifiable<K>, K> extends Repository<T,
     }
 
     @Override
-    public void add(T e) throws ValidationException {
-        super.add(e);
-        write();
+    public void markDirty() {
+        this.dirty = true;
     }
 
     @Override
-    public void remove(T e) {
-        super.remove(e);
-        write();
+    public void updateLinks() {
+        if (dirty) {
+            write();
+        }
     }
 }
