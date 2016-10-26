@@ -207,22 +207,22 @@ public class Console {
         System.out.print("Dati numele candidatului: ");
         String name = scanner.nextLine();
         if (name.equals("")) {
-            print("Nume invalid!");
-            return;
+            name = candidate.getName();
         }
         System.out.print("Dati numarul de telefon al candidatului: ");
         String tel = scanner.nextLine();
         if (tel.equals("")) {
-            print("Telefon invalid!");
-            return;
+            tel = candidate.getTel();
         }
         System.out.print("Dati adresa candidatului: ");
         String address = scanner.nextLine();
         if (address.equals("")) {
-            print("Adresa invalida!");
-            return;
+            address = candidate.getAddress();
         }
-        candidateController.updateCandidate(candidate, name, tel, address);
+
+        if (!(address.equals(candidate.getAddress()) && tel.equals(candidate.getTel()) && name.equals(candidate.getName()))) {
+            candidateController.updateCandidate(candidate, name, tel, address);
+        }
     }
 
     /**
@@ -239,12 +239,20 @@ public class Console {
         System.out.print("Dati numele sectiei: ");
         String name = scanner.nextLine();
         if (name.equals("")) {
-            print("Nume invalid!");
-            return;
+            name = section.getName();
         }
         System.out.print("Dati numarul de locuri al sectiei: ");
-        int nrLoc = scanner.nextInt(); scanner.nextLine();
-        sectionController.updateSection(section, name, nrLoc);
+        String nrLocString = scanner.nextLine();
+        int nrLoc;
+        if (nrLocString.equals("")) {
+            nrLoc = section.getNrLoc();
+        } else {
+            nrLoc = Integer.parseInt(nrLocString);
+        }
+
+        if (!(name.equals(section.getName()) && nrLoc == section.getNrLoc())) {
+            sectionController.updateSection(section, name, nrLoc);
+        }
     }
 
     /**
@@ -254,28 +262,46 @@ public class Console {
         System.out.println("Dati id-ul optiunii: ");
         int optionId = scanner.nextInt(); scanner.nextLine();
         Option option = optionController.get(optionId);
-
         if (option == null) {
             print("Nu exista optiunea cu acel ID");
             return;
         }
+
         System.out.print("Dati id-ul candidatului: ");
-        int candidateId = scanner.nextInt(); scanner.nextLine();
-        Candidate candidate = candidateController.get(candidateId);
+        String candidateIdString = scanner.nextLine();
+        Candidate candidate;
+        int candidateId;
+        if (candidateIdString.equals("")) {
+            candidateId = option.getCandidate().getId();
+            candidate = option.getCandidate();
+        } else {
+            candidateId = Integer.parseInt(candidateIdString);
+            candidate = candidateController.get(candidateId);
+        }
         if (candidate == null) {
             print("Candidatul cu id-ul dat nu exista!");
             return;
         }
 
         System.out.println("Dati id-ul sectiunii: ");
-        int sectionId = scanner.nextInt(); scanner.nextLine();
-        Section section = sectionController.get(sectionId);
+        String sectionIdString = scanner.nextLine();
+        Section section;
+        int sectionId;
+        if (sectionIdString.equals("")) {
+            sectionId = option.getSection().getId();
+            section = option.getSection();
+        } else {
+            sectionId = Integer.parseInt(sectionIdString);
+            section = sectionController.get(sectionId);
+        }
         if (section == null) {
             print("Sectiunea cu id-ul dat nu exista!");
             return;
         }
 
-        optionController.updateOption(option, candidate, section);
+        if (!(candidate.equals(option.getCandidate()) && section.equals(option.getSection()))) {
+            optionController.updateOption(option, candidate, section);
+        }
     }
 
     /**
