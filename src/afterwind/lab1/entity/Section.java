@@ -1,9 +1,13 @@
 package afterwind.lab1.entity;
 
+import java.io.Serializable;
+
 /**
  * Retine si gestioneaza datele unei sectiuni
  */
-public class Section implements IIdentifiable<Integer> {
+public class Section implements IIdentifiable<Integer>, Serializable {
+    private final static long serialVersionUID = 1L;
+
     private int id;
     private String name;
     private int nrLoc;

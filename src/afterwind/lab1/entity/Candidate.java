@@ -1,9 +1,13 @@
 package afterwind.lab1.entity;
 
+import java.io.Serializable;
+
 /**
  * Clasa pentru a retine si gestiona datele unui candidat
  */
-public class Candidate implements IIdentifiable<Integer> {
+public class Candidate implements IIdentifiable<Integer>, Serializable {
+    private final static long serialVersionUID = 1L;
+
     private int id;
     private String name;
     private String tel;

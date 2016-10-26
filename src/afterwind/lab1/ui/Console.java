@@ -8,6 +8,7 @@ import afterwind.lab1.entity.Option;
 import afterwind.lab1.entity.Section;
 import afterwind.lab1.exception.ValidationException;
 import afterwind.lab1.repository.FileRepository;
+import afterwind.lab1.repository.FileRepositoryNumeroDos;
 import afterwind.lab1.repository.IRepository;
 import afterwind.lab1.validator.CandidateValidator;
 import afterwind.lab1.validator.SectionValidator;
@@ -24,7 +25,7 @@ import java.util.Scanner;
  */
 public class Console {
     public final CandidateController candidateController = new CandidateController(new FileRepository<>(new CandidateValidator(), new Candidate.Serializer(), "/home/afterwind/IdeaProjects/MAP_Lab1/res/candidates.txt"));
-    public final SectionController sectionController = new SectionController(new FileRepository<>(new SectionValidator(), new Section.Serializer(), "/home/afterwind/IdeaProjects/MAP_Lab1/res/sections.txt"));
+    public final SectionController sectionController = new SectionController(new FileRepositoryNumeroDos<>(new SectionValidator(), "/home/afterwind/IdeaProjects/MAP_Lab1/res/sections2.txt"));
     public final OptionController optionController = new OptionController();
     private Scanner scanner = new Scanner(System.in);
 
