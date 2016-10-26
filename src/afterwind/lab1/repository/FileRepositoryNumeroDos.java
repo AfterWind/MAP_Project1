@@ -30,9 +30,11 @@ public class FileRepositoryNumeroDos<T extends IIdentifiable<K>, K> extends Repo
     protected void read() {
         try(ObjectInputStream br = new ObjectInputStream(new FileInputStream(filename))) {
             List<T> data = (List<T>) br.readObject();
-            for(T e : data) {
+            for (T e : data) {
                 add(e);
             }
+        } catch (FileNotFoundException e1) {
+            System.err.println("File '" + filename + "' not found!");
         } catch (IOException | ValidationException | ClassNotFoundException e) {
             e.printStackTrace();
         }

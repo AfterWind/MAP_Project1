@@ -30,7 +30,6 @@ public class FileRepository<T extends IIdentifiable<K>, K> extends Repository<T,
      */
     protected void read() {
         try(BufferedReader br = new BufferedReader(new FileReader(filename))) {
-
             String line = br.readLine();
             while (line != null) {
                 if (!"".equals(line)) {
@@ -38,6 +37,8 @@ public class FileRepository<T extends IIdentifiable<K>, K> extends Repository<T,
                 }
                 line = br.readLine();
             }
+        } catch (FileNotFoundException e1) {
+            System.err.println("File '" + filename + "' not found!");
         } catch (IOException | ValidationException e) {
             e.printStackTrace();
         }
