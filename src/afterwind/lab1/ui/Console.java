@@ -426,8 +426,8 @@ public class Console {
                 print("Eroare: Optiune invalida!");
             } catch (InvocationTargetException ex3) {
                 System.out.print(ex3.getTargetException().getMessage());
-            } catch (Exception ex4) {
-                ex4.printStackTrace();
+            } catch (Exception ex5) {
+                ex5.printStackTrace();
             }
         }
         uiForceUpdateLinks();

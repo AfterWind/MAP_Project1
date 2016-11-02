@@ -5,7 +5,7 @@ import java.io.Serializable;
 /**
  * Retine si gestioneaza datele unei sectiuni
  */
-public class Section implements IIdentifiable<Integer>, Serializable {
+public class Section implements IIdentifiable<Integer>, Serializable, Comparable<Section> {
     private final static long serialVersionUID = 1L;
 
     private int id;
@@ -85,6 +85,11 @@ public class Section implements IIdentifiable<Integer>, Serializable {
             return id == ((Section) obj).id;
         }
         return false;
+    }
+
+    @Override
+    public int compareTo(Section o) {
+        return getName().compareTo(o.getName());
     }
 
     public static class Serializer implements ISerializer<Section> {

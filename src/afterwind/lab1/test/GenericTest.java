@@ -11,7 +11,7 @@ import afterwind.lab1.validator.SectionValidator;
 import org.junit.Assert;
 import org.junit.Test;
 
-public class GenericTests {
+public class GenericTest {
 
     @Test
     public void repositoryTest() throws ValidationException {

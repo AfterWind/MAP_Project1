@@ -7,7 +7,7 @@ import org.junit.runner.RunWith;
         SectionTest.class,
         CandidateTest.class,
         OptionTest.class,
-        GenericTests.class
+        GenericTest.class
 })
 public class MAPSuite {
 }

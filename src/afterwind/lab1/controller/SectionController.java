@@ -49,13 +49,11 @@ public class SectionController extends AbstractController<Section> {
      */
     public IRepository<Section, Integer> filterByName(String name) {
         IRepository<Section, Integer> result = new Repository<>(new SectionValidator());
-        for (Section s : repo.getData()) {
-            if (s.getName().startsWith(name)) {
-                try {
-                    result.add(s);
-                } catch (ValidationException ex) {
-                    System.out.print(ex.getMessage());
-                }
+        for (Section section : filter((s) -> s.getName().startsWith(name))) {
+            try {
+                result.add(section);
+            } catch (ValidationException ex) {
+                System.out.print(ex.getMessage());
             }
         }
         result.setTableHeader(repo.getTableHeader());
@@ -70,13 +68,11 @@ public class SectionController extends AbstractController<Section> {
      */
     public IRepository<Section, Integer> filterByNrLoc(int nrLoc, boolean lower) {
         IRepository<Section, Integer> result = new Repository<>(new SectionValidator());
-        for (Section s : repo.getData()) {
-            if (lower && s.getNrLoc() <= nrLoc || !lower && s.getNrLoc() >= nrLoc) {
-                try {
-                    result.add(s);
-                } catch (ValidationException ex) {
-                    System.out.print(ex.getMessage());
-                }
+        for (Section section : filter((s) -> lower && s.getNrLoc() <= nrLoc || !lower && s.getNrLoc() >= nrLoc)) {
+            try {
+                result.add(section);
+            } catch (ValidationException ex) {
+                System.out.print(ex.getMessage());
             }
         }
         result.setTableHeader(repo.getTableHeader());

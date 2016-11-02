@@ -1,11 +1,13 @@
 package afterwind.lab1.entity;
 
+import afterwind.lab1.Utils;
+
 import java.io.Serializable;
 
 /**
  * Clasa pentru a retine si gestiona datele unui candidat
  */
-public class Candidate implements IIdentifiable<Integer>, Serializable {
+public class Candidate implements IIdentifiable<Integer>, Serializable, Comparable<Candidate>{
     private final static long serialVersionUID = 1L;
 
     private int id;
@@ -106,11 +108,19 @@ public class Candidate implements IIdentifiable<Integer>, Serializable {
         return false;
     }
 
+    @Override
+    public int compareTo(Candidate o) {
+        return getName().compareTo(o.getName());
+    }
+
     public static class Serializer implements ISerializer<Candidate> {
 
         @Override
         public Candidate deserialize(String s) {
             String[] data = s.split("\\|");
+            if (!Utils.tryParseInt(data[0])) {
+                return null;
+            }
             return new Candidate(Integer.parseInt(data[0]), data[1], data[2], data[3]);
         }
 

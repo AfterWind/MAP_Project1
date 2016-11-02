@@ -47,13 +47,11 @@ public class CandidateController extends AbstractController<Candidate> {
      */
     public IRepository<Candidate, Integer> filterByName(String name) {
         IRepository<Candidate, Integer> result = new Repository<>(new CandidateValidator());
-        for (Candidate c : repo.getData()) {
-            if (c.getName().startsWith(name)) {
-                try {
-                    result.add(c);
-                } catch (ValidationException ex) {
-                    System.out.print(ex.getMessage());
-                }
+        for (Candidate candidate : filter((c) -> c.getName().startsWith(name))) {
+            try {
+                result.add(candidate);
+            } catch (ValidationException ex) {
+                System.out.print(ex.getMessage());
             }
         }
         result.setTableHeader(repo.getTableHeader());
@@ -67,15 +65,14 @@ public class CandidateController extends AbstractController<Candidate> {
      */
     public IRepository<Candidate, Integer> filterByTelephone(String telephone) {
         IRepository<Candidate, Integer> result = new Repository<>(new CandidateValidator());
-        for (Candidate c : repo.getData()) {
-            if (c.getTel().startsWith(telephone)) {
-                try {
-                    result.add(c);
-                } catch (ValidationException ex) {
-                    System.out.print(ex.getMessage());
-                }
+        for (Candidate candidate : filter((c) -> c.getTel().startsWith(telephone))) {
+            try {
+                result.add(candidate);
+            } catch (ValidationException ex) {
+                System.out.println(ex.getMessage());
             }
         }
+
         result.setTableHeader(repo.getTableHeader());
         return result;
     }
@@ -87,13 +84,11 @@ public class CandidateController extends AbstractController<Candidate> {
      */
     public Repository<Candidate, Integer> filterByAddress(String address) {
         Repository<Candidate, Integer> result = new Repository<>(new CandidateValidator());
-        for (Candidate c : repo.getData()) {
-            if (c.getAddress().startsWith(address)) {
-                try {
-                    result.add(c);
-                } catch (ValidationException ex) {
-                    System.out.print(ex.getMessage());
-                }
+        for (Candidate candidate : filter((c) -> c.getAddress().startsWith(address))) {
+            try {
+                result.add(candidate);
+            } catch (ValidationException ex) {
+                System.out.print(ex.getMessage());
             }
         }
         result.setTableHeader(repo.getTableHeader());

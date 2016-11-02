@@ -6,6 +6,12 @@ import afterwind.lab1.repository.IRepository;
 import afterwind.lab1.repository.Repository;
 import afterwind.lab1.validator.IValidator;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
+
 public abstract class AbstractController<T extends IIdentifiable<Integer>> {
     protected IRepository<T, Integer> repo;
 
@@ -59,6 +65,18 @@ public abstract class AbstractController<T extends IIdentifiable<Integer>> {
      */
     public boolean contains(int id) {
         return repo.contains(id);
+    }
+
+    /**
+     * Filtreaza elementele bazandu-se pe pedicatul dat.
+     * @param pred predicatul folosit pentru testare
+     * @return o noua lista cu toate elementele care au trecut testul predicatului
+     */
+    public List<T> filter(Predicate<T> pred) {
+        return StreamSupport.stream(getData().spliterator(), false)
+                .filter(pred)
+                .sorted()
+                .collect(Collectors.toList());
     }
 
     /**

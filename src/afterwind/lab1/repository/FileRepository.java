@@ -33,7 +33,12 @@ public class FileRepository<T extends IIdentifiable<K>, K> extends Repository<T,
             String line = br.readLine();
             while (line != null) {
                 if (!"".equals(line)) {
-                    super.add(serializer.deserialize(line));
+                    T t = serializer.deserialize(line);
+                    if (t == null) {
+                        System.err.println("Linia: '" + line + "' este invalida, se ignora!");
+                    } else {
+                        super.add(t);
+                    }
                 }
                 line = br.readLine();
             }
