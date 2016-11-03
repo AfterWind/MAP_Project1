@@ -102,6 +102,7 @@ public class SectionController extends AbstractController<Section> {
             for (Map.Entry<Section, Integer> entry : v.entrySet()) {
                 if (max < entry.getValue()) {
                     found = entry.getKey();
+                    max = entry.getValue();
                 }
             }
             v.remove(found);

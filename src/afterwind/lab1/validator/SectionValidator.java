@@ -8,6 +8,9 @@ public class SectionValidator implements IValidator<Section> {
     @Override
     public void validate(Section e) throws ValidationException {
         String message = "";
+        if (e.getId() < 0) {
+            message += "ID invalid!\n";
+        }
         if (e.getName().equals("")) {
             message += "Nume invalid!\n";
         }

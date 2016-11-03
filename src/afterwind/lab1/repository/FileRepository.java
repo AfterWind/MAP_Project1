@@ -65,11 +65,13 @@ public class FileRepository<T extends IIdentifiable<K>, K> extends Repository<T,
 
     @Override
     public void markDirty() {
+        super.markDirty();
         this.dirty = true;
     }
 
     @Override
     public void updateLinks() {
+        super.updateLinks();
         if (dirty) {
             write();
         }

@@ -8,6 +8,9 @@ public class OptionValidator implements IValidator<Option> {
     @Override
     public void validate(Option e) throws ValidationException {
         String message = "";
+        if (e.getId() < 0) {
+            message += "ID invalid!\n";
+        }
         if (e.getCandidate() == null) {
             message += "Candidat invalid!\n";
         }

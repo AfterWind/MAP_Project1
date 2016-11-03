@@ -33,6 +33,8 @@ public class FileRepositoryNumeroDos<T extends IIdentifiable<K>, K> extends Repo
             for (T e : data) {
                 add(e);
             }
+        } catch (EOFException e2) {
+            System.out.println("File is empty, no data to read");
         } catch (FileNotFoundException e1) {
             System.err.println("File '" + filename + "' not found!");
         } catch (IOException | ValidationException | ClassNotFoundException e) {
@@ -53,11 +55,13 @@ public class FileRepositoryNumeroDos<T extends IIdentifiable<K>, K> extends Repo
 
     @Override
     public void markDirty() {
+        super.markDirty();
         this.dirty = true;
     }
 
     @Override
     public void updateLinks() {
+        super.updateLinks();
         if (dirty) {
             write();
         }

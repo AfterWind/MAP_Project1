@@ -8,6 +8,9 @@ public class CandidateValidator implements IValidator<Candidate> {
     @Override
     public void validate(Candidate e) throws ValidationException {
         String message = "";
+        if (e.getId() < 0) {
+            message += "ID invalid!\n";
+        }
         if (e.getName().equals("")) {
             message += "Nume invalid!\n";
         }
