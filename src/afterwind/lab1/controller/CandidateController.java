@@ -1,5 +1,6 @@
 package afterwind.lab1.controller;
 
+import afterwind.lab1.Utils;
 import afterwind.lab1.entity.Candidate;
 import afterwind.lab1.exception.ValidationException;
 import afterwind.lab1.repository.FileRepository;
@@ -7,6 +8,10 @@ import afterwind.lab1.repository.IRepository;
 import afterwind.lab1.repository.Repository;
 import afterwind.lab1.validator.CandidateValidator;
 import afterwind.lab1.validator.IValidator;
+
+import java.util.Comparator;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Stratul de "Controller" pentru entitatea "Candidate"
@@ -47,7 +52,8 @@ public class CandidateController extends AbstractController<Candidate> {
      */
     public IRepository<Candidate, Integer> filterByName(String name) {
         IRepository<Candidate, Integer> result = new Repository<>(new CandidateValidator());
-        for (Candidate candidate : filter((c) -> c.getName().startsWith(name))) {
+        List<Candidate> sortedList = sort(filter((c) -> c.getName().startsWith(name)), (c1, c2) -> c1.getName().compareTo(c2.getName()));
+        for (Candidate candidate : sortedList) {
             try {
                 result.add(candidate);
             } catch (ValidationException ex) {
@@ -65,7 +71,8 @@ public class CandidateController extends AbstractController<Candidate> {
      */
     public IRepository<Candidate, Integer> filterByTelephone(String telephone) {
         IRepository<Candidate, Integer> result = new Repository<>(new CandidateValidator());
-        for (Candidate candidate : filter((c) -> c.getTel().startsWith(telephone))) {
+        List<Candidate> sortedList = sort(filter((c) -> c.getTel().startsWith(telephone)), (c1, c2) -> c1.getTel().compareTo(c2.getTel()));
+        for (Candidate candidate : sortedList) {
             try {
                 result.add(candidate);
             } catch (ValidationException ex) {
@@ -84,7 +91,8 @@ public class CandidateController extends AbstractController<Candidate> {
      */
     public Repository<Candidate, Integer> filterByAddress(String address) {
         Repository<Candidate, Integer> result = new Repository<>(new CandidateValidator());
-        for (Candidate candidate : filter((c) -> c.getAddress().startsWith(address))) {
+        List<Candidate> sortedList = sort(filter((c) -> c.getAddress().startsWith(address)), (c1, c2) -> c1.getName().compareTo(c2.getName()));
+        for (Candidate candidate : sortedList) {
             try {
                 result.add(candidate);
             } catch (ValidationException ex) {

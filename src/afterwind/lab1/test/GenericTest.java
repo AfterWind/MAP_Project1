@@ -13,6 +13,9 @@ import afterwind.lab1.validator.SectionValidator;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class GenericTest {
 
     @Test
@@ -91,6 +94,13 @@ public class GenericTest {
         Assert.assertFalse("Failed to check existance of entity inside repository through controller", controller.contains(4));
 
         Assert.assertEquals("Failed to get proper repository from controller", repo, controller.getRepo());
+
+        List<Section> sections = new ArrayList<>();
+        sections.add(c1);
+        sections.add(c2);
+        sections = controller.sort(sections, (s1, s2) -> s1.getNrLoc() - s2.getNrLoc());
+        Assert.assertEquals("Failed to sort list", sections.get(0), c2);
+        Assert.assertEquals("Failed to sort list", sections.get(1), c1);
 
         controller.remove(5);
         Assert.assertEquals("Failed to remove an entity from repository through controller", null, controller.get(5));

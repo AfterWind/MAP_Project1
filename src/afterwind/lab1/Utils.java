@@ -1,6 +1,9 @@
 package afterwind.lab1;
 
+import java.util.Comparator;
 import java.util.InputMismatchException;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Diverse utilitati

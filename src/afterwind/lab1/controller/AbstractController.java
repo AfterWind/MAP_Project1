@@ -7,6 +7,7 @@ import afterwind.lab1.repository.Repository;
 import afterwind.lab1.validator.IValidator;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -75,7 +76,6 @@ public abstract class AbstractController<T extends IIdentifiable<Integer>> {
     public List<T> filter(Predicate<T> pred) {
         return StreamSupport.stream(getData().spliterator(), false)
                 .filter(pred)
-                .sorted()
                 .collect(Collectors.toList());
     }
 
@@ -98,6 +98,17 @@ public abstract class AbstractController<T extends IIdentifiable<Integer>> {
             }
         }
         return max + 1;
+    }
+
+    /**
+     * Sorteaza lista data folosind comparatorul comp
+     * @param list lista initiala
+     * @param comp comparatorul
+     * @param <E> tipul de date
+     * @return lista de elemente sortate
+     */
+    public <E> List<E> sort(List<E> list, Comparator<E> comp) {
+        return list.stream().sorted(comp).collect(Collectors.toList());
     }
 
     /**

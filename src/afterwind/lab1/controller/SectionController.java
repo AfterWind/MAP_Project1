@@ -49,7 +49,8 @@ public class SectionController extends AbstractController<Section> {
      */
     public IRepository<Section, Integer> filterByName(String name) {
         IRepository<Section, Integer> result = new Repository<>(new SectionValidator());
-        for (Section section : filter((s) -> s.getName().startsWith(name))) {
+        List<Section> sortedList = sort(filter((s) -> s.getName().startsWith(name)), (s1, s2) -> s1.getNrLoc() - s2.getNrLoc());
+        for (Section section : sortedList) {
             try {
                 result.add(section);
             } catch (ValidationException ex) {
@@ -68,7 +69,8 @@ public class SectionController extends AbstractController<Section> {
      */
     public IRepository<Section, Integer> filterByNrLoc(int nrLoc, boolean lower) {
         IRepository<Section, Integer> result = new Repository<>(new SectionValidator());
-        for (Section section : filter((s) -> lower && s.getNrLoc() <= nrLoc || !lower && s.getNrLoc() >= nrLoc)) {
+        List<Section> sortedList = sort(filter((s) -> lower && s.getNrLoc() <= nrLoc || !lower && s.getNrLoc() >= nrLoc), (s1, s2) -> s1.getNrLoc() - s2.getNrLoc());
+        for (Section section : sortedList) {
             try {
                 result.add(section);
             } catch (ValidationException ex) {

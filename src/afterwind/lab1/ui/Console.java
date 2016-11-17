@@ -351,7 +351,7 @@ public class Console {
     public void uiFilterSectionsByNrLoc() {
         System.out.print("Dati transa de numar de locuri: ");
         int nrLoc = scanner.nextInt(); scanner.nextLine();
-        System.out.print("Cautam sectii sub sau peste transa (true/false)? ");
+        System.out.print("Cautam sectii sub transa (true/false)? ");
         boolean lower = scanner.nextBoolean();
         IRepository<Section, Integer> result = sectionController.filterByNrLoc(nrLoc, lower);
         print("Rezultatul filtrarii:\n" + result);
