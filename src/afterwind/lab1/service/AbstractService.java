@@ -1,22 +1,23 @@
-package afterwind.lab1.controller;
+package afterwind.lab1.service;
 
 import afterwind.lab1.entity.IIdentifiable;
 import afterwind.lab1.exception.ValidationException;
 import afterwind.lab1.repository.IRepository;
-import afterwind.lab1.repository.Repository;
-import afterwind.lab1.validator.IValidator;
 
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Observable;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
-public abstract class AbstractController<T extends IIdentifiable<Integer>> {
+/**
+ * Controller in pattern-ul MVC
+ */
+public abstract class AbstractService<T extends IIdentifiable<Integer>> extends Observable {
     protected IRepository<T, Integer> repo;
 
-    public AbstractController(IRepository<T, Integer> repo) {
+    public AbstractService(IRepository<T, Integer> repo) {
         this.repo = repo;
     }
     /**
@@ -124,4 +125,5 @@ public abstract class AbstractController<T extends IIdentifiable<Integer>> {
     public IRepository<T, Integer> getRepo() {
         return repo;
     }
+
 }

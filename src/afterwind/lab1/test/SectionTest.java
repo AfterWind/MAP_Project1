@@ -1,7 +1,7 @@
 package afterwind.lab1.test;
 
-import afterwind.lab1.controller.OptionController;
-import afterwind.lab1.controller.SectionController;
+import afterwind.lab1.old_controller.OptionController;
+import afterwind.lab1.old_controller.SectionController;
 import afterwind.lab1.entity.Candidate;
 import afterwind.lab1.entity.ISerializer;
 import afterwind.lab1.entity.Option;

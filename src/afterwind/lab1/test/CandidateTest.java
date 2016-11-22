@@ -1,6 +1,6 @@
 package afterwind.lab1.test;
 
-import afterwind.lab1.controller.CandidateController;
+import afterwind.lab1.old_controller.CandidateController;
 import afterwind.lab1.entity.Candidate;
 import afterwind.lab1.entity.ISerializer;
 import afterwind.lab1.exception.ValidationException;
@@ -17,13 +17,13 @@ public class CandidateTest {
         Candidate c = new Candidate(10, "Sergiu", "000111222", "Kappa");
         Assert.assertEquals("Failed to get proper ID", 10, (int) c.getId());
         Assert.assertEquals("Failed to get proper name", "Sergiu", c.getName());
-        Assert.assertEquals("Failed to get proper telephone number", "000111222", c.getTel());
+        Assert.assertEquals("Failed to get proper telephone number", "000111222", c.getTelephone());
         Assert.assertEquals("Failed to get proper address", "Kappa", c.getAddress());
         c.setName("Victor");
-        c.setTel("00000000");
+        c.setTelephone("00000000");
         c.setAddress("Dunarii");
         Assert.assertEquals("Failed to set proper name", "Victor", c.getName());
-        Assert.assertEquals("Failed to set proper telephone number", "00000000", c.getTel());
+        Assert.assertEquals("Failed to set proper telephone number", "00000000", c.getTelephone());
         Assert.assertEquals("Failed to set proper address", "Dunarii", c.getAddress());
         Assert.assertNotNull("Failed to convert to string", c.toString());
     }
@@ -34,7 +34,7 @@ public class CandidateTest {
         Candidate c1 = new Candidate(10, "Sergiu", "000111222", "Kappa");
         controller.updateCandidate(c1, "Andrei", "111", "idk");
         Assert.assertEquals("Failed to update candidate", "Andrei", c1.getName());
-        Assert.assertEquals("Failed to update candidate", "111", c1.getTel());
+        Assert.assertEquals("Failed to update candidate", "111", c1.getTelephone());
         Assert.assertEquals("Failed to update candidate", "idk", c1.getAddress());
         Assert.assertEquals("Failed to update candidate", 10, (int) c1.getId());
         Assert.assertNotNull("Failed to convert controller to string", controller.toString());
@@ -78,7 +78,7 @@ public class CandidateTest {
         Assert.assertNotNull("Failed to desearialize candidate", c);
         Assert.assertEquals("Failed to deserialize id of candidate", 1, (int) c.getId());
         Assert.assertEquals("Failed to deserialize name of candidate", "Adi", c.getName());
-        Assert.assertEquals("Failed to deserialize telephone of candidate", "012", c.getTel());
+        Assert.assertEquals("Failed to deserialize telephone of candidate", "012", c.getTelephone());
         Assert.assertEquals("Failed to deserialize address of candidate", "Asdf", c.getAddress());
     }
 

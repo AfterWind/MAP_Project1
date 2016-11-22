@@ -1,4 +1,4 @@
-package afterwind.lab1.controller;
+package afterwind.lab1.old_controller;
 
 import afterwind.lab1.entity.Candidate;
 import afterwind.lab1.entity.Option;

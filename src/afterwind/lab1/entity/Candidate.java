@@ -1,6 +1,8 @@
 package afterwind.lab1.entity;
 
 import afterwind.lab1.Utils;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleStringProperty;
 
 import java.io.Serializable;
 
@@ -10,23 +12,23 @@ import java.io.Serializable;
 public class Candidate implements IIdentifiable<Integer>, Serializable, Comparable<Candidate>{
     private final static long serialVersionUID = 1L;
 
-    private int id;
-    private String name;
-    private String tel;
-    private String address;
+    private SimpleIntegerProperty id;
+    private SimpleStringProperty name;
+    private SimpleStringProperty telephone;
+    private SimpleStringProperty address;
 
     /**
      * Constructor pentru un obiect Candidate
      * @param id Identificatorul unic
      * @param name Numele
-     * @param tel Numarul de telefon
+     * @param telephone Numarul de telefon
      * @param address Adresa
      */
-    public Candidate(int id, String name, String tel, String address) {
-        this.name = name;
-        this.id = id;
-        this.tel = tel;
-        this.address = address;
+    public Candidate(int id, String name, String telephone, String address) {
+        this.id = new SimpleIntegerProperty(id);
+        this.name = new SimpleStringProperty(name);
+        this.telephone = new SimpleStringProperty(telephone);
+        this.address = new SimpleStringProperty(address);
     }
 
     /**
@@ -34,7 +36,7 @@ public class Candidate implements IIdentifiable<Integer>, Serializable, Comparab
      * @return numele candidatului
      */
     public String getName() {
-        return name;
+        return name.get();
     }
 
     /**
@@ -43,15 +45,15 @@ public class Candidate implements IIdentifiable<Integer>, Serializable, Comparab
      */
     @Override
     public Integer getId() {
-        return id;
+        return id.get();
     }
 
     /**
      * Getter pentru numarul de telefon
      * @return numarul de telefon al candidatului
      */
-    public String getTel() {
-        return tel;
+    public String getTelephone() {
+        return telephone.get();
     }
 
     /**
@@ -59,7 +61,7 @@ public class Candidate implements IIdentifiable<Integer>, Serializable, Comparab
      * @return adresa candidatului
      */
     public String getAddress() {
-        return address;
+        return address.get();
     }
 
     /**
@@ -67,15 +69,15 @@ public class Candidate implements IIdentifiable<Integer>, Serializable, Comparab
      * @param name noul nume al candidatului
      */
     public void setName(String name) {
-        this.name = name;
+        this.name.set(name);
     }
 
     /**
      * Setter pentru numarul de telefon
-     * @param tel noul numar de telefon al candidatului
+     * @param telephone noul numar de telefon al candidatului
      */
-    public void setTel(String tel) {
-        this.tel = tel;
+    public void setTelephone(String telephone) {
+        this.telephone.set(telephone);
     }
 
     /**
@@ -83,7 +85,7 @@ public class Candidate implements IIdentifiable<Integer>, Serializable, Comparab
      * @param address noua adresa a candidatului
      */
     public void setAddress(String address) {
-        this.address = address;
+        this.address.set(address);
     }
 
     /**
@@ -92,7 +94,7 @@ public class Candidate implements IIdentifiable<Integer>, Serializable, Comparab
      */
     @Override
     public String toString() {
-        return String.format("%3s | %20s | %15s | %15s", id, name, tel, address);
+        return String.format("%3s | %20s | %15s | %15s", getId(), getName(), getTelephone(), getAddress());
     }
 
     /**
@@ -102,10 +104,7 @@ public class Candidate implements IIdentifiable<Integer>, Serializable, Comparab
      */
     @Override
     public boolean equals(Object obj) {
-        if (obj instanceof Candidate) {
-            return id == ((Candidate) obj).id;
-        }
-        return false;
+        return obj instanceof Candidate && getId().equals(((Candidate) obj).getId());
     }
 
     @Override
@@ -126,7 +125,7 @@ public class Candidate implements IIdentifiable<Integer>, Serializable, Comparab
 
         @Override
         public String serialize(Candidate e) {
-            return String.format("%d|%s|%s|%s", e.getId(), e.getName(), e.getTel(), e.getAddress());
+            return String.format("%d|%s|%s|%s", e.getId(), e.getName(), e.getTelephone(), e.getAddress());
         }
     }
 }

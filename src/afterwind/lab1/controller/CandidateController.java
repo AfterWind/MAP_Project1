@@ -1,110 +1,107 @@
 package afterwind.lab1.controller;
 
-import afterwind.lab1.Utils;
 import afterwind.lab1.entity.Candidate;
 import afterwind.lab1.exception.ValidationException;
-import afterwind.lab1.repository.FileRepository;
-import afterwind.lab1.repository.IRepository;
-import afterwind.lab1.repository.Repository;
-import afterwind.lab1.validator.CandidateValidator;
-import afterwind.lab1.validator.IValidator;
+import afterwind.lab1.service.CandidateService;
+import afterwind.lab1.ui.CandidateView;
+import javafx.beans.value.ObservableValue;
+import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.scene.control.Alert;
 
-import java.util.Comparator;
-import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Observable;
+import java.util.Observer;
 
 /**
- * Stratul de "Controller" pentru entitatea "Candidate"
- * Folosita pentru schimbul de informatii dintre Repository si UI
+ * MVC controller perntru Candidate
  */
-public class CandidateController extends AbstractController<Candidate> {
+public class CandidateController implements Observer {
 
-    /**
-     * Constructor pentru CandidateController
-     */
-    public CandidateController(IRepository<Candidate, Integer> repo) {
-        super(repo);
-        repo.setTableHeader(String.format("%3s | %20s | %15s | %15s", "ID", "Nume", "Telefon", "Adresa"));
+    private CandidateService service;
+    private CandidateView view;
+    private ObservableList<Candidate> model;
+
+    public CandidateController(CandidateService service, CandidateView view) {
+        this.service = service;
+        this.view = view;
+        this.model = service.getRepo().getData();
     }
 
-    public CandidateController() {
-        this(new Repository<>(new CandidateValidator()));
+    public void showAll() {
+        view.tableView.setItems(model);
     }
 
-    /**
-     * Updateaza datele aflate in entitatea candidat
-     * @param candidate candidatul updatat
-     * @param name noul nume al candidatului
-     * @param tel noul numar de telefon al candidatului
-     * @param address noua adresa a candidatului
-     */
-    public void updateCandidate(Candidate candidate, String name, String tel, String address) {
-        candidate.setName(name);
-        candidate.setAddress(address);
-        candidate.setTel(tel);
-        repo.markDirty();
-    }
-
-    /**
-     * Filtrare dupa nume
-     * @param name stringul cu care este comparat numele prin startsWith
-     * @return un repository care contine toate datele filtrate
-     */
-    public IRepository<Candidate, Integer> filterByName(String name) {
-        IRepository<Candidate, Integer> result = new Repository<>(new CandidateValidator());
-        List<Candidate> sortedList = sort(filter((c) -> c.getName().startsWith(name)), (c1, c2) -> c1.getName().compareTo(c2.getName()));
-        for (Candidate candidate : sortedList) {
-            try {
-                result.add(candidate);
-            } catch (ValidationException ex) {
-                System.out.print(ex.getMessage());
-            }
+    public void showDetails(Candidate c) {
+        if (c == null) {
+            clearTextFields();
+        } else {
+            view.nameTextField.setText(c.getName());
+            view.addressTextField.setText(c.getAddress());
+            view.telTextField.setText(c.getTelephone());
         }
-        result.setTableHeader(repo.getTableHeader());
-        return result;
     }
 
-    /**
-     * Filtrare dupa numarul de telefon
-     * @param telephone stringul cu care este comparat numele prin startsWith
-     * @return un repository care contine toate datele filtrate
-     */
-    public IRepository<Candidate, Integer> filterByTelephone(String telephone) {
-        IRepository<Candidate, Integer> result = new Repository<>(new CandidateValidator());
-        List<Candidate> sortedList = sort(filter((c) -> c.getTel().startsWith(telephone)), (c1, c2) -> c1.getTel().compareTo(c2.getTel()));
-        for (Candidate candidate : sortedList) {
-            try {
-                result.add(candidate);
-            } catch (ValidationException ex) {
-                System.out.println(ex.getMessage());
-            }
-        }
-
-        result.setTableHeader(repo.getTableHeader());
-        return result;
-    }
-
-    /**
-     * Filtrare dupa adresa
-     * @param address stringul cu care este comparat numele prin startsWith
-     * @return un repository care contine toate datele filtrate
-     */
-    public Repository<Candidate, Integer> filterByAddress(String address) {
-        Repository<Candidate, Integer> result = new Repository<>(new CandidateValidator());
-        List<Candidate> sortedList = sort(filter((c) -> c.getAddress().startsWith(address)), (c1, c2) -> c1.getName().compareTo(c2.getName()));
-        for (Candidate candidate : sortedList) {
-            try {
-                result.add(candidate);
-            } catch (ValidationException ex) {
-                System.out.print(ex.getMessage());
-            }
-        }
-        result.setTableHeader(repo.getTableHeader());
-        return result;
+    public void clearTextFields() {
+        view.nameTextField.setText("");
+        view.addressTextField.setText("");
+        view.telTextField.setText("");
     }
 
     @Override
-    public String toString() {
-        return repo.toString();
+    public void update(Observable o, Object arg) {
+        if (o instanceof CandidateService) {
+            model.setAll(((CandidateService) o).getRepo().getData());
+        }
+    }
+
+    public void handleSelectionChanged(ObservableValue<? extends Candidate> o, Candidate oldValue, Candidate newValue) {
+        showDetails(newValue);
+    }
+
+    public void handleAdd(ActionEvent ev) {
+        String name = view.nameTextField.getText();
+        String address = view.addressTextField.getText();
+        String tel = view.telTextField.getText();
+        Integer id = service.getNextId();
+        try {
+            service.add(new Candidate(id, name, tel, address));
+        } catch (ValidationException ex) {
+            showErrorMessage(ex.getMessage());
+        }
+    }
+
+    public void handleDelete(ActionEvent ev) {
+        Candidate c = view.tableView.getSelectionModel().getSelectedItem();
+        service.remove(c);
+        clearTextFields();
+    }
+
+    public void handleUpdate(ActionEvent ev) {
+        Candidate c = view.tableView.getSelectionModel().getSelectedItem();
+        String name = view.nameTextField.getText();
+        String address = view.addressTextField.getText();
+        String tel = view.telTextField.getText();
+        for (char ch : tel.toCharArray()) {
+            if (ch < '0' || ch > '9') {
+                showErrorMessage("Telefon invalid!");
+                return;
+            }
+        }
+        service.updateCandidate(c, name, tel, address);
+        for (int i = 0; i < 4; i++) {
+            view.tableView.getColumns().get(i).setVisible(false);
+            view.tableView.getColumns().get(i).setVisible(true);
+        }
+    }
+
+    public void handleClear(ActionEvent ev) {
+        clearTextFields();
+    }
+
+    public void showErrorMessage(String message) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Eroare");
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 }

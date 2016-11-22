@@ -2,6 +2,7 @@ package afterwind.lab1.repository;
 
 import afterwind.lab1.entity.IIdentifiable;
 import afterwind.lab1.exception.ValidationException;
+import javafx.collections.ObservableList;
 
 public interface IRepository<T extends IIdentifiable<K>, K> {
 
@@ -41,7 +42,7 @@ public interface IRepository<T extends IIdentifiable<K>, K> {
      * Returneaza elementele
      * @return un obiect iterabil care contine toate elementele
      */
-    Iterable<T> getData();
+    ObservableList<T> getData();
 
     /**
      * Getter pentru tableHeader

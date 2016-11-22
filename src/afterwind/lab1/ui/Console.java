@@ -1,8 +1,8 @@
 package afterwind.lab1.ui;
 
-import afterwind.lab1.controller.CandidateController;
-import afterwind.lab1.controller.OptionController;
-import afterwind.lab1.controller.SectionController;
+import afterwind.lab1.old_controller.CandidateController;
+import afterwind.lab1.old_controller.OptionController;
+import afterwind.lab1.old_controller.SectionController;
 import afterwind.lab1.entity.Candidate;
 import afterwind.lab1.entity.Option;
 import afterwind.lab1.entity.Section;
@@ -213,7 +213,7 @@ public class Console {
         System.out.print("Dati numarul de telefon al candidatului: ");
         String tel = scanner.nextLine();
         if (tel.equals("")) {
-            tel = candidate.getTel();
+            tel = candidate.getTelephone();
         }
         System.out.print("Dati adresa candidatului: ");
         String address = scanner.nextLine();
@@ -221,7 +221,7 @@ public class Console {
             address = candidate.getAddress();
         }
 
-        if (!(address.equals(candidate.getAddress()) && tel.equals(candidate.getTel()) && name.equals(candidate.getName()))) {
+        if (!(address.equals(candidate.getAddress()) && tel.equals(candidate.getTelephone()) && name.equals(candidate.getName()))) {
             candidateController.updateCandidate(candidate, name, tel, address);
         }
     }

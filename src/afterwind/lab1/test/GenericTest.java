@@ -1,6 +1,6 @@
 package afterwind.lab1.test;
 
-import afterwind.lab1.controller.SectionController;
+import afterwind.lab1.old_controller.SectionController;
 import afterwind.lab1.entity.Candidate;
 import afterwind.lab1.entity.Section;
 import afterwind.lab1.exception.ValidationException;

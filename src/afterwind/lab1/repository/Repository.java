@@ -3,6 +3,8 @@ package afterwind.lab1.repository;
 import afterwind.lab1.entity.IIdentifiable;
 import afterwind.lab1.exception.ValidationException;
 import afterwind.lab1.validator.IValidator;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -11,7 +13,7 @@ import java.util.List;
 public class Repository<T extends IIdentifiable<K>, K> implements IRepository<T, K> {
 
     protected String tableHeader = "";
-    protected List<T> data = new ArrayList<>();
+    protected ObservableList<T> data = FXCollections.observableArrayList();
     protected IValidator<T> validator;
 
     public Repository(IValidator<T> validator) {
@@ -53,6 +55,7 @@ public class Repository<T extends IIdentifiable<K>, K> implements IRepository<T,
     public void add(T e) throws ValidationException {
         validator.validate(e);
         data.add(e);
+        markDirty();
     }
 
     /**
@@ -65,9 +68,10 @@ public class Repository<T extends IIdentifiable<K>, K> implements IRepository<T,
         while (it.hasNext()) {
             if (it.next().equals(e)) {
                 it.remove();
-                return;
+                break;
             }
         }
+        markDirty();
     }
 
     /**
@@ -99,7 +103,7 @@ public class Repository<T extends IIdentifiable<K>, K> implements IRepository<T,
      * @return vectorul de entitati
      */
     @Override
-    public Iterable<T> getData() {
+    public ObservableList<T> getData() {
         return data;
     }
 
