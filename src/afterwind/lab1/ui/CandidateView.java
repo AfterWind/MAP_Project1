@@ -8,6 +8,7 @@ import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 
 public class CandidateView extends BorderPane {
@@ -47,6 +48,7 @@ public class CandidateView extends BorderPane {
         initCenter();
         initTop();
         initBottom();
+        controller.showAll();
     }
 
     private void initTop() {
@@ -64,8 +66,11 @@ public class CandidateView extends BorderPane {
         HBox main = new HBox(5);
         center.getChildren().add(main);
 
+        // --- Table ---
+
         VBox tableBox = new VBox(10);
         main.getChildren().add(tableBox);
+        tableBox.getChildren().add(tableView);
 
         TableColumn<Candidate, Integer> columnID = new TableColumn<>("ID");
         TableColumn<Candidate, String> columnName = new TableColumn<>("Name");
@@ -76,29 +81,33 @@ public class CandidateView extends BorderPane {
         columnName.setCellValueFactory(new PropertyValueFactory<>("name"));
         columnTel.setCellValueFactory(new PropertyValueFactory<>("telephone"));
         columnAddress.setCellValueFactory(new PropertyValueFactory<>("address"));
+
         tableView.getColumns().setAll(columnID, columnName, columnTel, columnAddress);
+
         tableView.getSelectionModel().selectedItemProperty().addListener(controller::handleSelectionChanged);
-
-        tableBox.getChildren().add(tableView);
-
-        controller.showAll();
 
         HBox buttons = new HBox(5);
         tableBox.getChildren().add(buttons);
 
-        Button buttonAdd = new Button("Add");
         Button buttonDelete = new Button("Delete");
-        Button buttonUpdate = new Button("Update");
-        Button buttonClear = new Button("Clear");
-
-        buttonAdd.setOnAction(controller::handleAdd);
-        buttonDelete.setOnAction(controller::handleDelete);
-        buttonUpdate.setOnAction(controller::handleUpdate);
-        buttonClear.setOnAction(controller::handleClear);
+        buttonDelete.setMinSize(80, 0);
+        Button buttonRefresh = new Button("Refresh");
+        buttonRefresh.setMinSize(80, 0);
+        Button buttonSave = new Button("Save");
+        buttonSave.setMinSize(80, 0);
+        buttons.getChildren().addAll(buttonDelete, buttonRefresh, buttonSave);
 
         AnchorPane.setBottomAnchor(buttons, 10D);
         buttons.setAlignment(Pos.CENTER);
-        buttons.getChildren().addAll(buttonAdd, buttonDelete, buttonUpdate, buttonClear);
+
+        buttonDelete.setOnAction(controller::handleDelete);
+        buttonRefresh.setOnAction(controller::handleRefresh);
+        buttonSave.setOnAction(controller::handleSave);
+
+        // --- Details ---
+
+        VBox detailsBox = new VBox(5);
+        main.getChildren().add(detailsBox);
 
         GridPane details = new GridPane();
         details.setHgap(5D);
@@ -114,8 +123,38 @@ public class CandidateView extends BorderPane {
         details.add(addressTextField, 1, 1);
         details.add(telLabel, 0, 2);
         details.add(telTextField, 1, 2);
+
+        nameTextField.borderProperty().set(new Border(new BorderStroke(Color.LIGHTGRAY, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
+        addressTextField.borderProperty().set(new Border(new BorderStroke(Color.LIGHTGRAY, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
+        telTextField.borderProperty().set(new Border(new BorderStroke(Color.LIGHTGRAY, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
+
         AnchorPane.setRightAnchor(details, 20D);
-        main.getChildren().add(details);
+        detailsBox.getChildren().add(details);
+
+        nameTextField.textProperty().addListener(controller::handleTextChanged);
+        addressTextField.textProperty().addListener(controller::handleTextChanged);
+        telTextField.textProperty().addListener(controller::handleTextChanged);
+
+        HBox buttons2 = new HBox(5);
+        detailsBox.getChildren().add(buttons2);
+        buttons2.setPadding(new Insets(20, 0, 0, 0));
+
+        Button buttonAdd = new Button("Add");
+        Button buttonUpdate = new Button("Update");
+        Button buttonClear = new Button("Clear");
+        buttons2.getChildren().addAll(buttonAdd, buttonUpdate, buttonClear);
+
+        buttonAdd.setMinSize(80, 0);
+        buttonUpdate.setMinSize(80, 0);
+        buttonClear.setMinSize(80, 0);
+
+        buttonAdd.setOnAction(controller::handleAdd);
+        buttonDelete.setOnAction(controller::handleDelete);
+        buttonUpdate.setOnAction(controller::handleUpdate);
+        buttonClear.setOnAction(controller::handleClear);
+
+        AnchorPane.setBottomAnchor(buttons2, 10D);
+        buttons2.setAlignment(Pos.CENTER);
     }
 
     private void initBottom() {
