@@ -1,5 +1,8 @@
 package afterwind.lab1.entity;
 
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleStringProperty;
+
 import java.io.Serializable;
 
 /**
@@ -8,9 +11,9 @@ import java.io.Serializable;
 public class Section implements IIdentifiable<Integer>, Serializable, Comparable<Section> {
     private final static long serialVersionUID = 1L;
 
-    private int id;
-    private String name;
-    private int nrLoc;
+    private SimpleIntegerProperty id;
+    private SimpleStringProperty name;
+    private SimpleIntegerProperty nrLoc;
 
     /**
      * Constructor pentru o sectiune
@@ -19,9 +22,9 @@ public class Section implements IIdentifiable<Integer>, Serializable, Comparable
      * @param nrLoc Numarul de locuri disponibile
      */
     public Section(int id, String name, int nrLoc) {
-        this.name = name;
-        this.id = id;
-        this.nrLoc = nrLoc;
+        this.name = new SimpleStringProperty(name);
+        this.id = new SimpleIntegerProperty(id);
+        this.nrLoc = new SimpleIntegerProperty(nrLoc);
     }
 
     /**
@@ -29,7 +32,7 @@ public class Section implements IIdentifiable<Integer>, Serializable, Comparable
      * @return numele sectiunii
      */
     public String getName() {
-        return name;
+        return name.getValue();
     }
 
     /**
@@ -38,7 +41,7 @@ public class Section implements IIdentifiable<Integer>, Serializable, Comparable
      */
     @Override
     public Integer getId() {
-        return id;
+        return id.getValue();
     }
 
     /**
@@ -46,7 +49,7 @@ public class Section implements IIdentifiable<Integer>, Serializable, Comparable
      * @return numarul de locuri disponibile al sectiunii
      */
     public int getNrLoc() {
-        return nrLoc;
+        return nrLoc.getValue();
     }
 
     /**
@@ -54,7 +57,7 @@ public class Section implements IIdentifiable<Integer>, Serializable, Comparable
      * @param name noul nume al sectiunii
      */
     public void setName(String name) {
-        this.name = name;
+        this.name.set(name);
     }
 
     /**
@@ -62,7 +65,7 @@ public class Section implements IIdentifiable<Integer>, Serializable, Comparable
      * @param nrLoc nou numar de locuri disponibile al sectiunii
      */
     public void setNrLoc(int nrLoc) {
-        this.nrLoc = nrLoc;
+        this.nrLoc.set(nrLoc);
     }
 
     /**

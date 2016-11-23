@@ -149,7 +149,6 @@ public class CandidateView extends BorderPane {
         buttonClear.setMinSize(80, 0);
 
         buttonAdd.setOnAction(controller::handleAdd);
-        buttonDelete.setOnAction(controller::handleDelete);
         buttonUpdate.setOnAction(controller::handleUpdate);
         buttonClear.setOnAction(controller::handleClear);
 

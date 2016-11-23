@@ -9,7 +9,7 @@ import afterwind.lab1.validator.CandidateValidator;
 import java.util.List;
 
 /**
- * Candidate Controller in MVC
+ * Candidate service in MVC
  */
 public class CandidateService extends AbstractService<Candidate> {
 

@@ -1,27 +1,26 @@
 package afterwind.lab1;
 
-import afterwind.lab1.old_controller.CandidateController;
+import afterwind.lab1.controller.SectionController;
+import afterwind.lab1.entity.Section;
 import afterwind.lab1.entity.Candidate;
 import afterwind.lab1.repository.FileRepository;
 import afterwind.lab1.service.CandidateService;
-import afterwind.lab1.ui.CandidateView;
+import afterwind.lab1.service.SectionService;
 import afterwind.lab1.validator.CandidateValidator;
+import afterwind.lab1.validator.SectionValidator;
 import javafx.application.Application;
-import javafx.geometry.Pos;
-import javafx.scene.Group;
-import javafx.scene.Node;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
+import java.io.File;
+
 public class Main extends Application {
 
-    private CandidateService service = new CandidateService(new FileRepository<>(new CandidateValidator(), new Candidate.Serializer(), "/home/afterwind/IdeaProjects/MAP_Lab1/res/candidates.txt"));
-
+    private CandidateService candidateService = new CandidateService(new FileRepository<>(new CandidateValidator(), new Candidate.Serializer(), "/home/afterwind/IdeaProjects/MAP_Lab1/res/candidates.txt"));
+    private SectionService sectionService = new SectionService(new FileRepository<>(new SectionValidator(), new Section.Serializer(), "/home/afterwind/IdeaProjects/MAP_Lab1/res/sections.txt"));
     /*
         Verificarea datelor de intrare.
         Specificatii / Documentatie functii.
@@ -39,19 +38,32 @@ public class Main extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-        HBox root = new HBox();
-        root.setAlignment(Pos.CENTER);
+//        HBox root = new HBox();
+//        root.setAlignment(Pos.CENTER);
+//        Scene scene = new Scene(root, 1000, 600, Color.ALICEBLUE);
+//        root.getChildren().add(new CandidateView(candidateService));
+//        stage.setTitle("Candidate Management");
+//        stage.setScene(scene);
+//        stage.requestFocus();
+//        stage.show();
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(new File("/home/afterwind/IdeaProjects/MAP_Lab1/src/afterwind/lab1/ui/SectionView.fxml").toURL());
+        HBox root = loader.load();
+        SectionController controller = loader.getController();
+        controller.setService(sectionService);
         Scene scene = new Scene(root, 1000, 600, Color.ALICEBLUE);
-        root.getChildren().add(new CandidateView(service));
-        stage.setTitle("Candidate Management");
+        stage.setTitle("Sections Management");
         stage.setScene(scene);
         stage.requestFocus();
         stage.show();
+
+
     }
 
     @Override
     public void stop() throws Exception {
-        service.getRepo().updateLinks();
+        candidateService.getRepo().updateLinks();
+        sectionService.getRepo().updateLinks();
         super.stop();
     }
 }
