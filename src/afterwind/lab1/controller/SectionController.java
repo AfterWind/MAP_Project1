@@ -1,8 +1,6 @@
 package afterwind.lab1.controller;
 
 import afterwind.lab1.Utils;
-import afterwind.lab1.entity.Candidate;
-import afterwind.lab1.entity.Option;
 import afterwind.lab1.entity.Section;
 import afterwind.lab1.exception.ValidationException;
 import afterwind.lab1.service.SectionService;
@@ -31,24 +29,43 @@ public class SectionController {
     private SectionService service;
     private ObservableList<Section> model;
 
+    /**
+     * Constructor pentru controllerul de sectiuni
+     */
     public SectionController() { }
 
+    /**
+     * Afiseaza toate sectiunile
+     */
     public void showAll() {
         tableView.setItems(model);
     }
-    
+
+    /**
+     * Seteaza service-ul
+     * @param service service-ul
+     */
     public void setService(SectionService service) {
         this.service = service;
         this.model = service.getRepo().getData();
         showAll();
     }
-    
+
+    /**
+     * Sterge textul din fiecare TextField
+     */
     public void clearTextFields() {
         nameTextField.setText("");        
         nrLocTextField.setText("");        
         tableView.getSelectionModel().clearSelection();
     }
-    
+
+    /**
+     * Verifica datele din TextField-uri
+     * @param name Numele sectiunii
+     * @param nrLoc Numarul de locuri in acea sectiune
+     * @return daca datele sunt valide
+     */
     public boolean checkFields(String name, String nrLoc) {
         boolean errored = false;
         if (name.equals("")) {
@@ -62,6 +79,10 @@ public class SectionController {
         return errored;
     }
 
+    /**
+     * Afiseaza detalii despre o sectiune
+     * @param s Sectiunea
+     */
     public void showDetails(Section s) {
         nameTextField.setText(s.getName());
         nrLocTextField.setText(s.getNrLoc() + "");
@@ -75,32 +96,22 @@ public class SectionController {
         tableView.getSelectionModel().selectedItemProperty().addListener(this::handleSelectionChanged);
     }
 
+    /**
+     * Apelat daca selectia se modifica
+     * @param oldValue valoarea veche
+     * @param newValue valoarea noua
+     */
     public void handleSelectionChanged(ObservableValue<? extends Section> o, Section oldValue, Section newValue) {
         if (newValue != null) {
             showDetails(newValue);
         }
     }
 
-    public void handleDelete(ActionEvent actionEvent) {
-        Section s = tableView.getSelectionModel().getSelectedItem();
-        if (s == null) {
-            Utils.showErrorMessage("Nu a fost selectata nicio sectie!");
-            return;
-        }
-        service.remove(s);
-        clearTextFields();
-    }
-
-    public void handleRefresh(ActionEvent actionEvent) {
-        showAll();
-    }
-
-    public void handleSave(ActionEvent actionEvent) {
-        service.getRepo().updateLinks();
-        Utils.showInfoMessage("Totul a fost salvat in fisier!");
-    }
-
-    public void handleAdd(ActionEvent actionEvent) {
+    /**
+     * Apelat cand se apasa pe butonul Add
+     * @param ev evenimentul
+     */
+    public void handleAdd(ActionEvent ev) {
         String name = nameTextField.getText();
         String nrLocString = nrLocTextField.getText();
         if (checkFields(name, nrLocString)) {
@@ -113,6 +124,20 @@ public class SectionController {
         } catch (ValidationException e) {
             Utils.showErrorMessage(e.getMessage());
         }
+    }
+
+    /**
+     * Apelat cand se apasa pe butonul Delete
+     * @param ev evenimentul
+     */
+    public void handleDelete(ActionEvent ev) {
+        Section s = tableView.getSelectionModel().getSelectedItem();
+        if (s == null) {
+            Utils.showErrorMessage("Nu a fost selectata nicio sectie!");
+            return;
+        }
+        service.remove(s);
+        clearTextFields();
     }
 
     public void handleUpdate(ActionEvent actionEvent) {
@@ -128,9 +153,34 @@ public class SectionController {
         }
         int nrLoc = Integer.parseInt(nrLocString);
         service.updateSection(s, name, nrLoc);
+        for (int i = 0; i < 3; i++) {
+            tableView.getColumns().get(i).setVisible(false);
+            tableView.getColumns().get(i).setVisible(true);
+        }
     }
 
-    public void handleClear(ActionEvent actionEvent) {
+    /**
+     * Apelat cand se apasa pe butonul Clear
+     * @param ev evenimentul
+     */
+    public void handleClear(ActionEvent ev) {
         clearTextFields();
+    }
+
+    /**
+     * Apelat cand se apasa pe butonul Refresh
+     * @param ev evenimentul
+     */
+    public void handleRefresh(ActionEvent ev) {
+        showAll();
+    }
+
+    /**
+     * Apelat cand se apasa pe butonul Save
+     * @param ev evenimentul
+     */
+    public void handleSave(ActionEvent ev) {
+        service.getRepo().updateLinks();
+        Utils.showInfoMessage("Totul a fost salvat in fisier!");
     }
 }

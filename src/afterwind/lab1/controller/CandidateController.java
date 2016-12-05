@@ -25,22 +25,37 @@ public class CandidateController implements Observer {
     private CandidateView view;
     private ObservableList<Candidate> model;
 
+    /**
+     * Constructor pentru CandidateController
+     * @param service Service-ul de candidate
+     * @param view View-ul controlat
+     */
     public CandidateController(CandidateService service, CandidateView view) {
         this.service = service;
         this.view = view;
         this.model = service.getRepo().getData();
     }
 
+    /**
+     * Afiseaza toti candidatii
+     */
     public void showAll() {
         view.tableView.setItems(model);
     }
 
+    /**
+     * Afiseaza detaliile despre un candidat in TextField-uri
+     * @param c
+     */
     public void showDetails(Candidate c) {
         view.nameTextField.setText(c.getName());
         view.addressTextField.setText(c.getAddress());
         view.telTextField.setText(c.getTelephone());
     }
 
+    /**
+     * Goleste textul din toate TextField-uri
+     */
     public void clearTextFields() {
         view.nameTextField.setText("");
         view.addressTextField.setText("");
@@ -48,6 +63,13 @@ public class CandidateController implements Observer {
         view.tableView.getSelectionModel().clearSelection();
     }
 
+    /**
+     * Verifica daca textul din TextField-uri este valid
+     * @param name Numele candidatului
+     * @param address Adresa candidatului
+     * @param tel Numarul de telefon al candidatului
+     * @return daca textul e valid
+     */
     public boolean checkFields(String name, String address, String tel) {
         boolean errored = false;
         if (name.equals("")) {
@@ -79,12 +101,21 @@ public class CandidateController implements Observer {
         }
     }
 
+    /**
+     * Apelat daca selectia se modifica
+     * @param oldValue valoarea veche
+     * @param newValue valoarea noua
+     */
     public void handleSelectionChanged(ObservableValue<? extends Candidate> o, Candidate oldValue, Candidate newValue) {
         if (newValue != null) {
             showDetails(newValue);
         }
     }
 
+    /**
+     * Apelat cand se apasa pe butonul Add
+     * @param ev evenimentul
+     */
     public void handleAdd(ActionEvent ev) {
         String name = view.nameTextField.getText();
         String address = view.addressTextField.getText();
@@ -102,6 +133,10 @@ public class CandidateController implements Observer {
         }
     }
 
+    /**
+     * Apelat cand se apasa pe butonul Delete
+     * @param ev evenimentul
+     */
     public void handleDelete(ActionEvent ev) {
         Candidate c = view.tableView.getSelectionModel().getSelectedItem();
         if (c == null) {
@@ -112,6 +147,10 @@ public class CandidateController implements Observer {
         clearTextFields();
     }
 
+    /**
+     * Apelat cand se apasa pe butonul Update
+     * @param ev evenimentul
+     */
     public void handleUpdate(ActionEvent ev) {
         Candidate c = view.tableView.getSelectionModel().getSelectedItem();
         if (c == null) {
@@ -133,20 +172,36 @@ public class CandidateController implements Observer {
             view.tableView.getColumns().get(i).setVisible(true);
         }
     }
-
+    /**
+     * Apelat cand se apasa pe butonul Clear
+     * @param ev evenimentul
+     */
     public void handleClear(ActionEvent ev) {
         clearTextFields();
     }
 
+    /**
+     * Apelat cand se apasa pe butonul Refresh
+     * @param ev evenimentul
+     */
     public void handleRefresh(ActionEvent ev) {
         showAll();
     }
 
+    /**
+     * Apelat cand se apasa pe butonul Save
+     * @param ev evenimentul
+     */
     public void handleSave(ActionEvent ev) {
         Utils.showInfoMessage("Totul s-a salvat in fisier!");
         service.getRepo().updateLinks();
     }
 
+    /**
+     * Apelat cand se modifica textul dintr-un TextField
+     * @param oldValue vechea valoare
+     * @param newValue noua valoare
+     */
     public void handleTextChanged(ObservableValue<? extends String> observable, String oldValue, String newValue) {
         if (observable instanceof StringProperty && ((StringProperty) observable).getBean() instanceof TextField) {
             ((TextField) ((StringProperty) observable).getBean()).borderProperty().set(new Border(new BorderStroke(Color.LIGHTGRAY, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));

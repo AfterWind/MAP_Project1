@@ -29,7 +29,7 @@ public class FileRepositoryNumeroDos<T extends IIdentifiable<K>, K> extends Repo
      */
     protected void read() {
         try(ObjectInputStream br = new ObjectInputStream(new FileInputStream(filename))) {
-            List<T> data = (List<T>) br.readObject();
+            T[] data = (T[]) br.readObject();
             for (T e : data) {
                 add(e);
             }
@@ -47,7 +47,7 @@ public class FileRepositoryNumeroDos<T extends IIdentifiable<K>, K> extends Repo
      */
     protected void write() {
         try (ObjectOutputStream bw = new ObjectOutputStream(new FileOutputStream(filename))){
-            bw.writeObject(data);
+            bw.writeObject(data.toArray());
         } catch (IOException e) {
             e.printStackTrace();
         }

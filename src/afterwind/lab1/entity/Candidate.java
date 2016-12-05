@@ -94,7 +94,8 @@ public class Candidate implements IIdentifiable<Integer>, Serializable, Comparab
      */
     @Override
     public String toString() {
-        return String.format("%3s | %20s | %15s | %15s", getId(), getName(), getTelephone(), getAddress());
+        return getName();
+//        return String.format("%3s | %20s | %15s | %15s", getId(), getName(), getTelephone(), getAddress());
     }
 
     /**

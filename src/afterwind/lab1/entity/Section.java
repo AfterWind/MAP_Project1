@@ -74,7 +74,8 @@ public class Section implements IIdentifiable<Integer>, Serializable, Comparable
      */
     @Override
     public String toString() {
-        return String.format("%3s | %20s | %5s", id, name, nrLoc);
+        return getName();
+        //return String.format("%3s | %20s | %5s", getId(), getName(), getNrLoc());
     }
 
     /**

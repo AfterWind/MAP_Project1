@@ -47,7 +47,6 @@ public class CandidateView extends BorderPane {
 
         initCenter();
         initTop();
-        initBottom();
         controller.showAll();
     }
 
@@ -155,15 +154,4 @@ public class CandidateView extends BorderPane {
         AnchorPane.setBottomAnchor(buttons2, 10D);
         buttons2.setAlignment(Pos.CENTER);
     }
-
-    private void initBottom() {
-
-    }
-
-    public void update() {
-
-    }
-
-
-
 }

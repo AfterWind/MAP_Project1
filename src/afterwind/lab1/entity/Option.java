@@ -1,13 +1,19 @@
 package afterwind.lab1.entity;
 
+import afterwind.lab1.service.CandidateService;
+import afterwind.lab1.service.SectionService;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleObjectProperty;
+
 /**
  * O legatura intre candidat si sectiune
  */
 public class Option implements IIdentifiable<Integer> {
 
-    private int id;
-    private Section section;
-    private Candidate candidate;
+    private SimpleIntegerProperty id;
+    private SimpleObjectProperty<Section> section;
+    private SimpleObjectProperty<Candidate> candidate;
 
     /**
      * Constructorul unei optiuni
@@ -16,9 +22,9 @@ public class Option implements IIdentifiable<Integer> {
      * @param candidate candidatul
      */
     public Option(int id, Section section, Candidate candidate) {
-        this.id = id;
-        this.section = section;
-        this.candidate = candidate;
+        this.id = new SimpleIntegerProperty(id);
+        this.section = new SimpleObjectProperty<>(section, section.getName(), section);
+        this.candidate = new SimpleObjectProperty<>(candidate, candidate.getName(), candidate);
     }
 
     /**
@@ -26,7 +32,7 @@ public class Option implements IIdentifiable<Integer> {
      * @return sectiunea alesa de candidat
      */
     public Section getSection() {
-        return section;
+        return section.getValue();
     }
 
     /**
@@ -34,7 +40,7 @@ public class Option implements IIdentifiable<Integer> {
      * @return candidatul care a ales sectiunea
      */
     public Candidate getCandidate() {
-        return candidate;
+        return candidate.getValue();
     }
 
     /**
@@ -42,7 +48,7 @@ public class Option implements IIdentifiable<Integer> {
      * @param section noua sectiune aleasa de candidat
      */
     public void setSection(Section section) {
-        this.section = section;
+        this.section.set(section);
     }
 
     /**
@@ -50,7 +56,7 @@ public class Option implements IIdentifiable<Integer> {
      * @param candidate noul candidat
      */
     public void setCandidate(Candidate candidate) {
-        this.candidate = candidate;
+        this.candidate.set(candidate);
     }
 
     /**
@@ -59,7 +65,7 @@ public class Option implements IIdentifiable<Integer> {
      */
     @Override
     public Integer getId() {
-        return id;
+        return id.getValue();
     }
 
     /**
@@ -79,9 +85,33 @@ public class Option implements IIdentifiable<Integer> {
     @Override
     public boolean equals(Object obj) {
         if (obj instanceof Option) {
-            return ((Option) obj).getId() == id;
+            return ((Option) obj).getId().equals(getId());
         } else {
             return false;
+        }
+    }
+
+    public static class Serializer implements ISerializer<Option> {
+
+        private CandidateService candidateService;
+        private SectionService sectionService;
+
+        public Serializer(CandidateService candidateService, SectionService sectionService) {
+            this.candidateService = candidateService;
+            this.sectionService =  sectionService;
+        }
+
+        @Override
+        public Option deserialize(String s) {
+            String[] data = s.split("\\|");
+            Section section = sectionService.get(Integer.parseInt(data[1]));
+            Candidate candidate = candidateService.get(Integer.parseInt(data[2]));
+            return new Option(Integer.parseInt(data[0]), section, candidate);
+        }
+
+        @Override
+        public String serialize(Option e) {
+            return String.format("%d|%d|%d", e.getId(), e.getSection().getId(), e.getCandidate().getId());
         }
     }
 }
