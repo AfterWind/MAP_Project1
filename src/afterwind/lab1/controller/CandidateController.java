@@ -3,44 +3,71 @@ package afterwind.lab1.controller;
 import afterwind.lab1.Utils;
 import afterwind.lab1.entity.Candidate;
 import afterwind.lab1.exception.ValidationException;
+import afterwind.lab1.repository.IRepository;
+import afterwind.lab1.repository.Repository;
 import afterwind.lab1.service.CandidateService;
 import afterwind.lab1.ui.CandidateView;
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.scene.control.Button;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 
+import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.function.Predicate;
 
 /**
  * MVC controller perntru Candidate
  */
 public class CandidateController implements Observer {
 
+    @FXML
+    public TableView<Candidate> tableView;
+    @FXML
+    public TableColumn columnID, columnName, columnTel, columnAddress;
+    @FXML
+    public TextField nameTextField, addressTextField, telTextField;
+    @FXML
+    public TextField nameFilterTextField, addressFilterTextField, telFilterTextField;
+    @FXML
+    public Button clearFilterButton;
     private CandidateService service;
-    private CandidateView view;
     private ObservableList<Candidate> model;
 
     /**
      * Constructor pentru CandidateController
-     * @param service Service-ul de candidate
-     * @param view View-ul controlat
      */
-    public CandidateController(CandidateService service, CandidateView view) {
+    public CandidateController() { }
+
+    public void setService(CandidateService service) {
         this.service = service;
-        this.view = view;
         this.model = service.getRepo().getData();
+
+        columnID.setCellValueFactory(new PropertyValueFactory<>("id"));
+        columnName.setCellValueFactory(new PropertyValueFactory<>("name"));
+        columnTel.setCellValueFactory(new PropertyValueFactory<>("telephone"));
+        columnAddress.setCellValueFactory(new PropertyValueFactory<>("address"));
+
+        tableView.getSelectionModel().selectedItemProperty().addListener(this::handleSelectionChanged);
+
+        showAll();
     }
 
     /**
      * Afiseaza toti candidatii
      */
     public void showAll() {
-        view.tableView.setItems(model);
+        tableView.setItems(model);
     }
 
     /**
@@ -48,19 +75,26 @@ public class CandidateController implements Observer {
      * @param c
      */
     public void showDetails(Candidate c) {
-        view.nameTextField.setText(c.getName());
-        view.addressTextField.setText(c.getAddress());
-        view.telTextField.setText(c.getTelephone());
+        nameTextField.setText(c.getName());
+        addressTextField.setText(c.getAddress());
+        telTextField.setText(c.getTelephone());
     }
 
     /**
      * Goleste textul din toate TextField-uri
      */
     public void clearTextFields() {
-        view.nameTextField.setText("");
-        view.addressTextField.setText("");
-        view.telTextField.setText("");
-        view.tableView.getSelectionModel().clearSelection();
+        nameTextField.setText("");
+        addressTextField.setText("");
+        telTextField.setText("");
+        tableView.getSelectionModel().clearSelection();
+    }
+
+    public void clearFilterTextFields() {
+        nameFilterTextField.setText("");
+        addressFilterTextField.setText("");
+        telFilterTextField.setText("");
+        tableView.getSelectionModel().clearSelection();
     }
 
     /**
@@ -73,20 +107,20 @@ public class CandidateController implements Observer {
     public boolean checkFields(String name, String address, String tel) {
         boolean errored = false;
         if (name.equals("")) {
-            Utils.setErrorBorder(view.nameTextField);
+            Utils.setErrorBorder(nameTextField);
             errored = true;
         }
         if (address.equals("")) {
-            Utils.setErrorBorder(view.addressTextField);
+            Utils.setErrorBorder(addressTextField);
             errored = true;
         }
         if (tel.equals("")) {
-            Utils.setErrorBorder(view.telTextField);
+            Utils.setErrorBorder(telTextField);
             errored = true;
         } else {
             for (char ch : tel.toCharArray()) {
                 if (ch < '0' || ch > '9') {
-                    Utils.setErrorBorder(view.telTextField);
+                    Utils.setErrorBorder(telTextField);
                     errored = true;
                 }
             }
@@ -117,9 +151,9 @@ public class CandidateController implements Observer {
      * @param ev evenimentul
      */
     public void handleAdd(ActionEvent ev) {
-        String name = view.nameTextField.getText();
-        String address = view.addressTextField.getText();
-        String tel = view.telTextField.getText();
+        String name = nameTextField.getText();
+        String address = addressTextField.getText();
+        String tel = telTextField.getText();
 
         if (checkFields(name, address, tel)) {
             return;
@@ -138,7 +172,7 @@ public class CandidateController implements Observer {
      * @param ev evenimentul
      */
     public void handleDelete(ActionEvent ev) {
-        Candidate c = view.tableView.getSelectionModel().getSelectedItem();
+        Candidate c = tableView.getSelectionModel().getSelectedItem();
         if (c == null) {
             Utils.showErrorMessage("Nu a fost selectat nici un candidat!");
             return;
@@ -152,15 +186,15 @@ public class CandidateController implements Observer {
      * @param ev evenimentul
      */
     public void handleUpdate(ActionEvent ev) {
-        Candidate c = view.tableView.getSelectionModel().getSelectedItem();
+        Candidate c = tableView.getSelectionModel().getSelectedItem();
         if (c == null) {
             Utils.showErrorMessage("Nu a fost selectat nici un candidat!");
             return;
         }
 
-        String name = view.nameTextField.getText();
-        String address = view.addressTextField.getText();
-        String tel = view.telTextField.getText();
+        String name = nameTextField.getText();
+        String address = addressTextField.getText();
+        String tel = telTextField.getText();
 
         if (checkFields(name, address, tel)) {
             return;
@@ -168,8 +202,8 @@ public class CandidateController implements Observer {
 
         service.updateCandidate(c, name, tel, address);
         for (int i = 0; i < 4; i++) {
-            view.tableView.getColumns().get(i).setVisible(false);
-            view.tableView.getColumns().get(i).setVisible(true);
+            tableView.getColumns().get(i).setVisible(false);
+            tableView.getColumns().get(i).setVisible(true);
         }
     }
     /**
@@ -206,5 +240,63 @@ public class CandidateController implements Observer {
         if (observable instanceof StringProperty && ((StringProperty) observable).getBean() instanceof TextField) {
             ((TextField) ((StringProperty) observable).getBean()).borderProperty().set(new Border(new BorderStroke(Color.LIGHTGRAY, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
         }
+    }
+
+    public void handleNameFilter(ActionEvent ev) {
+        if(nameFilterTextField.getText().equals("")) {
+            Utils.setErrorBorder(nameFilterTextField);
+            return;
+        }
+        IRepository<Candidate, Integer> filtered = service.filterByName(nameFilterTextField.getText());
+        tableView.setItems(filtered.getData());
+        clearFilterButton.setDisable(false);
+    }
+
+    public void handleAddressFilter(ActionEvent ev) {
+        if(addressFilterTextField.getText().equals("")) {
+            Utils.setErrorBorder(addressFilterTextField);
+            return;
+        }
+        IRepository<Candidate, Integer> filtered = service.filterByAddress(addressFilterTextField.getText());
+        tableView.setItems(filtered.getData());
+        clearFilterButton.setDisable(false);
+    }
+
+    public void handleTelFilter(ActionEvent ev) {
+        if(telFilterTextField.getText().equals("")) {
+            Utils.setErrorBorder(telFilterTextField);
+            return;
+        }
+        IRepository<Candidate, Integer> filtered = service.filterByTelephone(telFilterTextField.getText());
+        tableView.setItems(filtered.getData());
+        clearFilterButton.setDisable(false);
+    }
+
+    public void handleFilter(ActionEvent ev) {
+        if (nameFilterTextField.getText().equals("") && addressFilterTextField.getText().equals("") && telFilterTextField.getText().equals("")) {
+            Utils.setErrorBorder(nameFilterTextField);
+            Utils.setErrorBorder(addressFilterTextField);
+            Utils.setErrorBorder(telFilterTextField);
+            return;
+        }
+        Predicate<Candidate> pred = (c) -> true;
+        if (!nameFilterTextField.getText().equals("")) {
+            pred = pred.and((c) -> c.getName().startsWith(nameFilterTextField.getText()));
+        }
+        if (!addressFilterTextField.getText().equals("")) {
+            pred = pred.and((c) -> c.getAddress().startsWith(addressFilterTextField.getText()));
+        }
+        if (!telFilterTextField.getText().equals("")) {
+            pred = pred.and((c) -> c.getTelephone().startsWith(telFilterTextField.getText()));
+        }
+        List<Candidate> filtered = service.filter(pred);
+        tableView.setItems(FXCollections.observableArrayList(filtered));
+        clearFilterButton.setDisable(false);
+    }
+
+    public void handleClearFilter(ActionEvent ev) {
+        tableView.setItems(model);
+        clearFilterTextFields();
+        clearFilterButton.setDisable(true);
     }
 }

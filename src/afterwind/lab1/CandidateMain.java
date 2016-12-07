@@ -36,7 +36,7 @@ public class CandidateMain extends Application {
         HBox root = new HBox();
         root.setAlignment(Pos.CENTER);
         Scene scene = new Scene(root, 1000, 600, Color.ALICEBLUE);
-        root.getChildren().add(new CandidateView(candidateService));
+//        root.getChildren().add(new CandidateView(candidateService));
         stage.setTitle("Candidate Management");
         stage.setScene(scene);
         stage.requestFocus();

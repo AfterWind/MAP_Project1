@@ -5,7 +5,6 @@ import afterwind.lab1.entity.Candidate;
 import afterwind.lab1.entity.Option;
 import afterwind.lab1.entity.Section;
 import afterwind.lab1.repository.FileRepository;
-import afterwind.lab1.repository.FileRepositoryNumeroDos;
 import afterwind.lab1.service.CandidateService;
 import afterwind.lab1.service.OptionService;
 import afterwind.lab1.service.SectionService;

@@ -1,13 +1,9 @@
 package afterwind.lab1;
 
 import afterwind.lab1.controller.SectionController;
-import afterwind.lab1.entity.Candidate;
 import afterwind.lab1.entity.Section;
 import afterwind.lab1.repository.FileRepository;
-import afterwind.lab1.service.CandidateService;
-import afterwind.lab1.service.OptionService;
 import afterwind.lab1.service.SectionService;
-import afterwind.lab1.validator.CandidateValidator;
 import afterwind.lab1.validator.SectionValidator;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;

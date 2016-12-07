@@ -13,6 +13,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.HBox;
 
 import java.util.Observable;
 import java.util.Observer;
@@ -20,7 +21,7 @@ import java.util.Observer;
 /**
  * MVC Controller pentru Options
  */
-public class OptionController implements Observer {
+public class OptionController {
 
     @FXML
     public TableView<Option> tableView;
@@ -87,13 +88,6 @@ public class OptionController implements Observer {
                 }
             }
         });
-    }
-
-    @Override
-    public void update(Observable o, Object arg) {
-        if (o instanceof OptionService) {
-            model.setAll(((OptionService) o).getRepo().getData());
-        }
     }
 
     public void handleDelete(ActionEvent ev) {
