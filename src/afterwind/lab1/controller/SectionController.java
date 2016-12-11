@@ -4,7 +4,9 @@ import afterwind.lab1.Utils;
 import afterwind.lab1.entity.Section;
 import afterwind.lab1.exception.ValidationException;
 import afterwind.lab1.service.SectionService;
+import afterwind.lab1.ui.control.StateButton;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -18,19 +20,29 @@ import javafx.scene.layout.HBox;
 
 import java.io.File;
 import java.net.MalformedURLException;
+import java.util.Comparator;
+import java.util.List;
+import java.util.function.Predicate;
 
 
 public class SectionController {
 
     @FXML
-    public Button buttonAdd, buttonUpdate, buttonClear, buttonDelete, buttonRefresh, buttonSave;
+    public Button buttonAdd, buttonUpdate, buttonClear, buttonDelete, buttonRefresh, buttonSave, clearFilterButton;
+    @FXML
+    public TextField nameFilterTextField, nrLocFilterTextField;
+    @FXML
+    public StateButton<String> nrLocState;
     @FXML
     private TableView<Section> tableView;
     @FXML
     private TableColumn<Section, String> idColumn, nameColumn, nrLocColumn;
     @FXML
     private TextField nameTextField, nrLocTextField;
-    
+
+    private Predicate<Section> filter = (s) -> true;
+    private Predicate<Integer> compTester = (diff) -> diff < 0;
+
     private SectionService service;
     private ObservableList<Section> model;
 
@@ -43,7 +55,7 @@ public class SectionController {
      * Afiseaza toate sectiunile
      */
     public void showAll() {
-        tableView.setItems(model);
+        tableView.setItems(FXCollections.observableArrayList(service.filter(filter)));
     }
 
     /**
@@ -60,8 +72,14 @@ public class SectionController {
      * Sterge textul din fiecare TextField
      */
     public void clearTextFields() {
-        nameTextField.setText("");        
-        nrLocTextField.setText("");        
+        nameTextField.setText("");
+        nrLocTextField.setText("");
+        tableView.getSelectionModel().clearSelection();
+    }
+
+    private void clearFilterTextFields() {
+        nameFilterTextField.setText("");
+        nrLocFilterTextField.setText("");
         tableView.getSelectionModel().clearSelection();
     }
 
@@ -92,13 +110,22 @@ public class SectionController {
         nameTextField.setText(s.getName());
         nrLocTextField.setText(s.getNrLoc() + "");
     }
-    
+
     @FXML
     private void initialize() {
         idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         nrLocColumn.setCellValueFactory(new PropertyValueFactory<>("nrLoc"));
         tableView.getSelectionModel().selectedItemProperty().addListener(this::handleSelectionChanged);
+
+        nrLocState.addState("<");
+        nrLocState.addState("≤");
+        nrLocState.addState("=");
+        nrLocState.addState("≥");
+        nrLocState.addState(">");
+
+        nameFilterTextField.textProperty().addListener(this::updateFilter);
+        nrLocFilterTextField.textProperty().addListener(this::updateFilter);
     }
 
     /**
@@ -125,7 +152,11 @@ public class SectionController {
         int nrLoc = Integer.parseInt(nrLocString);
         int id = service.getNextId();
         try {
-            service.add(new Section(id, name, nrLoc));
+            Section s = new Section(id, name, nrLoc);
+            service.add(s);
+            if (filter.test(s)) {
+                tableView.getItems().add(s);
+            }
         } catch (ValidationException e) {
             Utils.showErrorMessage(e.getMessage());
         }
@@ -187,5 +218,51 @@ public class SectionController {
     public void handleSave(ActionEvent ev) {
         service.getRepo().updateLinks();
         Utils.showInfoMessage("Totul a fost salvat in fisier!");
+    }
+
+    public void updateFilter(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+        boolean filtered = false;
+        filter = (c) -> true;
+        if (!nameFilterTextField.getText().equals("")) {
+            filter = filter.and((s) -> s.getName().toLowerCase().startsWith(nameFilterTextField.getText().toLowerCase()));
+            filtered = true;
+        }
+        if (!nrLocFilterTextField.getText().equals("") && Utils.tryParseInt(nrLocFilterTextField.getText())) {
+            int actualNrLoc = Integer.parseInt(nrLocFilterTextField.getText());
+            filter = filter.and((s) -> compTester.test(s.getNrLoc() - actualNrLoc));
+            filtered = true;
+        }
+
+        List<Section> filteredList = service.filter(filter);
+        tableView.setItems(FXCollections.observableArrayList(filteredList));
+        clearFilterButton.setDisable(!filtered);
+    }
+
+    public void handleClearFilter(ActionEvent ev) {
+        tableView.setItems(model);
+        clearFilterTextFields();
+        clearFilterButton.setDisable(true);
+    }
+
+    public void handleStateChange(ActionEvent ev) {
+        nrLocState.changeState();
+        switch (nrLocState.getState()) {
+            case "<":
+                compTester = (diff) -> diff < 0;
+                break;
+            case "≤":
+                compTester = (diff) -> diff <= 0;
+                break;
+            case "=":
+                compTester = (diff) -> diff == 0;
+                break;
+            case "≥":
+                compTester = (diff) -> diff >= 0;
+                break;
+            case ">":
+                compTester = (diff) -> diff > 0;
+                break;
+        }
+        updateFilter(null, null, null);
     }
 }

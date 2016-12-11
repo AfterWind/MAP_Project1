@@ -24,6 +24,7 @@ import javafx.scene.paint.Color;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.Optional;
 import java.util.function.Predicate;
 
 /**
@@ -41,6 +42,10 @@ public class CandidateController implements Observer {
     public TextField nameFilterTextField, addressFilterTextField, telFilterTextField;
     @FXML
     public Button clearFilterButton;
+
+    private Predicate<Candidate> filter = (c) -> true;
+
+
     private CandidateService service;
     private ObservableList<Candidate> model;
 
@@ -59,6 +64,9 @@ public class CandidateController implements Observer {
         columnAddress.setCellValueFactory(new PropertyValueFactory<>("address"));
 
         tableView.getSelectionModel().selectedItemProperty().addListener(this::handleSelectionChanged);
+        nameFilterTextField.textProperty().addListener(this::updateFilter);
+        addressFilterTextField.textProperty().addListener(this::updateFilter);
+        telFilterTextField.textProperty().addListener(this::updateFilter);
 
         showAll();
     }
@@ -67,7 +75,7 @@ public class CandidateController implements Observer {
      * Afiseaza toti candidatii
      */
     public void showAll() {
-        tableView.setItems(model);
+        tableView.setItems(FXCollections.observableArrayList(service.filter(filter)));
     }
 
     /**
@@ -161,7 +169,11 @@ public class CandidateController implements Observer {
 
         Integer id = service.getNextId();
         try {
-            service.add(new Candidate(id, name, tel, address));
+            Candidate c = new Candidate(id, name, tel, address);
+            service.add(c);
+            if (filter.test(c)) {
+                tableView.getItems().add(c);
+            }
         } catch (ValidationException ex) {
             Utils.showErrorMessage(ex.getMessage());
         }
@@ -220,6 +232,7 @@ public class CandidateController implements Observer {
      */
     public void handleRefresh(ActionEvent ev) {
         showAll();
+        clearFilterTextFields();
     }
 
     /**
@@ -242,56 +255,25 @@ public class CandidateController implements Observer {
         }
     }
 
-    public void handleNameFilter(ActionEvent ev) {
-        if(nameFilterTextField.getText().equals("")) {
-            Utils.setErrorBorder(nameFilterTextField);
-            return;
-        }
-        IRepository<Candidate, Integer> filtered = service.filterByName(nameFilterTextField.getText());
-        tableView.setItems(filtered.getData());
-        clearFilterButton.setDisable(false);
-    }
-
-    public void handleAddressFilter(ActionEvent ev) {
-        if(addressFilterTextField.getText().equals("")) {
-            Utils.setErrorBorder(addressFilterTextField);
-            return;
-        }
-        IRepository<Candidate, Integer> filtered = service.filterByAddress(addressFilterTextField.getText());
-        tableView.setItems(filtered.getData());
-        clearFilterButton.setDisable(false);
-    }
-
-    public void handleTelFilter(ActionEvent ev) {
-        if(telFilterTextField.getText().equals("")) {
-            Utils.setErrorBorder(telFilterTextField);
-            return;
-        }
-        IRepository<Candidate, Integer> filtered = service.filterByTelephone(telFilterTextField.getText());
-        tableView.setItems(filtered.getData());
-        clearFilterButton.setDisable(false);
-    }
-
-    public void handleFilter(ActionEvent ev) {
-        if (nameFilterTextField.getText().equals("") && addressFilterTextField.getText().equals("") && telFilterTextField.getText().equals("")) {
-            Utils.setErrorBorder(nameFilterTextField);
-            Utils.setErrorBorder(addressFilterTextField);
-            Utils.setErrorBorder(telFilterTextField);
-            return;
-        }
-        Predicate<Candidate> pred = (c) -> true;
+    public void updateFilter(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+        boolean filtered = false;
+        filter = (c) -> true;
         if (!nameFilterTextField.getText().equals("")) {
-            pred = pred.and((c) -> c.getName().startsWith(nameFilterTextField.getText()));
+            filter = filter.and((c) -> c.getName().toLowerCase().startsWith(nameFilterTextField.getText().toLowerCase()));
+            filtered = true;
         }
         if (!addressFilterTextField.getText().equals("")) {
-            pred = pred.and((c) -> c.getAddress().startsWith(addressFilterTextField.getText()));
+            filter = filter.and((c) -> c.getAddress().toLowerCase().startsWith(addressFilterTextField.getText().toLowerCase()));
+            filtered = true;
         }
         if (!telFilterTextField.getText().equals("")) {
-            pred = pred.and((c) -> c.getTelephone().startsWith(telFilterTextField.getText()));
+            filter = filter.and((c) -> c.getTelephone().toLowerCase().startsWith(telFilterTextField.getText().toLowerCase()));
+            filtered = true;
         }
-        List<Candidate> filtered = service.filter(pred);
-        tableView.setItems(FXCollections.observableArrayList(filtered));
-        clearFilterButton.setDisable(false);
+
+        List<Candidate> filteredList = service.filter(filter);
+        tableView.setItems(FXCollections.observableArrayList(filteredList));
+        clearFilterButton.setDisable(!filtered);
     }
 
     public void handleClearFilter(ActionEvent ev) {

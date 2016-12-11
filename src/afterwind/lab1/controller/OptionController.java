@@ -8,6 +8,8 @@ import afterwind.lab1.exception.ValidationException;
 import afterwind.lab1.service.CandidateService;
 import afterwind.lab1.service.OptionService;
 import afterwind.lab1.service.SectionService;
+import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -15,8 +17,10 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
 
+import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.function.Predicate;
 
 /**
  * MVC Controller pentru Options
@@ -32,22 +36,25 @@ public class OptionController {
     @FXML
     public TableColumn<Option, Candidate> candidateColumn;
     @FXML
-    public Button deleteButton, saveButton, refreshButton;
+    public Button deleteButton, saveButton, refreshButton, clearFilterButton;
     @FXML
     public ListView<Candidate> candidateList;
     @FXML
     public ListView<Section> sectionList;
     @FXML
     public Button addButton;
+    public TextField candidateFilterTextField, sectionFilterTextField;
 
     private OptionService service;
     private CandidateService candidateService;
     private SectionService sectionService;
 
+    private Predicate<Option> filter = (o) -> true;
+
     private ObservableList<Option> model;
 
     public void showAll() {
-        tableView.setItems(model);
+        tableView.setItems(FXCollections.observableArrayList(service.filter(filter)));
         candidateList.setItems(candidateService.getRepo().getData());
         sectionList.setItems(sectionService.getRepo().getData());
     }
@@ -88,6 +95,9 @@ public class OptionController {
                 }
             }
         });
+
+        candidateFilterTextField.textProperty().addListener(this::updateFilter);
+        sectionFilterTextField.textProperty().addListener(this::updateFilter);
     }
 
     public void handleDelete(ActionEvent ev) {
@@ -100,7 +110,7 @@ public class OptionController {
     }
 
     public void handleRefresh(ActionEvent ev) {
-        tableView.setItems(model);
+        tableView.setItems(FXCollections.observableArrayList(service.filter(filter)));
         candidateList.setItems(candidateService.getRepo().getData());
         sectionList.setItems(sectionService.getRepo().getData());
     }
@@ -129,9 +139,40 @@ public class OptionController {
         }
 
         try {
-            service.add(new Option(service.getNextId(), s, c));
+            Option o = new Option(service.getNextId(), s, c);
+            service.add(o);
+            if (filter.test(o)) {
+                tableView.getItems().add(o);
+            }
         } catch (ValidationException e) {
             Utils.showErrorMessage(e.getMessage());
         }
+    }
+
+    public void updateFilter(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+        boolean filtered = false;
+        filter = (c) -> true;
+        if (!candidateFilterTextField.getText().equals("")) {
+            filter = filter.and((o) -> o.getCandidate().getName().toLowerCase().startsWith(candidateFilterTextField.getText().toLowerCase()));
+            filtered = true;
+        }
+        if (!sectionFilterTextField.getText().equals("")) {
+            filter = filter.and((o) -> o.getSection().getName().toLowerCase().startsWith(sectionFilterTextField.getText().toLowerCase()));
+            filtered = true;
+        }
+        List<Option> filteredList = service.filter(filter);
+        tableView.setItems(FXCollections.observableArrayList(filteredList));
+        clearFilterButton.setDisable(!filtered);
+    }
+
+    public void handleClearFilter(ActionEvent ev) {
+        tableView.setItems(model);
+        clearFilterTextFields();
+        clearFilterButton.setDisable(true);
+    }
+
+    private void clearFilterTextFields() {
+        candidateFilterTextField.setText("");
+        sectionFilterTextField.setText("");
     }
 }
