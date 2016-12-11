@@ -1,8 +1,12 @@
 package afterwind.lab1.entity;
 
 import afterwind.lab1.Utils;
+import com.sun.org.apache.xml.internal.serialize.*;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 
 import java.io.Serializable;
 
@@ -127,6 +131,29 @@ public class Candidate implements IIdentifiable<Integer>, Serializable, Comparab
         @Override
         public String serialize(Candidate e) {
             return String.format("%d|%s|%s|%s", e.getId(), e.getName(), e.getTelephone(), e.getAddress());
+        }
+    }
+
+    public static class XMLSerializer implements afterwind.lab1.entity.XMLSerializer<Candidate> {
+
+        @Override
+        public Node serialize(Document doc, Candidate c) {
+            Element element = doc.createElement("candidate");
+            element.setAttribute("id", c.getId().toString());
+            element.setAttribute("name", c.getName());
+            element.setAttribute("address", c.getAddress());
+            element.setAttribute("telephone", c.getTelephone());
+            return element;
+        }
+
+        @Override
+        public Candidate deserialize(Document doc, Node node) {
+            Element element = (Element) node;
+            int id = Integer.parseInt(element.getAttribute("id"));
+            String name = element.getAttribute("name");
+            String address = element.getAttribute("address");
+            String telephone = element.getAttribute("telephone");
+            return new Candidate(id, name, telephone, address);
         }
     }
 }

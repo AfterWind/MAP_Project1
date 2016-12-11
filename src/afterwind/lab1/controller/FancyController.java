@@ -4,6 +4,7 @@ import afterwind.lab1.entity.Candidate;
 import afterwind.lab1.entity.Option;
 import afterwind.lab1.entity.Section;
 import afterwind.lab1.repository.FileRepository;
+import afterwind.lab1.repository.XMLRepository;
 import afterwind.lab1.service.CandidateService;
 import afterwind.lab1.service.OptionService;
 import afterwind.lab1.service.SectionService;
@@ -21,7 +22,7 @@ import javafx.scene.layout.StackPane;
 
 public class FancyController {
 
-    private CandidateService candidateService = new CandidateService(new FileRepository<>(new CandidateValidator(), new Candidate.Serializer(), "/home/afterwind/IdeaProjects/MAP_Lab1/res/candidates.txt"));
+    private CandidateService candidateService = new CandidateService(new XMLRepository<>(new CandidateValidator(), new Candidate.XMLSerializer(), "/home/afterwind/IdeaProjects/MAP_Lab1/res/candidates.xml"));
     private SectionService sectionService = new SectionService(new FileRepository<>(new SectionValidator(), new Section.Serializer(), "/home/afterwind/IdeaProjects/MAP_Lab1/res/sections.txt"));
     private OptionService optionService = new OptionService(new FileRepository<>(new OptionValidator(), new Option.Serializer(candidateService, sectionService), "/home/afterwind/IdeaProjects/MAP_Lab1/res/options.txt"));
 
