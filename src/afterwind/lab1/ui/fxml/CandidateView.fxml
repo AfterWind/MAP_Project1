@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.Border?>
 <?import java.lang.String?>
 <?import javafx.scene.shape.Rectangle?>
-<fx:root type="javafx.scene.layout.VBox" alignment="CENTER" xmlns:fx="http://javafx.com/fxml/1" fx:controller="afterwind.lab1.controller.CandidateController">
+<fx:root type="javafx.scene.layout.VBox" alignment="CENTER" xmlns:fx="http://javafx.com/fxml/1" fx:controller="afterwind.lab1.controller.NewCandidateController">
     <fx:define>
         <String fx:id="BORDER_LIGHTGRAY"
                 fx:value="-fx-border-color:lightgray; -fx-border-width: 1; -fx-border-style: solid;"/>
@@ -49,9 +49,9 @@
                         </TableView>
                         <HBox alignment="CENTER" spacing="5">
                             <children>
-                                <Button text="Delete" minWidth="80" onAction="#handleDelete"/>
-                                <Button text="Refresh" minWidth="80" onAction="#handleRefresh"/>
-                                <Button text="Save" minWidth="80" onAction="#handleSave"/>
+                                <Button fx:id="buttonDelete" text="Delete" minWidth="80" onAction="#handleDelete"/>
+                                <Button fx:id="buttonRefresh" text="Refresh" minWidth="80" onAction="#handleRefresh"/>
+                                <Button fx:id="buttonSave" text="Save" minWidth="80" onAction="#handleSave"/>
                             </children>
                         </HBox>
                     </children>
@@ -75,9 +75,9 @@
                                 </GridPane>
                                 <HBox alignment="CENTER" spacing="5">
                                     <children>
-                                        <Button text="Add" minWidth="80" onAction="#handleAdd"/>
-                                        <Button text="Update" minWidth="80" onAction="#handleUpdate"/>
-                                        <Button text="Clear" minWidth="80" onAction="#handleClear"/>
+                                        <Button fx:id="buttonAdd" text="Add" minWidth="80" onAction="#handleAdd"/>
+                                        <Button fx:id="buttonUpdate" text="Update" minWidth="80" disable="true" onAction="#handleUpdate"/>
+                                        <Button fx:id="buttonClear" text="Clear" minWidth="80" onAction="#handleClear"/>
                                     </children>
                                 </HBox>
                             </children>
@@ -98,7 +98,7 @@
                                     </children>
                                 </GridPane>
                                 <HBox spacing="5" alignment="CENTER">
-                                    <Button fx:id="clearFilterButton" text="Clear" minWidth="80" onAction="#handleClearFilter" disable="true"/>
+                                    <Button fx:id="buttonClearFilter" text="Clear" minWidth="80" onAction="#handleClearFilter" disable="true"/>
                                 </HBox>
                             </children>
                         </VBox>

@@ -1,17 +1,14 @@
 package afterwind.lab1.ui;
 
-import afterwind.lab1.controller.OptionController;
+import afterwind.lab1.controller.NewOptionController;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 
 import java.io.File;
 
 public class OptionView extends VBox {
 
-    public final OptionController controller = new OptionController();
+    public final NewOptionController controller = new NewOptionController();
     public OptionView() {
         FXMLLoader loader = new FXMLLoader();
         try {

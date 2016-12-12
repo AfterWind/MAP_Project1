@@ -3,85 +3,55 @@ package afterwind.lab1.controller;
 import afterwind.lab1.Utils;
 import afterwind.lab1.entity.Candidate;
 import afterwind.lab1.exception.ValidationException;
-import afterwind.lab1.repository.IRepository;
-import afterwind.lab1.repository.Repository;
 import afterwind.lab1.service.CandidateService;
-import afterwind.lab1.ui.CandidateView;
-import javafx.beans.property.StringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
 
 import java.util.List;
-import java.util.Observable;
-import java.util.Observer;
-import java.util.Optional;
-import java.util.function.Predicate;
 
 /**
  * MVC controller perntru Candidate
  */
-public class CandidateController implements Observer {
+public class NewCandidateController extends AbstractController<Candidate> {
 
-    @FXML
-    public TableView<Candidate> tableView;
     @FXML
     public TableColumn columnID, columnName, columnTel, columnAddress;
     @FXML
     public TextField nameTextField, addressTextField, telTextField;
     @FXML
     public TextField nameFilterTextField, addressFilterTextField, telFilterTextField;
+
     @FXML
-    public Button clearFilterButton;
-
-    private Predicate<Candidate> filter = (c) -> true;
-
-
-    private CandidateService service;
-    private ObservableList<Candidate> model;
-
-    /**
-     * Constructor pentru CandidateController
-     */
-    public CandidateController() { }
-
-    public void setService(CandidateService service) {
-        this.service = service;
-        this.model = service.getRepo().getData();
-
-        columnID.setCellValueFactory(new PropertyValueFactory<>("id"));
-        columnName.setCellValueFactory(new PropertyValueFactory<>("name"));
-        columnTel.setCellValueFactory(new PropertyValueFactory<>("telephone"));
-        columnAddress.setCellValueFactory(new PropertyValueFactory<>("address"));
+    @Override
+    public void initialize() {
+        super.initialize();
 
         tableView.getSelectionModel().selectedItemProperty().addListener(this::handleSelectionChanged);
         nameFilterTextField.textProperty().addListener(this::updateFilter);
         addressFilterTextField.textProperty().addListener(this::updateFilter);
         telFilterTextField.textProperty().addListener(this::updateFilter);
 
-        showAll();
+        columnID.setCellValueFactory(new PropertyValueFactory<>("id"));
+        columnName.setCellValueFactory(new PropertyValueFactory<>("name"));
+        columnTel.setCellValueFactory(new PropertyValueFactory<>("telephone"));
+        columnAddress.setCellValueFactory(new PropertyValueFactory<>("address"));
     }
 
-    /**
-     * Afiseaza toti candidatii
-     */
-    public void showAll() {
-        tableView.setItems(FXCollections.observableArrayList(service.filter(filter)));
+    public void setService(CandidateService service) {
+        this.service = service;
+        showAll();
     }
 
     /**
      * Afiseaza detaliile despre un candidat in TextField-uri
      * @param c
      */
+    @Override
     public void showDetails(Candidate c) {
         nameTextField.setText(c.getName());
         addressTextField.setText(c.getAddress());
@@ -91,13 +61,15 @@ public class CandidateController implements Observer {
     /**
      * Goleste textul din toate TextField-uri
      */
-    public void clearTextFields() {
+    @Override
+    public void clearModificationTextFields() {
         nameTextField.setText("");
         addressTextField.setText("");
         telTextField.setText("");
         tableView.getSelectionModel().clearSelection();
     }
 
+    @Override
     public void clearFilterTextFields() {
         nameFilterTextField.setText("");
         addressFilterTextField.setText("");
@@ -136,28 +108,11 @@ public class CandidateController implements Observer {
         return errored;
     }
 
-    @Override
-    public void update(Observable o, Object arg) {
-        if (o instanceof CandidateService) {
-            model.setAll(((CandidateService) o).getRepo().getData());
-        }
-    }
-
-    /**
-     * Apelat daca selectia se modifica
-     * @param oldValue valoarea veche
-     * @param newValue valoarea noua
-     */
-    public void handleSelectionChanged(ObservableValue<? extends Candidate> o, Candidate oldValue, Candidate newValue) {
-        if (newValue != null) {
-            showDetails(newValue);
-        }
-    }
-
     /**
      * Apelat cand se apasa pe butonul Add
      * @param ev evenimentul
      */
+    @Override
     public void handleAdd(ActionEvent ev) {
         String name = nameTextField.getText();
         String address = addressTextField.getText();
@@ -183,6 +138,7 @@ public class CandidateController implements Observer {
      * Apelat cand se apasa pe butonul Delete
      * @param ev evenimentul
      */
+    @Override
     public void handleDelete(ActionEvent ev) {
         Candidate c = tableView.getSelectionModel().getSelectedItem();
         if (c == null) {
@@ -190,13 +146,14 @@ public class CandidateController implements Observer {
             return;
         }
         service.remove(c);
-        clearTextFields();
+        clearModificationTextFields();
     }
 
     /**
      * Apelat cand se apasa pe butonul Update
      * @param ev evenimentul
      */
+    @Override
     public void handleUpdate(ActionEvent ev) {
         Candidate c = tableView.getSelectionModel().getSelectedItem();
         if (c == null) {
@@ -212,49 +169,14 @@ public class CandidateController implements Observer {
             return;
         }
 
-        service.updateCandidate(c, name, tel, address);
+        ((CandidateService)service).updateCandidate(c, name, tel, address);
         for (int i = 0; i < 4; i++) {
             tableView.getColumns().get(i).setVisible(false);
             tableView.getColumns().get(i).setVisible(true);
         }
     }
-    /**
-     * Apelat cand se apasa pe butonul Clear
-     * @param ev evenimentul
-     */
-    public void handleClear(ActionEvent ev) {
-        clearTextFields();
-    }
 
-    /**
-     * Apelat cand se apasa pe butonul Refresh
-     * @param ev evenimentul
-     */
-    public void handleRefresh(ActionEvent ev) {
-        showAll();
-        clearFilterTextFields();
-    }
-
-    /**
-     * Apelat cand se apasa pe butonul Save
-     * @param ev evenimentul
-     */
-    public void handleSave(ActionEvent ev) {
-        Utils.showInfoMessage("Totul s-a salvat in fisier!");
-        service.getRepo().updateLinks();
-    }
-
-    /**
-     * Apelat cand se modifica textul dintr-un TextField
-     * @param oldValue vechea valoare
-     * @param newValue noua valoare
-     */
-    public void handleTextChanged(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-        if (observable instanceof StringProperty && ((StringProperty) observable).getBean() instanceof TextField) {
-            ((TextField) ((StringProperty) observable).getBean()).borderProperty().set(new Border(new BorderStroke(Color.LIGHTGRAY, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
-        }
-    }
-
+    @Override
     public void updateFilter(ObservableValue<? extends String> observable, String oldValue, String newValue) {
         boolean filtered = false;
         filter = (c) -> true;
@@ -273,12 +195,6 @@ public class CandidateController implements Observer {
 
         List<Candidate> filteredList = service.filter(filter);
         tableView.setItems(FXCollections.observableArrayList(filteredList));
-        clearFilterButton.setDisable(!filtered);
-    }
-
-    public void handleClearFilter(ActionEvent ev) {
-        tableView.setItems(model);
-        clearFilterTextFields();
-        clearFilterButton.setDisable(true);
+        buttonClearFilter.setDisable(!filtered);
     }
 }

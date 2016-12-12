@@ -1,24 +1,16 @@
 package afterwind.lab1.ui;
 
-import afterwind.lab1.controller.CandidateController;
-import afterwind.lab1.entity.Candidate;
-import afterwind.lab1.service.CandidateService;
+import afterwind.lab1.controller.NewCandidateController;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
-import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
+import javafx.scene.layout.VBox;
 
 import java.io.File;
 
 public class CandidateView extends VBox {
 
-    public final CandidateController controller;
+    public final NewCandidateController controller;
     public CandidateView() {
-        this.controller = new CandidateController();
+        this.controller = new NewCandidateController();
         try {
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(new File("/home/afterwind/IdeaProjects/MAP_Lab1/src/afterwind/lab1/ui/fxml/CandidateView.fxml").toURL());

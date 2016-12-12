@@ -5,7 +5,7 @@
 <?import javafx.scene.text.Font?>
 <?import java.lang.String?>
 <?import afterwind.lab1.ui.control.StateButton?>
-<fx:root type="javafx.scene.layout.VBox" spacing="5" alignment="CENTER" xmlns:fx="http://javafx.com/fxml/1" fx:controller="afterwind.lab1.controller.SectionController">
+<fx:root type="javafx.scene.layout.VBox" spacing="5" alignment="CENTER" xmlns:fx="http://javafx.com/fxml/1" fx:controller="afterwind.lab1.controller.NewSectionController">
     <fx:define>
         <String fx:id="BORDER_LIGHTGRAY"
                 fx:value="-fx-border-color:lightgray; -fx-border-width: 1; -fx-border-style: solid;"/>
@@ -30,7 +30,7 @@
             <center>
                 <VBox alignment="CENTER">
                     <children>
-                        <VBox spacing="5" alignment="CENTER">
+                        <VBox spacing="10" alignment="CENTER">
                             <children>
                                 <TableView fx:id="tableView" maxWidth="447">
                                     <columns>
@@ -69,7 +69,7 @@
                                         <HBox spacing="5" alignment="CENTER">
                                             <children>
                                                 <Button fx:id="buttonAdd" text="Add" minWidth="80" onAction="#handleAdd"/>
-                                                <Button fx:id="buttonUpdate" text="Update" minWidth="80" onAction="#handleUpdate"/>
+                                                <Button fx:id="buttonUpdate" text="Update" disable="true" minWidth="80" onAction="#handleUpdate"/>
                                                 <Button fx:id="buttonClear" text="Clear" minWidth="80" onAction="#handleClear"/>
                                             </children>
                                         </HBox>
@@ -94,7 +94,7 @@
                                             </children>
                                         </GridPane>
                                         <HBox spacing="5" alignment="CENTER">
-                                            <Button fx:id="clearFilterButton" text="Clear" minWidth="80" onAction="#handleClearFilter" disable="true"/>
+                                            <Button fx:id="buttonClearFilter" text="Clear" minWidth="80" onAction="#handleClearFilter" disable="true"/>
                                         </HBox>
                                     </children>
                                 </VBox>

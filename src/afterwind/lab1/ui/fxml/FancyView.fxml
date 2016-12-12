@@ -3,11 +3,9 @@
 <?import javafx.scene.control.ToggleButton?>
 <?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 <?import java.lang.Double?>
 <?import javafx.scene.layout.StackPane?>
-<?import afterwind.lab1.controller.SectionController?>
 <?import javafx.geometry.Insets?>
 <VBox alignment="CENTER" xmlns:fx="http://javafx.com/fxml" fx:controller="afterwind.lab1.controller.FancyController">
     <children>

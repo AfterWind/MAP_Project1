@@ -1,6 +1,6 @@
 package afterwind.lab1.ui;
 
-import afterwind.lab1.controller.SectionController;
+import afterwind.lab1.controller.NewSectionController;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.VBox;
 
@@ -8,7 +8,7 @@ import java.io.File;
 
 public class SectionView extends VBox {
 
-    public final SectionController controller = new SectionController();
+    public final NewSectionController controller = new NewSectionController();
     public SectionView() {
         FXMLLoader loader = new FXMLLoader();
         try {

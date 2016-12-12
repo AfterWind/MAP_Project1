@@ -1,6 +1,6 @@
 package afterwind.lab1;
 
-import afterwind.lab1.controller.OptionController;
+import afterwind.lab1.controller.NewOptionController;
 import afterwind.lab1.entity.Candidate;
 import afterwind.lab1.entity.Option;
 import afterwind.lab1.entity.Section;
@@ -49,7 +49,7 @@ public class OptionMain extends Application {
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(new File("/home/afterwind/IdeaProjects/MAP_Lab1/src/afterwind/lab1/ui/OptionView.fxml").toURL());
         HBox root = loader.load();
-        OptionController controller = loader.getController();
+        NewOptionController controller = loader.getController();
         controller.setServices(optionService, candidateService, sectionService);
         Scene scene = new Scene(root, 1000, 600, Color.ALICEBLUE);
         stage.setTitle("Options Management");

@@ -1,6 +1,6 @@
 package afterwind.lab1;
 
-import afterwind.lab1.controller.SectionController;
+import afterwind.lab1.controller.NewSectionController;
 import afterwind.lab1.entity.Section;
 import afterwind.lab1.repository.FileRepository;
 import afterwind.lab1.service.SectionService;
@@ -38,7 +38,7 @@ public class SectionMain extends Application {
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(new File("/home/afterwind/IdeaProjects/MAP_Lab1/src/afterwind/lab1/ui/SectionView.fxml").toURL());
         HBox root = loader.load();
-        SectionController controller = loader.getController();
+        NewSectionController controller = loader.getController();
         controller.setService(sectionService);
         Scene scene = new Scene(root, 1000, 600, Color.ALICEBLUE);
         stage.setTitle("Sections Management");

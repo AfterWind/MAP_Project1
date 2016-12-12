@@ -7,56 +7,28 @@ import afterwind.lab1.service.SectionService;
 import afterwind.lab1.ui.control.StateButton;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.layout.HBox;
 
-import java.io.File;
-import java.net.MalformedURLException;
-import java.util.Comparator;
 import java.util.List;
 import java.util.function.Predicate;
 
 
-public class SectionController {
+public class NewSectionController extends AbstractController<Section> {
 
-    @FXML
-    public Button buttonAdd, buttonUpdate, buttonClear, buttonDelete, buttonRefresh, buttonSave, clearFilterButton;
     @FXML
     public TextField nameFilterTextField, nrLocFilterTextField;
     @FXML
     public StateButton<String> nrLocState;
     @FXML
-    private TableView<Section> tableView;
-    @FXML
     private TableColumn<Section, String> idColumn, nameColumn, nrLocColumn;
     @FXML
     private TextField nameTextField, nrLocTextField;
 
-    private Predicate<Section> filter = (s) -> true;
     private Predicate<Integer> compTester = (diff) -> diff < 0;
-
-    private SectionService service;
-    private ObservableList<Section> model;
-
-    /**
-     * Constructor pentru controllerul de sectiuni
-     */
-    public SectionController() { }
-
-    /**
-     * Afiseaza toate sectiunile
-     */
-    public void showAll() {
-        tableView.setItems(FXCollections.observableArrayList(service.filter(filter)));
-    }
 
     /**
      * Seteaza service-ul
@@ -64,20 +36,21 @@ public class SectionController {
      */
     public void setService(SectionService service) {
         this.service = service;
-        this.model = service.getRepo().getData();
         showAll();
     }
 
     /**
      * Sterge textul din fiecare TextField
      */
-    public void clearTextFields() {
+    @Override
+    public void clearModificationTextFields() {
         nameTextField.setText("");
         nrLocTextField.setText("");
         tableView.getSelectionModel().clearSelection();
     }
 
-    private void clearFilterTextFields() {
+    @Override
+    public void clearFilterTextFields() {
         nameFilterTextField.setText("");
         nrLocFilterTextField.setText("");
         tableView.getSelectionModel().clearSelection();
@@ -106,17 +79,19 @@ public class SectionController {
      * Afiseaza detalii despre o sectiune
      * @param s Sectiunea
      */
+    @Override
     public void showDetails(Section s) {
         nameTextField.setText(s.getName());
         nrLocTextField.setText(s.getNrLoc() + "");
     }
 
     @FXML
-    private void initialize() {
+    @Override
+    public void initialize() {
+        super.initialize();
         idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         nrLocColumn.setCellValueFactory(new PropertyValueFactory<>("nrLoc"));
-        tableView.getSelectionModel().selectedItemProperty().addListener(this::handleSelectionChanged);
 
         nrLocState.addState("<");
         nrLocState.addState("≤");
@@ -129,20 +104,10 @@ public class SectionController {
     }
 
     /**
-     * Apelat daca selectia se modifica
-     * @param oldValue valoarea veche
-     * @param newValue valoarea noua
-     */
-    public void handleSelectionChanged(ObservableValue<? extends Section> o, Section oldValue, Section newValue) {
-        if (newValue != null) {
-            showDetails(newValue);
-        }
-    }
-
-    /**
      * Apelat cand se apasa pe butonul Add
      * @param ev evenimentul
      */
+    @Override
     public void handleAdd(ActionEvent ev) {
         String name = nameTextField.getText();
         String nrLocString = nrLocTextField.getText();
@@ -166,6 +131,7 @@ public class SectionController {
      * Apelat cand se apasa pe butonul Delete
      * @param ev evenimentul
      */
+    @Override
     public void handleDelete(ActionEvent ev) {
         Section s = tableView.getSelectionModel().getSelectedItem();
         if (s == null) {
@@ -173,9 +139,10 @@ public class SectionController {
             return;
         }
         service.remove(s);
-        clearTextFields();
+        clearModificationTextFields();
     }
 
+    @Override
     public void handleUpdate(ActionEvent actionEvent) {
         Section s = tableView.getSelectionModel().getSelectedItem();
         if (s == null) {
@@ -188,38 +155,14 @@ public class SectionController {
             return;
         }
         int nrLoc = Integer.parseInt(nrLocString);
-        service.updateSection(s, name, nrLoc);
+        ((SectionService)service).updateSection(s, name, nrLoc);
         for (int i = 0; i < 3; i++) {
             tableView.getColumns().get(i).setVisible(false);
             tableView.getColumns().get(i).setVisible(true);
         }
     }
 
-    /**
-     * Apelat cand se apasa pe butonul Clear
-     * @param ev evenimentul
-     */
-    public void handleClear(ActionEvent ev) {
-        clearTextFields();
-    }
-
-    /**
-     * Apelat cand se apasa pe butonul Refresh
-     * @param ev evenimentul
-     */
-    public void handleRefresh(ActionEvent ev) {
-        showAll();
-    }
-
-    /**
-     * Apelat cand se apasa pe butonul Save
-     * @param ev evenimentul
-     */
-    public void handleSave(ActionEvent ev) {
-        service.getRepo().updateLinks();
-        Utils.showInfoMessage("Totul a fost salvat in fisier!");
-    }
-
+    @Override
     public void updateFilter(ObservableValue<? extends String> observable, String oldValue, String newValue) {
         boolean filtered = false;
         filter = (c) -> true;
@@ -235,13 +178,7 @@ public class SectionController {
 
         List<Section> filteredList = service.filter(filter);
         tableView.setItems(FXCollections.observableArrayList(filteredList));
-        clearFilterButton.setDisable(!filtered);
-    }
-
-    public void handleClearFilter(ActionEvent ev) {
-        tableView.setItems(model);
-        clearFilterTextFields();
-        clearFilterButton.setDisable(true);
+        buttonClearFilter.setDisable(!filtered);
     }
 
     public void handleStateChange(ActionEvent ev) {
