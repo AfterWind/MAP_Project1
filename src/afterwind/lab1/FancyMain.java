@@ -20,7 +20,7 @@ public class FancyMain extends Application {
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(new File("/home/afterwind/IdeaProjects/MAP_Lab1/src/afterwind/lab1/ui/fxml/FancyView.fxml").toURL());
         Scene scene = new Scene(loader.load(), 1000, 800, Color.ALICEBLUE);
-        stage.setTitle("Options Management");
+        stage.setTitle("Fancy Management");
         stage.setScene(scene);
         stage.requestFocus();
         stage.show();

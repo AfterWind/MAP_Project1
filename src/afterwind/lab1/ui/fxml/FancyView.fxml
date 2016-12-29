@@ -7,30 +7,41 @@
 <?import java.lang.Double?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuItem?>
 <VBox alignment="CENTER" xmlns:fx="http://javafx.com/fxml" fx:controller="afterwind.lab1.controller.FancyController">
     <children>
+        <MenuBar>
+            <Menu text="File">
+                <MenuItem text="Save all" onAction="#handleMenuSaveAll"/>
+                <MenuItem text="Exit" onAction="#handleMenuExit"/>
+            </Menu>
+            <Menu text="View">
+                <MenuItem text="Reports..." onAction="#handleMenuReports"/>
+            </Menu>
+        </MenuBar>
         <HBox alignment="CENTER" spacing="10">
             <fx:define>
                 <ToggleGroup fx:id="main"/>
                 <Double fx:id="BUTTON_WIDTH" fx:value="200.0"/>
             </fx:define>
-            <children>
-                <ToggleButton fx:id="candidateButton" minWidth="$BUTTON_WIDTH" text="Candidati" toggleGroup="$main" onAction="#handleViewChange"/>
-                <ToggleButton fx:id="sectionsButton" minWidth="$BUTTON_WIDTH" text="Sectiuni" toggleGroup="$main" onAction="#handleViewChange"/>
-                <ToggleButton fx:id="optionsButton" minWidth="$BUTTON_WIDTH" text="Optiuni" toggleGroup="$main"  onAction="#handleViewChange"/>
-            </children>
             <padding>
                 <Insets top="30" right="0" left="0" bottom="20"/>
             </padding>
+            <ToggleButton fx:id="candidateButton" minWidth="$BUTTON_WIDTH" text="Candidati" toggleGroup="$main"
+                          onAction="#handleViewChange"/>
+            <ToggleButton fx:id="sectionsButton" minWidth="$BUTTON_WIDTH" text="Sectiuni" toggleGroup="$main"
+                          onAction="#handleViewChange"/>
+            <ToggleButton fx:id="optionsButton" minWidth="$BUTTON_WIDTH" text="Optiuni" toggleGroup="$main"
+                          onAction="#handleViewChange"/>
         </HBox>
         <!--<SectionController fx:id="sectionsView" minHeight="400" minWidth="400"/>-->
         <!--<OptionView fx:id="optionsView" minHeight="400" minWidth="400"/>-->
-        <StackPane fx:id="shown" minHeight="400" minWidth="800">
-            <children>
-                <CandidateView fx:id="candidatesView" visible="true"/>
-                <SectionView fx:id="sectionsView" visible="false"/>
-                <OptionView fx:id="optionsView" visible="false"/>
-            </children>
+        <StackPane minHeight="400" minWidth="800">
+            <CandidateView fx:id="candidatesView" visible="true"/>
+            <SectionView fx:id="sectionsView" visible="false"/>
+            <OptionView fx:id="optionsView" visible="false"/>
         </StackPane>
     </children>
 </VBox>

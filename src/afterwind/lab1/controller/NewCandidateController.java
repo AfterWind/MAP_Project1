@@ -146,6 +146,7 @@ public class NewCandidateController extends AbstractController<Candidate> {
             return;
         }
         service.remove(c);
+        tableView.getItems().remove(c);
         clearModificationTextFields();
     }
 

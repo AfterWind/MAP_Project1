@@ -148,12 +148,16 @@ public class Candidate implements IIdentifiable<Integer>, Serializable, Comparab
 
         @Override
         public Candidate deserialize(Document doc, Node node) {
-            Element element = (Element) node;
-            int id = Integer.parseInt(element.getAttribute("id"));
-            String name = element.getAttribute("name");
-            String address = element.getAttribute("address");
-            String telephone = element.getAttribute("telephone");
-            return new Candidate(id, name, telephone, address);
+            try {
+                Element element = (Element) node;
+                int id = Integer.parseInt(element.getAttribute("id"));
+                String name = element.getAttribute("name");
+                String address = element.getAttribute("address");
+                String telephone = element.getAttribute("telephone");
+                return new Candidate(id, name, telephone, address);
+            } catch (Exception ex) {
+                return null;
+            }
         }
     }
 }

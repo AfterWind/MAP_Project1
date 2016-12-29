@@ -89,15 +89,17 @@ public class SectionService extends AbstractService<Section> {
         if (getSize() == 0 || amount <= 0) {
             return repo;
         }
+        if (amount > this.repo.getSize()) {
+            return getRepo();
+        }
 
         Map<Section, Integer> v = new HashMap<>();
-        for (Option o : options.getData()) {
-            int a = v.containsKey(o.getSection()) ? v.get(o.getSection()) : 0;
-            v.put(o.getSection(), a + 1);
+        for (Section s : getData()) {
+            v.put(s, (int) options.getData().stream().filter(o -> o.getSection().getId() == s.getId()).count());
         }
         for (int i = 0; i < amount; i++) {
             Section found = null;
-            int max = 0;
+            int max = -1;
             for (Map.Entry<Section, Integer> entry : v.entrySet()) {
                 if (max < entry.getValue()) {
                     found = entry.getKey();

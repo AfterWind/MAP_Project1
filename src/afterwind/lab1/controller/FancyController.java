@@ -1,5 +1,6 @@
 package afterwind.lab1.controller;
 
+import afterwind.lab1.Utils;
 import afterwind.lab1.entity.Candidate;
 import afterwind.lab1.entity.Option;
 import afterwind.lab1.entity.Section;
@@ -10,15 +11,27 @@ import afterwind.lab1.service.OptionService;
 import afterwind.lab1.service.SectionService;
 import afterwind.lab1.ui.CandidateView;
 import afterwind.lab1.ui.OptionView;
+import afterwind.lab1.ui.ReportsView;
 import afterwind.lab1.ui.SectionView;
 import afterwind.lab1.validator.CandidateValidator;
 import afterwind.lab1.validator.OptionValidator;
 import afterwind.lab1.validator.SectionValidator;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
+
+import java.io.File;
+import java.io.IOException;
+import java.net.MalformedURLException;
 
 public class FancyController {
 
@@ -33,6 +46,8 @@ public class FancyController {
     @FXML
     private OptionView optionsView;
 
+    private Stage reportsWindow;
+
     public FancyController() { }
 
     @FXML
@@ -40,12 +55,15 @@ public class FancyController {
         sectionsView.controller.setService(sectionService);
         optionsView.controller.setServices(optionService, candidateService, sectionService);
         candidatesView.controller.setService(candidateService);
+        reportsWindow = new Stage();
+        reportsWindow.setTitle("Reports");
+        ReportsView reportsView = new ReportsView();
+        reportsView.controller.setServices(optionService, candidateService, sectionService);
+        reportsWindow.setScene(new Scene(reportsView, 800, 400));
     }
 
     @FXML
     public ToggleButton candidateButton, sectionsButton, optionsButton;
-    @FXML
-    public StackPane shown;
 
     public void resetViews() {
         sectionsView.setVisible(false);
@@ -62,6 +80,24 @@ public class FancyController {
             sectionsView.setVisible(true);
         } else if(ev.getSource() == optionsButton) {
             optionsView.setVisible(true);
+        }
+    }
+
+    public void handleMenuSaveAll(ActionEvent ev) {
+        candidateService.getRepo().updateLinks();
+        sectionService.getRepo().updateLinks();
+        optionService.getRepo().updateLinks();
+        Utils.showInfoMessage("Totul s-a salvat in fisier!");
+    }
+
+    public void handleMenuExit(ActionEvent ev) {
+//        ((Stage) candidateButton.getScene().getWindow()).close();
+        Platform.exit();
+    }
+
+    public void handleMenuReports(ActionEvent ev) {
+        if (!reportsWindow.isShowing()) {
+            reportsWindow.show();
         }
     }
 }

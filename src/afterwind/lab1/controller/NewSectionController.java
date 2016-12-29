@@ -139,6 +139,7 @@ public class NewSectionController extends AbstractController<Section> {
             return;
         }
         service.remove(s);
+        tableView.getItems().remove(s);
         clearModificationTextFields();
     }
 

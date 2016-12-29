@@ -16,6 +16,8 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.function.Predicate;
 
@@ -40,6 +42,16 @@ public class NewOptionController extends AbstractController<Option> {
     private SectionService sectionService;
 
     public void showAll() {
+        List<Option> toRemove = new ArrayList<>();
+        for (Iterator<Option> it = service.getRepo().getData().iterator(); it.hasNext();) {
+            Option o = it.next();
+            if (o.getCandidate() == null || o.getSection() == null) {
+                toRemove.add(o);
+            }
+        }
+        for (Option o : toRemove) {
+            service.remove(o);
+        }
         super.showAll();
         candidateList.setItems(candidateService.getRepo().getData());
         sectionList.setItems(sectionService.getRepo().getData());
@@ -104,8 +116,13 @@ public class NewOptionController extends AbstractController<Option> {
      */
     @Override
     public void showDetails(Option o) {
-        candidateList.getSelectionModel().select(candidateList.getItems().filtered((c) -> c.equals(o.getCandidate())).get(0));
-        sectionList.getSelectionModel().select(sectionList.getItems().filtered((s) -> s.equals(o.getSection())).get(0));
+//        System.out.println(o.getSection().getName() + ", " + o.getCandidate().getName());
+        if (candidateService.get(o.getCandidate().getId()) == null || sectionService.get(o.getSection().getId()) == null) {
+            service.remove(o);
+            tableView.setItems(service.getRepo().getData());
+        }
+        candidateList.getSelectionModel().select(o.getCandidate());
+        sectionList.getSelectionModel().select(o.getSection());
     }
 
     @Override
@@ -116,6 +133,8 @@ public class NewOptionController extends AbstractController<Option> {
             return;
         }
         service.remove(o);
+        clearModificationTextFields();
+        tableView.getItems().remove(o);
     }
 
     @Override
