@@ -1,5 +1,6 @@
 package afterwind.lab1.repository;
 
+import afterwind.lab1.entity.Candidate;
 import afterwind.lab1.entity.IIdentifiable;
 import afterwind.lab1.exception.ValidationException;
 import javafx.collections.ObservableList;
@@ -55,6 +56,13 @@ public interface IRepository<T extends IIdentifiable<K>, K> {
      * @param tableHeader noul tableHeader
      */
     void setTableHeader(String tableHeader);
+
+    /**
+     * Updates the entity with the data given
+     * @param k The key of the existing entity in the repository
+     * @param data The data to update with
+     */
+    void update(K k, T data);
 
     /**
      * Marks the repository as being dirty which means:

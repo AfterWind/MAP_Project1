@@ -51,6 +51,11 @@ public abstract class AbstractService<T extends IIdentifiable<Integer>> extends 
         return e;
     }
 
+    public void update(Integer key, T data) {
+        repo.update(key, data);
+        repo.markDirty();
+    }
+
     /**
      * Returneaza entitatea cu id-ul dat
      * @param id id-ul entitatii cautate

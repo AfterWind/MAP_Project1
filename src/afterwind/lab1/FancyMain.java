@@ -1,5 +1,6 @@
 package afterwind.lab1;
 
+import afterwind.lab1.database.SQLiteDatabase;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;

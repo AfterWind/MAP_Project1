@@ -1,6 +1,9 @@
 package afterwind.lab1.repository;
 
+import afterwind.lab1.entity.Candidate;
 import afterwind.lab1.entity.IIdentifiable;
+import afterwind.lab1.entity.Option;
+import afterwind.lab1.entity.Section;
 import afterwind.lab1.exception.ValidationException;
 import afterwind.lab1.validator.IValidator;
 import javafx.collections.FXCollections;
@@ -121,6 +124,24 @@ public class Repository<T extends IIdentifiable<K>, K> implements IRepository<T,
             }
         }
         return result;
+    }
+
+    @Override
+    public void update(K k, T data) {
+        if (data instanceof Candidate) {
+            Candidate c = (Candidate) get(k);
+            c.setName(((Candidate) data).getName());
+            c.setAddress(((Candidate) data).getAddress());
+            c.setTelephone(((Candidate) data).getTelephone());
+        } else if(data instanceof Section) {
+            Section s = (Section) get(k);
+            s.setName(((Section) data).getName());
+            s.setNrLoc(((Section) data).getNrLoc());
+        } else if(data instanceof Option) {
+            Option o = (Option) get(k);
+            o.setCandidate(((Option) data).getCandidate());
+            o.setSection(((Option) data).getSection());
+        }
     }
 
     @Override

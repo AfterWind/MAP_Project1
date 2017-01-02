@@ -1,11 +1,11 @@
 package afterwind.lab1.controller;
 
 import afterwind.lab1.Utils;
+import afterwind.lab1.database.SQLiteDatabase;
 import afterwind.lab1.entity.Candidate;
 import afterwind.lab1.entity.Option;
 import afterwind.lab1.entity.Section;
-import afterwind.lab1.repository.FileRepository;
-import afterwind.lab1.repository.XMLRepository;
+import afterwind.lab1.repository.*;
 import afterwind.lab1.service.CandidateService;
 import afterwind.lab1.service.OptionService;
 import afterwind.lab1.service.SectionService;
@@ -19,25 +19,17 @@ import afterwind.lab1.validator.SectionValidator;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.ToggleButton;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-
-import java.io.File;
-import java.io.IOException;
-import java.net.MalformedURLException;
 
 public class FancyController {
 
-    private CandidateService candidateService = new CandidateService(new XMLRepository<>(new CandidateValidator(), new Candidate.XMLSerializer(), "/home/afterwind/IdeaProjects/MAP_Lab1/res/candidates.xml"));
-    private SectionService sectionService = new SectionService(new FileRepository<>(new SectionValidator(), new Section.Serializer(), "/home/afterwind/IdeaProjects/MAP_Lab1/res/sections.txt"));
-    private OptionService optionService = new OptionService(new FileRepository<>(new OptionValidator(), new Option.Serializer(candidateService, sectionService), "/home/afterwind/IdeaProjects/MAP_Lab1/res/options.txt"));
+    private SQLiteDatabase database = new SQLiteDatabase("res/data.db");
+
+    private CandidateService candidateService = new CandidateService(new SQLiteCandidateRepository(database, new CandidateValidator()));//new XMLRepository<>(new CandidateValidator(), new Candidate.XMLSerializer(), "/home/afterwind/IdeaProjects/MAP_Lab1/res/candidates.xml"));
+    private SectionService sectionService = new SectionService(new SQLiteSectionRepository(database, new SectionValidator()));//new FileRepository<>(new SectionValidator(), new Section.Serializer(), "/home/afterwind/IdeaProjects/MAP_Lab1/res/sections.txt"));
+    private OptionService optionService = new OptionService(new SQLiteOptionRepository(database, new OptionValidator(), candidateService.getRepo(), sectionService.getRepo()));//new FileRepository<>(new OptionValidator(), new Option.Serializer(candidateService, sectionService), "/home/afterwind/IdeaProjects/MAP_Lab1/res/options.txt"));
 
     @FXML
     private CandidateView candidatesView;

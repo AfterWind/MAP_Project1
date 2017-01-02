@@ -55,7 +55,7 @@ public class ReportsController {
         topSectionsSlider.setMin(1);
         topSectionsSlider.setMax(sectionService.getSize());
         topSectionsSlider.setBlockIncrement(1D);
-        topSectionsSlider.setMajorTickUnit(Math.floor(sectionService.getSize() / 4));
+        topSectionsSlider.setMajorTickUnit(Math.max(Math.floor(sectionService.getSize() / 4), 1));
         topSectionsSlider.setMinorTickCount(1);
 
         idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
