@@ -122,6 +122,7 @@ public class NewSectionController extends AbstractController<Section> {
             if (filter.test(s)) {
                 tableView.getItems().add(s);
             }
+            clearModificationTextFields();
         } catch (ValidationException e) {
             Utils.showErrorMessage(e.getMessage());
         }

@@ -162,6 +162,7 @@ public class NewOptionController extends AbstractController<Option> {
             if (filter.test(o)) {
                 tableView.getItems().add(o);
             }
+            clearModificationTextFields();
         } catch (ValidationException e) {
             Utils.showErrorMessage(e.getMessage());
         }

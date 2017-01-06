@@ -129,6 +129,7 @@ public class NewCandidateController extends AbstractController<Candidate> {
             if (filter.test(c)) {
                 tableView.getItems().add(c);
             }
+            clearModificationTextFields();
         } catch (ValidationException ex) {
             Utils.showErrorMessage(ex.getMessage());
         }

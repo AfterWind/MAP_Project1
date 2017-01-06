@@ -55,20 +55,6 @@ public abstract class AbstractController<T extends IIdentifiable<Integer>> {
 
     protected abstract void showDetails(T t);
 
-    /**
-     * Apelat daca selectia se modifica
-     * @param oldValue valoarea veche
-     * @param newValue valoarea noua
-     */
-    public void handleSelectionChanged(ObservableValue<? extends T> o, T oldValue, T newValue) {
-        if (newValue != null) {
-            showDetails(newValue);
-            buttonUpdate.setDisable(false);
-        } else {
-            buttonUpdate.setDisable(true);
-        }
-    }
-
     public void applyFilter() {
         List<T> filteredList = service.filter(filter);
         tableView.setItems(FXCollections.observableArrayList(filteredList));
@@ -83,6 +69,20 @@ public abstract class AbstractController<T extends IIdentifiable<Integer>> {
     public abstract void handleAdd(ActionEvent ev);
     public abstract void handleUpdate(ActionEvent ev);
     public abstract void handleDelete(ActionEvent ev);
+
+    /**
+     * Apelat daca selectia se modifica
+     * @param oldValue valoarea veche
+     * @param newValue valoarea noua
+     */
+    public void handleSelectionChanged(ObservableValue<? extends T> o, T oldValue, T newValue) {
+        if (newValue != null) {
+            showDetails(newValue);
+            buttonUpdate.setDisable(false);
+        } else {
+            buttonUpdate.setDisable(true);
+        }
+    }
 
     public void handleClear(ActionEvent ev) {
         clearModificationTextFields();
