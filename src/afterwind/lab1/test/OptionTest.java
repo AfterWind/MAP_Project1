@@ -1,10 +1,10 @@
 package afterwind.lab1.test;
 
-import afterwind.lab1.old_controller.OptionController;
 import afterwind.lab1.entity.Candidate;
 import afterwind.lab1.entity.Option;
 import afterwind.lab1.entity.Section;
 import afterwind.lab1.exception.ValidationException;
+import afterwind.lab1.service.OptionService;
 import afterwind.lab1.validator.IValidator;
 import afterwind.lab1.validator.OptionValidator;
 import org.junit.Assert;
@@ -36,7 +36,7 @@ public class OptionTest {
 
     @Test
     public void controllerTest() {
-        OptionController controller = new OptionController();
+        OptionService controller = new OptionService();
         Candidate c1 = new Candidate(10, "Sergiu", "000111222", "Kappa");
         Candidate c2 = new Candidate(11, "Andrei", "000111222", "Kappa");
         Section s1 = new Section(5, "Info", 100);

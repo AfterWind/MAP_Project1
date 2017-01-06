@@ -1,8 +1,5 @@
 package afterwind.lab1.ui;
 
-import afterwind.lab1.old_controller.CandidateController;
-import afterwind.lab1.old_controller.OptionController;
-import afterwind.lab1.old_controller.SectionController;
 import afterwind.lab1.entity.Candidate;
 import afterwind.lab1.entity.Option;
 import afterwind.lab1.entity.Section;
@@ -10,6 +7,9 @@ import afterwind.lab1.exception.ValidationException;
 import afterwind.lab1.repository.FileRepository;
 import afterwind.lab1.repository.FileRepositoryNumeroDos;
 import afterwind.lab1.repository.IRepository;
+import afterwind.lab1.service.CandidateService;
+import afterwind.lab1.service.OptionService;
+import afterwind.lab1.service.SectionService;
 import afterwind.lab1.validator.CandidateValidator;
 import afterwind.lab1.validator.SectionValidator;
 
@@ -24,9 +24,9 @@ import java.util.Scanner;
  * Stratul de "UI"
  */
 public class Console {
-    public final CandidateController candidateController = new CandidateController(new FileRepository<>(new CandidateValidator(), new Candidate.Serializer(), "/home/afterwind/IdeaProjects/MAP_Lab1/res/candidates.txt"));
-    public final SectionController sectionController = new SectionController(new FileRepositoryNumeroDos<>(new SectionValidator(), "/home/afterwind/IdeaProjects/MAP_Lab1/res/sections2.txt"));
-    public final OptionController optionController = new OptionController();
+    public final CandidateService candidateService = new CandidateService(new FileRepository<>(new CandidateValidator(), new Candidate.Serializer(), "/home/afterwind/IdeaProjects/MAP_Lab1/res/candidates.txt"));
+    public final SectionService sectionService = new SectionService(new FileRepositoryNumeroDos<>(new SectionValidator(), "/home/afterwind/IdeaProjects/MAP_Lab1/res/sections2.txt"));
+    public final OptionService optionService = new OptionService();
     private Scanner scanner = new Scanner(System.in);
 
     /**
@@ -75,21 +75,21 @@ public class Console {
      * Afiseaza toti candidatii
      */
     public void uiShowCandidates() {
-        print(candidateController.toString());
+        print(candidateService.toString());
     }
 
     /**
      * Afiseaza toate sectiunile
      */
     public void uiShowSections() {
-        print(sectionController.toString());
+        print(sectionService.toString());
     }
 
     /**
      * Afiseaza toate optiunile
      */
     public void uiShowOptions() {
-        print(optionController.toString());
+        print(optionService.toString());
     }
 
     /**
@@ -114,7 +114,7 @@ public class Console {
             print("Adresa invalida!");
             return;
         }
-        candidateController.add(new Candidate(candidateController.getNextId(), name, tel, address));
+        candidateService.add(new Candidate(candidateService.getNextId(), name, tel, address));
     }
 
     /**
@@ -129,7 +129,7 @@ public class Console {
         }
         System.out.print("Dati numarul de locuri al sectiei: ");
         int nrLoc = scanner.nextInt(); scanner.nextLine();
-        sectionController.add(new Section(sectionController.getNextId(), name, nrLoc));
+        sectionService.add(new Section(sectionService.getNextId(), name, nrLoc));
     }
 
     /**
@@ -138,7 +138,7 @@ public class Console {
     public void uiAddOption() throws ValidationException {
         System.out.print("Dati id-ul candidatului: ");
         int candidateId = scanner.nextInt(); scanner.nextLine();
-        Candidate candidate = candidateController.get(candidateId);
+        Candidate candidate = candidateService.get(candidateId);
         if (candidate == null) {
             print("Candidatul cu id-ul dat nu exista!");
             return;
@@ -146,13 +146,13 @@ public class Console {
 
         System.out.print("Dati id-ul sectiunii: ");
         int sectionId = scanner.nextInt(); scanner.nextLine();
-        Section section = sectionController.get(sectionId);
+        Section section = sectionService.get(sectionId);
         if (section == null) {
             print("Sectiunea cu id-ul dat nu exista!");
             return;
         }
 
-        optionController.add(new Option(optionController.getNextId(), section, candidate));
+        optionService.add(new Option(optionService.getNextId(), section, candidate));
     }
 
     /**
@@ -161,11 +161,11 @@ public class Console {
     public void uiDeleteCandidate() {
         System.out.print("Dati id-ul candidatului: ");
         int id = scanner.nextInt(); scanner.nextLine();
-        if (candidateController.get(id) == null) {
+        if (candidateService.get(id) == null) {
             print("Candidatul cu id-ul dat nu exista!");
             return;
         }
-        candidateController.remove(id);
+        candidateService.remove(id);
     }
 
     /**
@@ -174,11 +174,11 @@ public class Console {
     public void uiDeleteSection() {
         System.out.print("Dati id-ul sectiei: ");
         int id = scanner.nextInt(); scanner.nextLine();
-        if (sectionController.get(id) == null) {
+        if (sectionService.get(id) == null) {
             print("Sectiunea cu id-ul dat nu exista!");
             return;
         }
-        sectionController.remove(id);
+        sectionService.remove(id);
     }
 
     /**
@@ -187,11 +187,11 @@ public class Console {
     public void uiDeleteOption() {
         System.out.print("Dati id-ul optiunii: ");
         int id = scanner.nextInt(); scanner.nextLine();
-        if (sectionController.contains(id)) {
+        if (sectionService.contains(id)) {
             print("Optiunea cu id-ul dat nu exista!");
             return;
         }
-        sectionController.remove(id);
+        sectionService.remove(id);
     }
 
     /**
@@ -200,7 +200,7 @@ public class Console {
     public void uiUpdateCandidate() {
         System.out.print("Dati id-ul candidatului: ");
         int id = scanner.nextInt(); scanner.nextLine();
-        Candidate candidate = candidateController.get(id);
+        Candidate candidate = candidateService.get(id);
         if (candidate == null) {
             print("Candidatul cu id-ul dat nu exista!");
             return;
@@ -222,7 +222,7 @@ public class Console {
         }
 
         if (!(address.equals(candidate.getAddress()) && tel.equals(candidate.getTelephone()) && name.equals(candidate.getName()))) {
-            candidateController.updateCandidate(candidate, name, tel, address);
+            candidateService.updateCandidate(candidate, name, tel, address);
         }
     }
 
@@ -232,7 +232,7 @@ public class Console {
     public void uiUpdateSection() {
         System.out.print("Dati id-ul sectiei: ");
         int id = scanner.nextInt(); scanner.nextLine();
-        Section section = sectionController.get(id);
+        Section section = sectionService.get(id);
         if (section == null) {
             print("Sectiunea cu id-ul dat nu exista!");
             return;
@@ -252,7 +252,7 @@ public class Console {
         }
 
         if (!(name.equals(section.getName()) && nrLoc == section.getNrLoc())) {
-            sectionController.updateSection(section, name, nrLoc);
+            sectionService.updateSection(section, name, nrLoc);
         }
     }
 
@@ -262,7 +262,7 @@ public class Console {
     public void uiUpdateOption() {
         System.out.println("Dati id-ul optiunii: ");
         int optionId = scanner.nextInt(); scanner.nextLine();
-        Option option = optionController.get(optionId);
+        Option option = optionService.get(optionId);
         if (option == null) {
             print("Nu exista optiunea cu acel ID");
             return;
@@ -277,7 +277,7 @@ public class Console {
             candidate = option.getCandidate();
         } else {
             candidateId = Integer.parseInt(candidateIdString);
-            candidate = candidateController.get(candidateId);
+            candidate = candidateService.get(candidateId);
         }
         if (candidate == null) {
             print("Candidatul cu id-ul dat nu exista!");
@@ -293,7 +293,7 @@ public class Console {
             section = option.getSection();
         } else {
             sectionId = Integer.parseInt(sectionIdString);
-            section = sectionController.get(sectionId);
+            section = sectionService.get(sectionId);
         }
         if (section == null) {
             print("Sectiunea cu id-ul dat nu exista!");
@@ -301,7 +301,7 @@ public class Console {
         }
 
         if (!(candidate.equals(option.getCandidate()) && section.equals(option.getSection()))) {
-            optionController.updateOption(option, candidate, section);
+            optionService.updateOption(option, candidate, section);
         }
     }
 
@@ -311,7 +311,7 @@ public class Console {
     public void uiFilterCandidatesByName() {
         System.out.print("Dati numele cautat: ");
         String name = scanner.nextLine();
-        IRepository<Candidate, Integer> result = candidateController.filterByName(name);
+        IRepository<Candidate, Integer> result = candidateService.filterByName(name);
         print("Rezultatul filtrarii:\n" + result);
     }
 
@@ -321,7 +321,7 @@ public class Console {
     public void uiFilterCandidatesByTelephone() {
         System.out.print("Dati numarul de telefon cautat: ");
         String tel = scanner.nextLine();
-        IRepository<Candidate, Integer> result = candidateController.filterByTelephone(tel);
+        IRepository<Candidate, Integer> result = candidateService.filterByTelephone(tel);
         print("Rezultatul filtrarii:\n" + result);
     }
 
@@ -331,7 +331,7 @@ public class Console {
     public void uiFilterCandidatesByAddress() {
         System.out.print("Dati adresa cautata: ");
         String address = scanner.nextLine();
-        IRepository<Candidate, Integer> result = candidateController.filterByAddress(address);
+        IRepository<Candidate, Integer> result = candidateService.filterByAddress(address);
         print("Rezultatul filtrarii:\n" + result);
     }
 
@@ -341,7 +341,7 @@ public class Console {
     public void uiFilterSectionsByName() {
         System.out.print("Dati numele cautat: ");
         String name = scanner.nextLine();
-        IRepository<Section, Integer> result = sectionController.filterByName(name);
+        IRepository<Section, Integer> result = sectionService.filterByName(name);
         print("Rezultatul filtrarii:\n" + result);
     }
 
@@ -353,7 +353,7 @@ public class Console {
         int nrLoc = scanner.nextInt(); scanner.nextLine();
         System.out.print("Cautam sectii sub transa (true/false)? ");
         boolean lower = scanner.nextBoolean();
-        IRepository<Section, Integer> result = sectionController.filterByNrLoc(nrLoc, lower);
+        IRepository<Section, Integer> result = sectionService.filterByNrLoc(nrLoc, lower);
         print("Rezultatul filtrarii:\n" + result);
     }
 
@@ -364,15 +364,15 @@ public class Console {
         System.out.println("Dati cate sectii doriti in top: ");
         int amount = scanner.nextInt(); scanner.nextLine();
         System.out.println("Sectiile din top: ");
-        IRepository<Section, Integer> result = sectionController.getMostOccupiedSections(optionController.getRepo(), amount);
+        IRepository<Section, Integer> result = sectionService.getMostOccupiedSections(optionService.getRepo(), amount);
         System.out.print(result.toString());
     }
 
     public void uiForceUpdateLinks() {
         System.out.print("Updating all file repository links... ");
-        candidateController.getRepo().updateLinks();
-        sectionController.getRepo().updateLinks();
-        optionController.getRepo().updateLinks();
+        candidateService.getRepo().updateLinks();
+        sectionService.getRepo().updateLinks();
+        optionService.getRepo().updateLinks();
         System.out.println("Finished!");
     }
 

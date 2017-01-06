@@ -1,13 +1,13 @@
 package afterwind.lab1.test;
 
-import afterwind.lab1.old_controller.OptionController;
-import afterwind.lab1.old_controller.SectionController;
 import afterwind.lab1.entity.Candidate;
 import afterwind.lab1.entity.ISerializer;
 import afterwind.lab1.entity.Option;
 import afterwind.lab1.entity.Section;
 import afterwind.lab1.exception.ValidationException;
 import afterwind.lab1.repository.IRepository;
+import afterwind.lab1.service.OptionService;
+import afterwind.lab1.service.SectionService;
 import afterwind.lab1.validator.IValidator;
 import afterwind.lab1.validator.SectionValidator;
 import org.junit.Assert;
@@ -29,7 +29,7 @@ public class SectionTest {
 
     @Test
     public void controllerTest() throws ValidationException {
-        SectionController controller = new SectionController();
+        SectionService controller = new SectionService();
         Section c1 = new Section(0, "Mate", 12);
         controller.add(c1);
         Assert.assertTrue("Failed to add section", controller.contains(0));
@@ -44,7 +44,7 @@ public class SectionTest {
 
     @Test
     public void controllerMostOccupiedTest() throws ValidationException {
-        SectionController controller = new SectionController();
+        SectionService controller = new SectionService();
         Section s1 = new Section(0, "Mate", 12);
         Section s2 = new Section(1, "Info", 300);
         Section s3 = new Section(2, "Geografie", 10);
@@ -59,28 +59,28 @@ public class SectionTest {
         Candidate c1 = new Candidate(0, "Andrei", "000", "Address");
         Candidate c2 = new Candidate(1, "Adi", "111", "Address");
         Candidate c3 = new Candidate(2, "Victor", "123", "Address");
-        OptionController optionController = new OptionController();
+        OptionService OptionService = new OptionService();
         Option o1 = new Option(0, s1, c1);
         Option o2 = new Option(1, s2, c1);
         Option o3 = new Option(2, s2, c2);
         Option o4 = new Option(3, s3, c2);
         Option o5 = new Option(4, s1, c2);
         Option o6 = new Option(5, s1, c3);
-        optionController.add(o1);
-        optionController.add(o2);
-        optionController.add(o3);
-        optionController.add(o4);
-        optionController.add(o5);
-        optionController.add(o6);
+        OptionService.add(o1);
+        OptionService.add(o2);
+        OptionService.add(o3);
+        OptionService.add(o4);
+        OptionService.add(o5);
+        OptionService.add(o6);
 
-        IRepository<Section, Integer> result = controller.getMostOccupiedSections(optionController.getRepo(), 2);
+        IRepository<Section, Integer> result = controller.getMostOccupiedSections(OptionService.getRepo(), 2);
         Assert.assertTrue("Failed to get top most occupied section", result.contains(s1.getId()));
         Assert.assertTrue("Failed to get second most occupied section", result.contains(s2.getId()));
     }
 
     @Test
     public void filterTest() throws ValidationException {
-        SectionController controller = new SectionController();
+        SectionService controller = new SectionService();
         Section c1 = new Section(1, "Info", 100);
         Section c2 = new Section(2, "Mate", 100);
         Section c3 = new Section(3, "Romana", 50);

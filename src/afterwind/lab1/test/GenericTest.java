@@ -1,6 +1,5 @@
 package afterwind.lab1.test;
 
-import afterwind.lab1.old_controller.SectionController;
 import afterwind.lab1.entity.Candidate;
 import afterwind.lab1.entity.Section;
 import afterwind.lab1.exception.ValidationException;
@@ -8,6 +7,7 @@ import afterwind.lab1.repository.FileRepository;
 import afterwind.lab1.repository.FileRepositoryNumeroDos;
 import afterwind.lab1.repository.IRepository;
 import afterwind.lab1.repository.Repository;
+import afterwind.lab1.service.SectionService;
 import afterwind.lab1.validator.CandidateValidator;
 import afterwind.lab1.validator.SectionValidator;
 import org.junit.Assert;
@@ -77,7 +77,7 @@ public class GenericTest {
     @Test
     public void controllerTest() throws ValidationException {
         Repository<Section, Integer> repo = new Repository<>(new SectionValidator());
-        SectionController controller = new SectionController(repo);
+        SectionService controller = new SectionService(repo);
         Section c1 = new Section(5, "Info", 100);
         controller.add(c1);
         Assert.assertEquals("Failed to save an entity to repository through controller", c1, controller.get(5));

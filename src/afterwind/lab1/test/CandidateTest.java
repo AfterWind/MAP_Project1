@@ -1,10 +1,10 @@
 package afterwind.lab1.test;
 
-import afterwind.lab1.old_controller.CandidateController;
 import afterwind.lab1.entity.Candidate;
 import afterwind.lab1.entity.ISerializer;
 import afterwind.lab1.exception.ValidationException;
 import afterwind.lab1.repository.IRepository;
+import afterwind.lab1.service.CandidateService;
 import afterwind.lab1.validator.CandidateValidator;
 import afterwind.lab1.validator.IValidator;
 import org.junit.Assert;
@@ -30,7 +30,7 @@ public class CandidateTest {
 
     @Test
     public void controllerTest() {
-        CandidateController controller = new CandidateController();
+        CandidateService controller = new CandidateService();
         Candidate c1 = new Candidate(10, "Sergiu", "000111222", "Kappa");
         controller.updateCandidate(c1, "Andrei", "111", "idk");
         Assert.assertEquals("Failed to update candidate", "Andrei", c1.getName());
@@ -42,7 +42,7 @@ public class CandidateTest {
 
     @Test
     public void filterTest() throws ValidationException {
-        CandidateController controller = new CandidateController();
+        CandidateService controller = new CandidateService();
         Candidate c1 = new Candidate(10, "Sergiu", "000111222", "Kappa");
         Candidate c2 = new Candidate(11, "Andrei", "111", "IDK");
         Candidate c3 = new Candidate(12, "Vlad", "222", "Task");
