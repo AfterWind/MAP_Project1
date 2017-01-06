@@ -3,6 +3,7 @@ package afterwind.lab1.controller;
 import afterwind.lab1.Utils;
 import afterwind.lab1.entity.Section;
 import afterwind.lab1.exception.ValidationException;
+import afterwind.lab1.repository.FileRepository;
 import afterwind.lab1.service.SectionService;
 import afterwind.lab1.ui.control.StateButton;
 import javafx.beans.value.ObservableValue;
@@ -36,6 +37,9 @@ public class NewSectionController extends AbstractController<Section> {
      */
     public void setService(SectionService service) {
         this.service = service;
+        if (!(service.getRepo() instanceof FileRepository)) {
+            buttonSave.setDisable(true);
+        }
         showAll();
     }
 

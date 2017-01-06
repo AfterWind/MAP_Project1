@@ -16,12 +16,16 @@ public class FancyMain extends Application {
         launch(args);
     }
 
+    public static Scene scene;
+    public static Stage stage;
+
     @Override
     public void start(Stage stage) throws Exception {
+        FancyMain.stage = stage;
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(new File("/home/afterwind/IdeaProjects/MAP_Lab1/src/afterwind/lab1/ui/fxml/FancyView.fxml").toURL());
-        Scene scene = new Scene(loader.load(), 1000, 800, Color.ALICEBLUE);
-        stage.setTitle("Fancy Management");
+        scene = new Scene(loader.load(), 800, 650, Color.DARKBLUE);
+        stage.setTitle("Candidates Management");
         stage.setScene(scene);
         stage.requestFocus();
         stage.show();

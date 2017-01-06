@@ -3,6 +3,7 @@ package afterwind.lab1.controller;
 import afterwind.lab1.Utils;
 import afterwind.lab1.entity.Candidate;
 import afterwind.lab1.exception.ValidationException;
+import afterwind.lab1.repository.FileRepository;
 import afterwind.lab1.service.CandidateService;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -44,6 +45,9 @@ public class NewCandidateController extends AbstractController<Candidate> {
 
     public void setService(CandidateService service) {
         this.service = service;
+        if (!(service.getRepo() instanceof FileRepository)) {
+            buttonSave.setDisable(true);
+        }
         showAll();
     }
 

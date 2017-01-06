@@ -16,18 +16,17 @@
 <fx:root type="javafx.scene.layout.VBox" xmlns:fx="http://javafx.com/fxml/1" fx:controller="afterwind.lab1.controller.ReportsController">
     <children>
         <MenuBar>
-            <Menu text="File">
+            <Menu text="Options">
                 <MenuItem text="Export as PDF" onAction="#handleMenuExportPDF"/>
                 <MenuItem text="Generate..." onAction="#handleMenuGenerate"/>
-                <MenuItem text="Exit" onAction="#handleMenuExit"/>
             </Menu>
         </MenuBar>
         <VBox alignment="CENTER" spacing="10">
             <padding>
-                <Insets top="0" right="5" bottom="20" left="5"/>
+                <Insets top="20" right="10" bottom="20" left="10"/>
             </padding>
             <StackPane>
-                <TableView fx:id="sectionReportsTable">
+                <TableView fx:id="sectionReportsTable" maxWidth="610">
                     <columns>
                         <TableColumn fx:id="idColumn" text="ID" minWidth="35"/>
                         <TableColumn fx:id="nameColumn" text="Name" minWidth="250"/>

@@ -5,6 +5,7 @@ import afterwind.lab1.entity.Candidate;
 import afterwind.lab1.entity.Option;
 import afterwind.lab1.entity.Section;
 import afterwind.lab1.exception.ValidationException;
+import afterwind.lab1.repository.FileRepository;
 import afterwind.lab1.service.CandidateService;
 import afterwind.lab1.service.OptionService;
 import afterwind.lab1.service.SectionService;
@@ -61,6 +62,9 @@ public class NewOptionController extends AbstractController<Option> {
         this.service = service;
         this.candidateService = candidateService;
         this.sectionService = sectionService;
+        if (!(service.getRepo() instanceof FileRepository)) {
+            buttonSave.setDisable(true);
+        }
         showAll();
     }
 

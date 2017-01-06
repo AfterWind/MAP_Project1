@@ -2,11 +2,13 @@ package afterwind.lab1.ui;
 
 import afterwind.lab1.controller.NewCandidateController;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 
 import java.io.File;
 
-public class CandidateView extends VBox {
+    public class CandidateView extends VBox {
 
     public final NewCandidateController controller;
     public CandidateView() {

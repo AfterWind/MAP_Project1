@@ -27,7 +27,6 @@ import java.util.Objects;
 
 public class ReportsController {
 
-
     @FXML
     public TableView sectionReportsTable;
     @FXML
@@ -130,10 +129,6 @@ public class ReportsController {
     }
 
     public void handleMenuGenerate(ActionEvent ev) {
-
-    }
-
-    public void handleMenuExit(ActionEvent ev) {
 
     }
 

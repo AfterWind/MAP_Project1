@@ -3,6 +3,7 @@ package afterwind.lab1.controller;
 import afterwind.lab1.Utils;
 import afterwind.lab1.entity.IIdentifiable;
 import afterwind.lab1.entity.Option;
+import afterwind.lab1.repository.FileRepository;
 import afterwind.lab1.service.AbstractService;
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ObservableValue;
@@ -46,6 +47,12 @@ public abstract class AbstractController<T extends IIdentifiable<Integer>> {
         tableView.getSelectionModel().selectedItemProperty().addListener(this::handleSelectionChanged);
     }
 
+    public void applyFilter() {
+        List<T> filteredList = service.filter(filter);
+        tableView.setItems(FXCollections.observableArrayList(filteredList));
+        buttonClearFilter.setDisable(false);
+    }
+
     /**
      * Afiseaza toti candidatii
      */
@@ -54,12 +61,6 @@ public abstract class AbstractController<T extends IIdentifiable<Integer>> {
     }
 
     protected abstract void showDetails(T t);
-
-    public void applyFilter() {
-        List<T> filteredList = service.filter(filter);
-        tableView.setItems(FXCollections.observableArrayList(filteredList));
-        buttonClearFilter.setDisable(false);
-    }
 
     public abstract void updateFilter(ObservableValue<? extends String> observable, String oldValue, String newValue);
 
@@ -99,8 +100,12 @@ public abstract class AbstractController<T extends IIdentifiable<Integer>> {
     }
 
     public void handleSave(ActionEvent ev) {
-        Utils.showInfoMessage("Totul s-a salvat in fisier!");
-        service.getRepo().updateLinks();
+        if (service.getRepo() instanceof FileRepository) {
+            Utils.showInfoMessage("Totul s-a salvat in fisier!");
+            service.getRepo().updateLinks();
+        } else {
+            Utils.showInfoMessage("Tipul de Repository nu suporta salvarea in fisier!");
+        }
     }
 
     /**
