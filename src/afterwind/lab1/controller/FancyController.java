@@ -2,10 +2,9 @@ package afterwind.lab1.controller;
 
 import afterwind.lab1.Utils;
 import afterwind.lab1.database.SQLiteDatabase;
-import afterwind.lab1.entity.Candidate;
-import afterwind.lab1.entity.Option;
-import afterwind.lab1.entity.Section;
-import afterwind.lab1.repository.*;
+import afterwind.lab1.repository.sql.SQLiteCandidateRepository;
+import afterwind.lab1.repository.sql.SQLiteOptionRepository;
+import afterwind.lab1.repository.sql.SQLiteSectionRepository;
 import afterwind.lab1.service.CandidateService;
 import afterwind.lab1.service.OptionService;
 import afterwind.lab1.service.SectionService;

@@ -1,16 +1,17 @@
-package afterwind.lab1.repository;
+package afterwind.lab1.repository.sql;
 
 import afterwind.lab1.database.SQLiteDatabase;
 import afterwind.lab1.entity.Candidate;
 import afterwind.lab1.entity.Option;
 import afterwind.lab1.entity.Section;
 import afterwind.lab1.exception.ValidationException;
+import afterwind.lab1.repository.IRepository;
 import afterwind.lab1.validator.IValidator;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class SQLiteOptionRepository extends SQLiteRepository<Option, Integer>{
+public class SQLiteOptionRepository extends SQLiteRepository<Option>{
 
     private IRepository<Section, Integer> sectionRepo;
     private IRepository<Candidate, Integer> candidateRepo;
@@ -57,17 +58,6 @@ public class SQLiteOptionRepository extends SQLiteRepository<Option, Integer>{
             statementAdd.setInt(3, o.getSection().getId());
             statementAdd.execute();
             super.add(o);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    @Override
-    public void remove(Option o) {
-        try {
-            statementRemove.setInt(1, o.getId());
-            statementRemove.execute();
-            super.remove(o);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

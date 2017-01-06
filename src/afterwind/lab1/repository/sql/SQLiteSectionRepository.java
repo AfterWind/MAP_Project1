@@ -1,22 +1,16 @@
-package afterwind.lab1.repository;
+package afterwind.lab1.repository.sql;
 
 import afterwind.lab1.database.SQLiteDatabase;
-import afterwind.lab1.entity.Candidate;
 import afterwind.lab1.entity.Section;
 import afterwind.lab1.exception.ValidationException;
-import afterwind.lab1.repository.Repository;
-import afterwind.lab1.repository.SQLiteRepository;
-import afterwind.lab1.service.CandidateService;
-import afterwind.lab1.service.SectionService;
 import afterwind.lab1.validator.IValidator;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class SQLiteSectionRepository extends SQLiteRepository<Section, Integer> {
+public class SQLiteSectionRepository extends SQLiteRepository<Section> {
 
-    private SQLiteDatabase database;
     private PreparedStatement statementAdd, statementRemove, statementUpdate;
 
     public SQLiteSectionRepository(SQLiteDatabase database, IValidator<Section> validator) {
@@ -55,17 +49,6 @@ public class SQLiteSectionRepository extends SQLiteRepository<Section, Integer> 
             statementAdd.setInt(3, s.getNrLoc());
             statementAdd.execute();
             super.add(s);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    @Override
-    public void remove(Section s) {
-        try {
-            statementRemove.setInt(1, s.getId());
-            statementRemove.execute();
-            super.remove(s);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

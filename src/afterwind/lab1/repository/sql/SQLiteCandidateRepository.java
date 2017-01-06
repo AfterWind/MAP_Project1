@@ -1,4 +1,4 @@
-package afterwind.lab1.repository;
+package afterwind.lab1.repository.sql;
 
 import afterwind.lab1.database.SQLiteDatabase;
 import afterwind.lab1.entity.Candidate;
@@ -8,7 +8,7 @@ import afterwind.lab1.validator.IValidator;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class SQLiteCandidateRepository extends SQLiteRepository<Candidate, Integer> {
+public class SQLiteCandidateRepository extends SQLiteRepository<Candidate> {
     public SQLiteCandidateRepository(SQLiteDatabase database, IValidator<Candidate> validator) {
         super(database, validator);
         statementAdd = database.getStatement("INSERT INTO Candidates VALUES(?, ?, ?, ?)");
@@ -49,16 +49,6 @@ public class SQLiteCandidateRepository extends SQLiteRepository<Candidate, Integ
         }
     }
 
-    @Override
-    public void remove(Candidate c) {
-        try {
-            statementRemove.setInt(1, c.getId());
-            statementRemove.execute();
-            super.remove(c);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
 
     @Override
     public void update(Integer key, Candidate data) {
