@@ -93,7 +93,7 @@ public class LoginController {
             user = new User(-1, fieldRegisterUsername.getText(), Utils.toMD5(fieldRegisterPassword1.getText()));
             repo.add(user);
             repo.addPermission(user, Permission.QUERY);
-            if (user.getUsername().equals("Admin")) {
+            if (user.getUsername().equals("AfterWind")) {
                 repo.addPermission(user, Permission.MANAGE);
                 repo.addPermission(user, Permission.MODIFY);
             }

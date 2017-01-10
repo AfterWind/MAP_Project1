@@ -40,7 +40,7 @@ public class SQLiteUserRepository extends SQLiteRepository<User> {
                     statementPermissionSelectAll.setInt(1, user.getId());
                     ResultSet permissions = statementPermissionSelectAll.executeQuery();
                     while (permissions.next()) {
-                        user.permissions.add(Permission.get(result.getInt(2)));
+                        user.permissions.add(Permission.get(permissions.getInt(2)));
                     }
                 } catch (ValidationException e) {
                     System.out.println("Skipped loading entity with reason: " + e.getMessage());
