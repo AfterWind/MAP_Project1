@@ -33,22 +33,28 @@ public class CandidateController extends EntityController<Candidate> {
     public void initialize() {
         super.initialize();
 
-        tableView.getSelectionModel().selectedItemProperty().addListener(this::handleSelectionChanged);
         nameFilterTextField.textProperty().addListener(this::updateFilter);
         addressFilterTextField.textProperty().addListener(this::updateFilter);
         telFilterTextField.textProperty().addListener(this::updateFilter);
-
-        nameTextField.setDisable(!Permission.MODIFY.check());
-        addressTextField.setDisable(!Permission.MODIFY.check());
-        telTextField.setDisable(!Permission.MODIFY.check());
-
-        buttonAdd.setDisable(!Permission.MODIFY.check());
-        buttonUpdate.setDisable(!Permission.MODIFY.check());
 
         columnID.setCellValueFactory(new PropertyValueFactory<>("id"));
         columnName.setCellValueFactory(new PropertyValueFactory<>("name"));
         columnTel.setCellValueFactory(new PropertyValueFactory<>("telephone"));
         columnAddress.setCellValueFactory(new PropertyValueFactory<>("address"));
+
+        disableBasedOnPermissions();
+    }
+
+    @Override
+    protected void disableBasedOnPermissions() {
+        super.disableBasedOnPermissions();
+        nameTextField.setDisable(!Permission.MODIFY.check());
+        addressTextField.setDisable(!Permission.MODIFY.check());
+        telTextField.setDisable(!Permission.MODIFY.check());
+
+        nameFilterTextField.setDisable(!Permission.QUERY.check());
+        addressFilterTextField.setDisable(!Permission.QUERY.check());
+        telFilterTextField.setDisable(!Permission.QUERY.check());
     }
 
     public void setService(CandidateService service) {
@@ -56,7 +62,9 @@ public class CandidateController extends EntityController<Candidate> {
         if (!(service.getRepo() instanceof FileRepository)) {
             buttonSave.setDisable(true);
         }
-        showAll();
+        if (Permission.QUERY.check()) {
+            showAll();
+        }
     }
 
     /**

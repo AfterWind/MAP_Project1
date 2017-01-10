@@ -3,6 +3,7 @@ package afterwind.lab1.controller;
 import afterwind.lab1.Utils;
 import afterwind.lab1.entity.Section;
 import afterwind.lab1.exception.ValidationException;
+import afterwind.lab1.permission.Permission;
 import afterwind.lab1.repository.FileRepository;
 import afterwind.lab1.service.SectionService;
 import afterwind.lab1.ui.control.StateButton;
@@ -40,7 +41,9 @@ public class SectionController extends EntityController<Section> {
         if (!(service.getRepo() instanceof FileRepository)) {
             buttonSave.setDisable(true);
         }
-        showAll();
+        if (Permission.QUERY.check()) {
+            showAll();
+        }
     }
 
     /**
@@ -105,6 +108,18 @@ public class SectionController extends EntityController<Section> {
 
         nameFilterTextField.textProperty().addListener(this::updateFilter);
         nrLocFilterTextField.textProperty().addListener(this::updateFilter);
+
+        disableBasedOnPermissions();
+    }
+
+    @Override
+    protected void disableBasedOnPermissions() {
+        super.disableBasedOnPermissions();
+        nameTextField.setDisable(!Permission.MODIFY.check());
+        nrLocTextField.setDisable(!Permission.MODIFY.check());
+
+        nameFilterTextField.setDisable(!Permission.QUERY.check());
+        nrLocFilterTextField.setDisable(!Permission.MODIFY.check());
     }
 
     /**

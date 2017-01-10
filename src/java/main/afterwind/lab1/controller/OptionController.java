@@ -5,6 +5,7 @@ import afterwind.lab1.entity.Candidate;
 import afterwind.lab1.entity.Option;
 import afterwind.lab1.entity.Section;
 import afterwind.lab1.exception.ValidationException;
+import afterwind.lab1.permission.Permission;
 import afterwind.lab1.repository.FileRepository;
 import afterwind.lab1.service.CandidateService;
 import afterwind.lab1.service.OptionService;
@@ -40,6 +41,7 @@ public class OptionController extends EntityController<Option> {
     private CandidateService candidateService;
     private SectionService sectionService;
 
+    @Override
     public void showAll() {
         List<Option> toRemove = new ArrayList<>();
         for (Iterator<Option> it = service.getRepo().getData().iterator(); it.hasNext();) {
@@ -51,6 +53,7 @@ public class OptionController extends EntityController<Option> {
         for (Option o : toRemove) {
             service.remove(o);
         }
+
         super.showAll();
         candidateList.setItems(candidateService.getRepo().getData());
         sectionList.setItems(sectionService.getRepo().getData());
@@ -63,7 +66,9 @@ public class OptionController extends EntityController<Option> {
         if (!(service.getRepo() instanceof FileRepository)) {
             buttonSave.setDisable(true);
         }
-        showAll();
+        if (Permission.QUERY.check()) {
+            showAll();
+        }
     }
 
     public void clearFilterTextFields() {
@@ -110,6 +115,18 @@ public class OptionController extends EntityController<Option> {
 
         candidateFilterTextField.textProperty().addListener(this::updateFilter);
         sectionFilterTextField.textProperty().addListener(this::updateFilter);
+
+        disableBasedOnPermissions();
+    }
+
+    @Override
+    protected void disableBasedOnPermissions() {
+        super.disableBasedOnPermissions();
+        candidateList.setDisable(!Permission.MODIFY.check());
+        sectionList.setDisable(!Permission.MODIFY.check());
+
+        candidateFilterTextField.setDisable(!Permission.QUERY.check());
+        sectionFilterTextField.setDisable(!Permission.QUERY.check());
     }
 
     /**

@@ -3,6 +3,7 @@ package afterwind.lab1.controller;
 import afterwind.lab1.Utils;
 import afterwind.lab1.entity.IIdentifiable;
 import afterwind.lab1.entity.Option;
+import afterwind.lab1.permission.Permission;
 import afterwind.lab1.repository.FileRepository;
 import afterwind.lab1.service.AbstractService;
 import javafx.beans.property.StringProperty;
@@ -53,6 +54,18 @@ public abstract class EntityController<T extends IIdentifiable<Integer>> {
         buttonClearFilter.setDisable(false);
     }
 
+    protected void disableBasedOnPermissions() {
+        buttonAdd.setDisable(!Permission.MODIFY.check());
+        buttonUpdate.setDisable(!Permission.MODIFY.check());
+        buttonClear.setDisable(!Permission.MODIFY.check());
+        buttonDelete.setDisable(!Permission.MODIFY.check());
+
+        tableView.setDisable(!Permission.QUERY.check());
+        buttonRefresh.setDisable(!Permission.QUERY.check());
+        buttonSave.setDisable(!Permission.QUERY.check());
+        buttonClearFilter.setDisable(!Permission.QUERY.check());
+    }
+
     /**
      * Afiseaza toti candidatii
      */
@@ -79,7 +92,9 @@ public abstract class EntityController<T extends IIdentifiable<Integer>> {
     public void handleSelectionChanged(ObservableValue<? extends T> o, T oldValue, T newValue) {
         if (newValue != null) {
             showDetails(newValue);
-            buttonUpdate.setDisable(false);
+            if (Permission.MODIFY.check()) {
+                buttonUpdate.setDisable(false);
+            }
         } else {
             buttonUpdate.setDisable(true);
         }

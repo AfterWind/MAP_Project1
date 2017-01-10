@@ -15,6 +15,8 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
@@ -48,7 +50,14 @@ public class LoginController {
     @FXML
     public void initialize() {
         this.current = loginPanel;
+        fieldPassword.setOnKeyPressed(this::handleEnter);
         Utils.moveRight(registerPanel, Duration.millis(1000));
+    }
+
+    public void handleEnter(KeyEvent ev) {
+        if (ev.getCode() == KeyCode.ENTER) {
+            handleLogIn(null);
+        }
     }
 
     public void handleLogIn(ActionEvent ev) {

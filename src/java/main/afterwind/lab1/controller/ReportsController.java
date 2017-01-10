@@ -1,6 +1,7 @@
 package afterwind.lab1.controller;
 
 import afterwind.lab1.entity.Section;
+import afterwind.lab1.permission.Permission;
 import afterwind.lab1.repository.IRepository;
 import afterwind.lab1.service.CandidateService;
 import afterwind.lab1.service.OptionService;
@@ -46,6 +47,23 @@ public class ReportsController {
 
     private Stage generateWindow;
 
+    @FXML
+    public void initialize() {
+        idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
+        nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
+        nrLocColumn.setCellValueFactory(new PropertyValueFactory<>("nrLoc"));
+        nrLocOccupiedColumn.setCellValueFactory(param -> new SimpleStringProperty(
+                getOccupiedNrLoc(param.getValue()) + ""
+        ));
+
+        disableBasedOnPermissions();
+    }
+
+    protected void disableBasedOnPermissions() {
+        sectionReportsTable.setDisable(!Permission.QUERY.check());
+        topSectionsSlider.setDisable(!Permission.QUERY.check());
+    }
+
     public void setServices(OptionService service, CandidateService candidateService, SectionService sectionService) {
         this.optionService = service;
         this.candidateService = candidateService;
@@ -57,14 +75,9 @@ public class ReportsController {
         topSectionsSlider.setMajorTickUnit(Math.max(Math.floor(sectionService.getSize() / 4), 1));
         topSectionsSlider.setMinorTickCount(1);
 
-        idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
-        nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
-        nrLocColumn.setCellValueFactory(new PropertyValueFactory<>("nrLoc"));
-        nrLocOccupiedColumn.setCellValueFactory(param -> new SimpleStringProperty(
-                getOccupiedNrLoc(param.getValue()) + ""
-        ));
-
-        populateTable((int) Math.floor(topSectionsSlider.getValue()));
+        if (Permission.QUERY.check()) {
+            populateTable((int) Math.floor(topSectionsSlider.getValue()));
+        }
     }
 
     public void populateTable(int top) {
