@@ -16,7 +16,6 @@ import java.util.List;
 public class FileRepositoryNumeroDos<T extends IIdentifiable<K>, K> extends Repository<T, K> {
 
     private final String filename;
-    private boolean dirty = false;
 
     public FileRepositoryNumeroDos(IValidator<T> validator, String file) {
         super(validator);
@@ -54,16 +53,20 @@ public class FileRepositoryNumeroDos<T extends IIdentifiable<K>, K> extends Repo
     }
 
     @Override
-    public void markDirty() {
-        super.markDirty();
-        this.dirty = true;
+    public void add(T e) throws ValidationException {
+        super.add(e);
+        write();
     }
 
     @Override
-    public void updateLinks() {
-        super.updateLinks();
-        if (dirty) {
-            write();
-        }
+    public void update(K k, T data) {
+        super.update(k, data);
+        write();
+    }
+
+    @Override
+    public void remove(T e) {
+        super.remove(e);
+        write();
     }
 }

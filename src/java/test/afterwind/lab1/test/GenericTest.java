@@ -23,26 +23,18 @@ public class GenericTest {
         IRepository<Candidate, Integer> repo = new FileRepository<>(new CandidateValidator(), new Candidate.Serializer(), "/home/afterwind/IdeaProjects/MAP_Lab1/res/candidates_test.txt");
         Candidate c1 = new Candidate(10, "Sergiu", "000111222", "Kappa");
         repo.add(c1);
-        repo.markDirty();
-        repo.updateLinks();
         Assert.assertEquals("Failed to save an entity to repository" ,c1, repo.get(10));
         Candidate c2 = new Candidate(11, "Victor", "000111222", "Kappa");
         repo.add(c2);
-        repo.markDirty();
-        repo.updateLinks();
         Assert.assertEquals("Failed to save an entity to repository", c2, repo.get(11));
         Assert.assertEquals("Failed to get proper size of the repository", 2, repo.getSize());
         Assert.assertTrue("Failed to check existance of entity in repository", repo.contains(10));
         Assert.assertFalse("Failed to check existance of entity in repository", repo.contains(12));
         repo.remove(c1);
-        repo.markDirty();
-        repo.updateLinks();
         Assert.assertNull("Failed to remove an entity from repository", repo.get(10));
         Assert.assertEquals("Failed to remove proper entity from repository", c2, repo.get(11));
         repo.remove(new Candidate(1, "asd", " asd", "asss"));
         repo.remove(c2);
-        repo.markDirty();
-        repo.updateLinks();
         Assert.assertNotNull("Failed to convert repository to string", repo.toString());
     }
 
@@ -51,26 +43,18 @@ public class GenericTest {
         IRepository<Candidate, Integer> repo = new FileRepositoryNumeroDos<>(new CandidateValidator(), "/home/afterwind/IdeaProjects/MAP_Lab1/res/candidates_test2.txt");
         Candidate c1 = new Candidate(10, "Sergiu", "000111222", "Kappa");
         repo.add(c1);
-        repo.markDirty();
-        repo.updateLinks();
         Assert.assertEquals("Failed to save an entity to repository" ,c1, repo.get(10));
         Candidate c2 = new Candidate(11, "Victor", "000111222", "Kappa");
         repo.add(c2);
-        repo.markDirty();
-        repo.updateLinks();
         Assert.assertEquals("Failed to save an entity to repository", c2, repo.get(11));
         Assert.assertEquals("Failed to get proper size of the repository", 2, repo.getSize());
         Assert.assertTrue("Failed to check existance of entity in repository", repo.contains(10));
         Assert.assertFalse("Failed to check existance of entity in repository", repo.contains(12));
         repo.remove(c1);
-        repo.markDirty();
-        repo.updateLinks();
         Assert.assertNull("Failed to remove an entity from repository", repo.get(10));
         Assert.assertEquals("Failed to remove proper entity from repository", c2, repo.get(11));
         repo.remove(new Candidate(1, "asd", " asd", "asss"));
         repo.remove(c2);
-        repo.markDirty();
-        repo.updateLinks();
         Assert.assertNotNull("Failed to convert repository to string", repo.toString());
     }
 

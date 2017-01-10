@@ -222,7 +222,7 @@ public class Console {
         }
 
         if (!(address.equals(candidate.getAddress()) && tel.equals(candidate.getTelephone()) && name.equals(candidate.getName()))) {
-            candidateService.updateCandidate(candidate, name, tel, address);
+            candidateService.update(candidate.getId(), new Candidate(-1, name, tel, address));
         }
     }
 
@@ -252,7 +252,7 @@ public class Console {
         }
 
         if (!(name.equals(section.getName()) && nrLoc == section.getNrLoc())) {
-            sectionService.updateSection(section, name, nrLoc);
+            sectionService.update(section.getId(), new Section(-1, name, nrLoc));
         }
     }
 
@@ -301,7 +301,7 @@ public class Console {
         }
 
         if (!(candidate.equals(option.getCandidate()) && section.equals(option.getSection()))) {
-            optionService.updateOption(option, candidate, section);
+            optionService.update(option.getId(), new Option(-1, section, candidate));
         }
     }
 
@@ -368,14 +368,6 @@ public class Console {
         System.out.print(result.toString());
     }
 
-    public void uiForceUpdateLinks() {
-        System.out.print("Updating all file repository links... ");
-        candidateService.getRepo().updateLinks();
-        sectionService.getRepo().updateLinks();
-        optionService.getRepo().updateLinks();
-        System.out.println("Finished!");
-    }
-
     /**
      * Locul de pornirea a zonei de ui
      */
@@ -402,7 +394,6 @@ public class Console {
             uis.put(16, this.getClass().getDeclaredMethod("uiFilterSectionsByName"));
             uis.put(17, this.getClass().getDeclaredMethod("uiFilterSectionsByNrLoc"));
             uis.put(18, this.getClass().getDeclaredMethod("uiMostOccupiedSections"));
-            uis.put(19, this.getClass().getDeclaredMethod("uiForceUpdateLinks"));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -430,7 +421,6 @@ public class Console {
                 ex5.printStackTrace();
             }
         }
-        uiForceUpdateLinks();
         print("Goodbye!");
     }
 }

@@ -26,20 +26,6 @@ public class CandidateService extends AbstractService<Candidate> {
     }
 
     /**
-     * Updateaza datele aflate in entitatea candidat
-     * @param candidate candidatul updatat
-     * @param name noul nume al candidatului
-     * @param tel noul numar de telefon al candidatului
-     * @param address noua adresa a candidatului
-     */
-    public void updateCandidate(Candidate candidate, String name, String tel, String address) {
-        candidate.setName(name);
-        candidate.setAddress(address);
-        candidate.setTelephone(tel);
-        notifyObservers();
-    }
-
-    /**
      * Filtrare dupa nume
      * @param name stringul cu care este comparat numele prin startsWith
      * @return un repository care contine toate datele filtrate

@@ -23,18 +23,6 @@ public class OptionService extends AbstractService<Option> {
         this(new Repository<>(new OptionValidator()));
     }
 
-    /**
-     * Updateaza o optiune din repository
-     * @param option optiunea updatata
-     * @param candidate noul candidat
-     * @param section noua sectiune
-     */
-    public void updateOption(Option option, Candidate candidate, Section section) {
-        option.setCandidate(candidate);
-        option.setSection(section);
-        repo.markDirty();
-    }
-
     @Override
     public String toString() {
         return repo.toString();

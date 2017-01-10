@@ -4,6 +4,7 @@ import afterwind.lab1.permission.User;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
@@ -25,7 +26,9 @@ public class FancyMain extends Application {
         FXMLLoader loader = new FXMLLoader();
 //        loader.setLocation(new File("src/java/main/afterwind/lab1/ui/fxml/FancyView.fxml").toURL());
         loader.setLocation(new File("src/java/main/afterwind/lab1/ui/fxml/LoginView.fxml").toURL());
-        scene = new Scene(loader.load(), 400, 200, Color.DARKBLUE);
+        scene = new Scene(loader.load(), 400.0D, 200.0D, Color.DARKBLUE);
+//        stage.setResizable(false);
+        stage.getIcons().add(new Image(String.valueOf(new File("res/images.jpeg").toURL())));
         stage.setTitle("Management");
         stage.setScene(scene);
         stage.requestFocus();

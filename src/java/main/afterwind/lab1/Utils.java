@@ -72,7 +72,8 @@ public class Utils {
     }
 
     public static void transition(Node from, Node to, Duration duration) {
-        int offsetX = 1500;
+        int offsetX = 100;
+        System.out.println(offsetX);
         TranslateTransition first = new TranslateTransition(duration.divide(2), from);
         first.setCycleCount(1);
         first.setByX(offsetX);
@@ -84,7 +85,8 @@ public class Utils {
     }
 
     public static void  moveRight(Node node, Duration duration) {
-        int offsetX = 1500;
+        int offsetX = 100;
+        System.out.println(offsetX);
         TranslateTransition second = new TranslateTransition(duration, node);
         second.setCycleCount(1);
         second.setByX(offsetX);

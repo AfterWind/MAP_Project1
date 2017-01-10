@@ -63,17 +63,4 @@ public interface IRepository<T extends IIdentifiable<K>, K> {
      * @param data The data to update with
      */
     void update(K k, T data);
-
-    /**
-     * Marks the repository as being dirty which means:
-     *  - The repository has been modified AND
-     *  - Linked objects haven't been notified OR
-     *  - Files haven't been updated
-     */
-    void markDirty();
-
-    /**
-     * If the Repository is dirty all the linked objects should be notified and updated
-     */
-    void updateLinks();
 }

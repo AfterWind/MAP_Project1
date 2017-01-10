@@ -40,8 +40,6 @@ public class FancyController {
     private OptionService optionService = new OptionService(new SQLiteOptionRepository(database, new OptionValidator(), candidateService.getRepo(), sectionService.getRepo()));//new FileRepository<>(new OptionValidator(), new Option.Serializer(candidateService, sectionService), "res/options.txt"));
 
     @FXML
-    private MenuItem menuFileSaveAll;
-    @FXML
     private CandidateView candidatesView;
     @FXML
     private SectionView sectionsView;
@@ -51,7 +49,6 @@ public class FancyController {
     private ReportsView reportsView;
 
     private Node current;
-    private Stage reportsWindow;
 
     public FancyController() { }
 
@@ -65,10 +62,6 @@ public class FancyController {
 //        ReportsView reportsView = new ReportsView();
         reportsView.controller.setServices(optionService, candidateService, sectionService);
 //        reportsWindow.setScene(new Scene(reportsView, 800, 400));
-
-        if (!(candidateService.getRepo() instanceof FileRepository || sectionService.getRepo() instanceof FileRepository || optionService.getRepo() instanceof FileRepository)) {
-            menuFileSaveAll.setDisable(true);
-        }
 
         Utils.moveRight(optionsView, Duration.millis(1000));
         Utils.moveRight(sectionsView, Duration.millis(1000));
@@ -95,13 +88,6 @@ public class FancyController {
                 current = reportsView;
             }
         }
-    }
-
-    public void handleMenuSaveAll(ActionEvent ev) {
-        candidateService.getRepo().updateLinks();
-        sectionService.getRepo().updateLinks();
-        optionService.getRepo().updateLinks();
-        Utils.showInfoMessage("Totul s-a salvat in fisier!");
     }
 
     public void handleMenuExit(ActionEvent ev) {

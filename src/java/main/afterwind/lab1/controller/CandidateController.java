@@ -59,9 +59,6 @@ public class CandidateController extends EntityController<Candidate> {
 
     public void setService(CandidateService service) {
         this.service = service;
-        if (!(service.getRepo() instanceof FileRepository)) {
-            buttonSave.setDisable(true);
-        }
         if (Permission.QUERY.check()) {
             showAll();
         }
@@ -191,7 +188,7 @@ public class CandidateController extends EntityController<Candidate> {
             return;
         }
 
-        ((CandidateService)service).updateCandidate(c, name, tel, address);
+        service.update(c.getId(), new Candidate(-1, name, tel, address));
         for (int i = 0; i < 4; i++) {
             tableView.getColumns().get(i).setVisible(false);
             tableView.getColumns().get(i).setVisible(true);

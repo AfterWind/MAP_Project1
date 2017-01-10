@@ -38,9 +38,6 @@ public class SectionController extends EntityController<Section> {
      */
     public void setService(SectionService service) {
         this.service = service;
-        if (!(service.getRepo() instanceof FileRepository)) {
-            buttonSave.setDisable(true);
-        }
         if (Permission.QUERY.check()) {
             showAll();
         }
@@ -176,7 +173,7 @@ public class SectionController extends EntityController<Section> {
             return;
         }
         int nrLoc = Integer.parseInt(nrLocString);
-        ((SectionService)service).updateSection(s, name, nrLoc);
+        service.update(s.getId(), new Section(-1, name, nrLoc));
         for (int i = 0; i < 3; i++) {
             tableView.getColumns().get(i).setVisible(false);
             tableView.getColumns().get(i).setVisible(true);

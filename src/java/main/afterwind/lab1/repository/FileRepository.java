@@ -16,7 +16,6 @@ public class FileRepository<T extends IIdentifiable<K>, K> extends Repository<T,
 
     private final ISerializer<T> serializer;
     private final String filename;
-    private boolean dirty = false;
 
     public FileRepository(IValidator<T> validator, ISerializer<T> serializer, String file) {
         super(validator);
@@ -64,16 +63,20 @@ public class FileRepository<T extends IIdentifiable<K>, K> extends Repository<T,
     }
 
     @Override
-    public void markDirty() {
-        super.markDirty();
-        this.dirty = true;
+    public void add(T e) throws ValidationException {
+        super.add(e);
+        write();
     }
 
     @Override
-    public void updateLinks() {
-        super.updateLinks();
-        if (dirty) {
-            write();
-        }
+    public void update(K k, T data) {
+        super.update(k, data);
+        write();
+    }
+
+    @Override
+    public void remove(T e) {
+        super.remove(e);
+        write();
     }
 }

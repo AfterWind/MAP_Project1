@@ -32,7 +32,7 @@ public class CandidateTest {
     public void controllerTest() {
         CandidateService controller = new CandidateService();
         Candidate c1 = new Candidate(10, "Sergiu", "000111222", "Kappa");
-        controller.updateCandidate(c1, "Andrei", "111", "idk");
+        controller.update(c1.getId(), new Candidate(-1, "Andrei", "111", "idk"));
         Assert.assertEquals("Failed to update candidate", "Andrei", c1.getName());
         Assert.assertEquals("Failed to update candidate", "111", c1.getTelephone());
         Assert.assertEquals("Failed to update candidate", "idk", c1.getAddress());

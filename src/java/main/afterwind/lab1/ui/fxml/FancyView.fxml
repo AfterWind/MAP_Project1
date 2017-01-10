@@ -19,7 +19,6 @@
     <children>
         <MenuBar>
             <Menu text="File">
-                <MenuItem fx:id="menuFileSaveAll" text="Save all" onAction="#handleMenuSaveAll"/>
                 <MenuItem text="Exit" onAction="#handleMenuExit"/>
             </Menu>
             <Menu text="View">

@@ -27,7 +27,6 @@ public class XMLRepository<T extends IIdentifiable<K>, K> extends Repository<T, 
 
     private final XMLSerializer<T> serializer;
     private final String filename;
-    private boolean dirty = false;
 
     public XMLRepository(IValidator<T> validator, XMLSerializer<T> serializer, String file) {
         super(validator);
@@ -89,16 +88,20 @@ public class XMLRepository<T extends IIdentifiable<K>, K> extends Repository<T, 
     }
 
     @Override
-    public void markDirty() {
-        super.markDirty();
-        this.dirty = true;
+    public void add(T e) throws ValidationException {
+        super.add(e);
+        write();
     }
 
     @Override
-    public void updateLinks() {
-        super.updateLinks();
-        if (dirty) {
-            write();
-        }
+    public void update(K k, T data) {
+        super.update(k, data);
+        write();
+    }
+
+    @Override
+    public void remove(T e) {
+        super.remove(e);
+        write();
     }
 }

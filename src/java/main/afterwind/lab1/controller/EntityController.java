@@ -27,7 +27,7 @@ public abstract class EntityController<T extends IIdentifiable<Integer>> {
     public TableView<T> tableView;
 
     @FXML
-    public Button buttonDelete, buttonSave, buttonRefresh,
+    public Button buttonDelete, buttonRefresh,
             buttonAdd, buttonUpdate, buttonClear,
             buttonClearFilter;
 
@@ -42,7 +42,6 @@ public abstract class EntityController<T extends IIdentifiable<Integer>> {
         buttonClear.setOnAction(this::handleClear);
         buttonDelete.setOnAction(this::handleDelete);
         buttonRefresh.setOnAction(this::handleRefresh);
-        buttonSave.setOnAction(this::handleSave);
         buttonClearFilter.setOnAction(this::handleClearFilter);
 
         tableView.getSelectionModel().selectedItemProperty().addListener(this::handleSelectionChanged);
@@ -62,7 +61,6 @@ public abstract class EntityController<T extends IIdentifiable<Integer>> {
 
         tableView.setDisable(!Permission.QUERY.check());
         buttonRefresh.setDisable(!Permission.QUERY.check());
-        buttonSave.setDisable(!Permission.QUERY.check());
         buttonClearFilter.setDisable(!Permission.QUERY.check());
     }
 
@@ -112,15 +110,6 @@ public abstract class EntityController<T extends IIdentifiable<Integer>> {
 
     public void handleRefresh(ActionEvent ev) {
         showAll();
-    }
-
-    public void handleSave(ActionEvent ev) {
-        if (service.getRepo() instanceof FileRepository) {
-            Utils.showInfoMessage("Totul s-a salvat in fisier!");
-            service.getRepo().updateLinks();
-        } else {
-            Utils.showInfoMessage("Tipul de Repository nu suporta salvarea in fisier!");
-        }
     }
 
     /**

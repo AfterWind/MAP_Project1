@@ -43,7 +43,7 @@ public class OptionTest {
         Section s2 = new Section(3, "Matematica", 100);
 
         Option o = new Option(0, s1, c2);
-        controller.updateOption(o, c1, s2);
+        controller.update(o.getId(), new Option(-1, s2, c1));
         Assert.assertEquals("Failed to update option", c1, o.getCandidate());
         Assert.assertEquals("Failed to update option", s2, o.getSection());
         Assert.assertEquals("Failed to update option", 0, (int) o.getId());

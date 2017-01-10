@@ -58,7 +58,6 @@ public class Repository<T extends IIdentifiable<K>, K> implements IRepository<T,
     public void add(T e) throws ValidationException {
         validator.validate(e);
         data.add(e);
-        markDirty();
     }
 
     /**
@@ -74,7 +73,6 @@ public class Repository<T extends IIdentifiable<K>, K> implements IRepository<T,
                 break;
             }
         }
-        markDirty();
     }
 
     /**
@@ -142,15 +140,5 @@ public class Repository<T extends IIdentifiable<K>, K> implements IRepository<T,
             o.setCandidate(((Option) data).getCandidate());
             o.setSection(((Option) data).getSection());
         }
-    }
-
-    @Override
-    public void markDirty() {
-        // No meaning. Has no links whatsoever.
-    }
-
-    @Override
-    public void updateLinks() {
-        // No meaning. Has no links whatsoever.
     }
 }

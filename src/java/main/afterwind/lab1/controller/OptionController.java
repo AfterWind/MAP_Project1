@@ -63,9 +63,6 @@ public class OptionController extends EntityController<Option> {
         this.service = service;
         this.candidateService = candidateService;
         this.sectionService = sectionService;
-        if (!(service.getRepo() instanceof FileRepository)) {
-            buttonSave.setDisable(true);
-        }
         if (Permission.QUERY.check()) {
             showAll();
         }
@@ -208,7 +205,7 @@ public class OptionController extends EntityController<Option> {
             return;
         }
 
-        ((OptionService) service).updateOption(o, c, s);
+        service.update(o.getId(), new Option(-1, s, c));
         for (int i = 0; i < 3; i++) {
             tableView.getColumns().get(i).setVisible(false);
             tableView.getColumns().get(i).setVisible(true);

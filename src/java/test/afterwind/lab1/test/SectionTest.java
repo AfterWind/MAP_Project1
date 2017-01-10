@@ -33,7 +33,7 @@ public class SectionTest {
         Section c1 = new Section(0, "Mate", 12);
         controller.add(c1);
         Assert.assertTrue("Failed to add section", controller.contains(0));
-        controller.updateSection(c1, "Romana", 200);
+        controller.update(c1.getId(), new Section(-1, "Romana", 200));
         Assert.assertEquals("Failed to update section", "Romana", c1.getName());
         Assert.assertEquals("Failed to update section", 200, c1.getNrLoc());
         Assert.assertEquals("Failed to update section", 0, (int) c1.getId());

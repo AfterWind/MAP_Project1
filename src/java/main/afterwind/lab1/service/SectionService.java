@@ -28,18 +28,6 @@ public class SectionService extends AbstractService<Section> {
     }
 
     /**
-     * Updateaza datele unei sectiuni
-     * @param section sectiunea care va fi updatata
-     * @param name noul nume
-     * @param nrLoc noul numar de locuri disponibile
-     */
-    public void updateSection(Section section, String name, int nrLoc) {
-        section.setName(name);
-        section.setNrLoc(nrLoc);
-        repo.markDirty();
-    }
-
-    /**
      * Filtrare dupa nume
      * @param name stringul cu care este comparat numele prin startsWith
      * @return un repository care contine toate datele filtrate

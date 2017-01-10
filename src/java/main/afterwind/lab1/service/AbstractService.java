@@ -26,7 +26,6 @@ public abstract class AbstractService<T extends IIdentifiable<Integer>> extends 
      */
     public void add(T e) throws ValidationException {
         repo.add(e);
-        repo.markDirty();
     }
 
     /**
@@ -35,7 +34,6 @@ public abstract class AbstractService<T extends IIdentifiable<Integer>> extends 
      */
     public void remove(T e) {
         repo.remove(e);
-        repo.markDirty();
     }
 
     /**
@@ -47,13 +45,16 @@ public abstract class AbstractService<T extends IIdentifiable<Integer>> extends 
         if (e != null) {
             repo.remove(e);
         }
-        repo.markDirty();
         return e;
     }
 
+    /**
+     * Inlocuieste toate datele entitatii cu cheia data
+     * @param key cheia entitatii din repository
+     * @param data datele cu care vor fi inlocuite
+     */
     public void update(Integer key, T data) {
         repo.update(key, data);
-        repo.markDirty();
     }
 
     /**
