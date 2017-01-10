@@ -70,9 +70,9 @@ public class FancyController {
             menuFileSaveAll.setDisable(true);
         }
 
-        moveRight(optionsView, Duration.millis(1000));
-        moveRight(sectionsView, Duration.millis(1000));
-        moveRight(reportsView, Duration.millis(1000));
+        Utils.moveRight(optionsView, Duration.millis(1000));
+        Utils.moveRight(sectionsView, Duration.millis(1000));
+        Utils.moveRight(reportsView, Duration.millis(1000));
         current = candidatesView;
     }
 
@@ -82,39 +82,19 @@ public class FancyController {
         if (ev.getSource() instanceof RadioMenuItem) {
             FancyMain.stage.setTitle(((RadioMenuItem) ev.getSource()).getText() + " Management");
             if (((RadioMenuItem) ev.getSource()).getText().equals("Candidates")) {
-                transition(current, candidatesView, Duration.millis(2000));
+                Utils.transition(current, candidatesView, Duration.millis(2000));
                 current = candidatesView;
             } else if (((RadioMenuItem) ev.getSource()).getText().equals("Sections")) {
-                transition(current, sectionsView, Duration.millis(2000));
+                Utils.transition(current, sectionsView, Duration.millis(2000));
                 current = sectionsView;
             } else if (((RadioMenuItem) ev.getSource()).getText().equals("Options")) {
-                transition(current, optionsView, Duration.millis(2000));
+                Utils.transition(current, optionsView, Duration.millis(2000));
                 current = optionsView;
             } else if (((RadioMenuItem) ev.getSource()).getText().equals("Reports")) {
-                transition(current, reportsView, Duration.millis(2000));
+                Utils.transition(current, reportsView, Duration.millis(2000));
                 current = reportsView;
             }
         }
-    }
-
-    private void transition(Node from, Node to, Duration duration) {
-        int offsetX = 1500;
-        TranslateTransition first = new TranslateTransition(duration.divide(2), from);
-        first.setCycleCount(1);
-        first.setByX(offsetX);
-        first.play();
-        TranslateTransition second = new TranslateTransition(duration.divide(2), to);
-        second.setCycleCount(1);
-        second.setByX(-offsetX);
-        second.play();
-    }
-
-    private void moveRight(Node node, Duration duration) {
-        int offsetX = 1500;
-        TranslateTransition second = new TranslateTransition(duration, node);
-        second.setCycleCount(1);
-        second.setByX(offsetX);
-        second.play();
     }
 
     public void handleMenuSaveAll(ActionEvent ev) {
@@ -127,12 +107,6 @@ public class FancyController {
     public void handleMenuExit(ActionEvent ev) {
 //        ((Stage) candidateButton.getScene().getWindow()).close();
         Platform.exit();
-    }
-
-    public void handleMenuReports(ActionEvent ev) {
-        if (!reportsWindow.isShowing()) {
-            reportsWindow.show();
-        }
     }
 
     public void handleAnimationMoveAbout(ActionEvent ev) {

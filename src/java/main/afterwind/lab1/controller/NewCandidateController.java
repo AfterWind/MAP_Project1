@@ -3,6 +3,7 @@ package afterwind.lab1.controller;
 import afterwind.lab1.Utils;
 import afterwind.lab1.entity.Candidate;
 import afterwind.lab1.exception.ValidationException;
+import afterwind.lab1.permission.Permission;
 import afterwind.lab1.repository.FileRepository;
 import afterwind.lab1.service.CandidateService;
 import javafx.beans.value.ObservableValue;
@@ -36,6 +37,13 @@ public class NewCandidateController extends AbstractController<Candidate> {
         nameFilterTextField.textProperty().addListener(this::updateFilter);
         addressFilterTextField.textProperty().addListener(this::updateFilter);
         telFilterTextField.textProperty().addListener(this::updateFilter);
+
+        nameTextField.setDisable(!Permission.MODIFY.check());
+        addressTextField.setDisable(!Permission.MODIFY.check());
+        telTextField.setDisable(!Permission.MODIFY.check());
+
+        buttonAdd.setDisable(!Permission.MODIFY.check());
+        buttonUpdate.setDisable(!Permission.MODIFY.check());
 
         columnID.setCellValueFactory(new PropertyValueFactory<>("id"));
         columnName.setCellValueFactory(new PropertyValueFactory<>("name"));

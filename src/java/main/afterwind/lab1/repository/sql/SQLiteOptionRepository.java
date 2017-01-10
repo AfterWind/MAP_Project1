@@ -18,6 +18,7 @@ public class SQLiteOptionRepository extends SQLiteRepository<Option>{
 
     public SQLiteOptionRepository(SQLiteDatabase database, IValidator<Option> validator, IRepository<Candidate, Integer> candidateRepo, IRepository<Section, Integer> sectionRepo) {
         super(database, validator);
+        initTable();
         this.sectionRepo = sectionRepo;
         this.candidateRepo = candidateRepo;
 
@@ -27,6 +28,20 @@ public class SQLiteOptionRepository extends SQLiteRepository<Option>{
         statementSelectAll = database.getStatement("SELECT * FROM Options");
 
         load();
+    }
+
+    private void initTable() {
+        try {
+            database.getStatement(
+                    "CREATE TABLE IF NOT EXISTS Options(" +
+                            "ID INTEGER PRIMARY KEY AUTOINCREMENT," +
+                            "CandidateID INTEGER," +
+                            "SectionID INTEGER, " +
+                            "FOREIGN KEY(CandidateID) REFERENCES Candidates(ID)," +
+                            "FOREIGN KEY(SectionID) REFERENCES Sections(ID))").execute();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private void load() {

@@ -16,13 +16,25 @@ public class SQLiteSectionRepository extends SQLiteRepository<Section> {
     public SQLiteSectionRepository(SQLiteDatabase database, IValidator<Section> validator) {
         super(database, validator);
         this.database = database;
-
+        initTable();
         statementAdd = database.getStatement("INSERT INTO Sections VALUES(?, ?, ?)");
         statementRemove = database.getStatement("DELETE FROM Sections WHERE ID = ?");
         statementUpdate = database.getStatement("UPDATE Sections SET Name = ?, Seats = ? WHERE ID = ?");
         statementSelectAll = database.getStatement("SELECT * FROM Sections");
 
         load();
+    }
+
+    private void initTable() {
+        try {
+            database.getStatement(
+                    "CREATE TABLE IF NOT EXISTS Sections(" +
+                            "ID INTEGER PRIMARY KEY AUTOINCREMENT," +
+                            "Name VARCHAR(300) NOT NULL," +
+                            "Seats INTEGER NOT NULL)").execute();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private void load() {

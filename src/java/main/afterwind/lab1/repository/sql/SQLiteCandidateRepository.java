@@ -11,12 +11,25 @@ import java.sql.SQLException;
 public class SQLiteCandidateRepository extends SQLiteRepository<Candidate> {
     public SQLiteCandidateRepository(SQLiteDatabase database, IValidator<Candidate> validator) {
         super(database, validator);
+        initTable();
         statementAdd = database.getStatement("INSERT INTO Candidates VALUES(?, ?, ?, ?)");
         statementRemove = database.getStatement("DELETE FROM Candidates WHERE ID = ?");
         statementUpdate = database.getStatement("UPDATE Candidates SET Name = ?, Address = ?, Telephone = ? WHERE ID = ?");
         statementSelectAll = database.getStatement("SELECT * FROM Candidates");
-
         load();
+    }
+
+    private void initTable() {
+        try {
+            database.getStatement(
+                    "CREATE TABLE IF NOT EXISTS Candidates(" +
+                            "ID INTEGER PRIMARY KEY AUTOINCREMENT," +
+                            "Name VARCHAR(300) NOT NULL," +
+                            "Address VARCHAR(300) NOT NULL," +
+                            "Telephone VARCHAR(300) NOT NULL)").execute();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private void load() {

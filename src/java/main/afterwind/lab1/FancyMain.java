@@ -1,9 +1,8 @@
 package afterwind.lab1;
 
-import afterwind.lab1.database.SQLiteDatabase;
+import afterwind.lab1.permission.User;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
@@ -18,14 +17,16 @@ public class FancyMain extends Application {
 
     public static Scene scene;
     public static Stage stage;
+    public static User user;
 
     @Override
     public void start(Stage stage) throws Exception {
         FancyMain.stage = stage;
         FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(new File("/home/afterwind/IdeaProjects/MAP_Lab1/src/afterwind/lab1/ui/fxml/FancyView.fxml").toURL());
-        scene = new Scene(loader.load(), 800, 650, Color.DARKBLUE);
-        stage.setTitle("Candidates Management");
+//        loader.setLocation(new File("/home/afterwind/IdeaProjects/MAP_Lab1/src/afterwind/lab1/ui/fxml/FancyView.fxml").toURL());
+        loader.setLocation(new File("/home/afterwind/IdeaProjects/MAP_Lab1/src/afterwind/lab1/ui/fxml/LoginView.fxml").toURL());
+        scene = new Scene(loader.load(), 400, 200, Color.DARKBLUE);
+        stage.setTitle("Management");
         stage.setScene(scene);
         stage.requestFocus();
         stage.show();
