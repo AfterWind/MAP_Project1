@@ -13,7 +13,7 @@ public class ReportsView extends VBox {
         controller = new ReportsController();
         try {
             FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(new File("/home/afterwind/IdeaProjects/MAP_Lab1/src/afterwind/lab1/ui/fxml/ReportsView.fxml").toURL());
+            loader.setLocation(new File("src/java/main/afterwind/lab1/ui/fxml/ReportsView.fxml").toURL());
             loader.setRoot(this);
             loader.setControllerFactory((param) -> controller);
             loader.load();

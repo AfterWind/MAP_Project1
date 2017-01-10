@@ -23,8 +23,8 @@ public class FancyMain extends Application {
     public void start(Stage stage) throws Exception {
         FancyMain.stage = stage;
         FXMLLoader loader = new FXMLLoader();
-//        loader.setLocation(new File("/home/afterwind/IdeaProjects/MAP_Lab1/src/afterwind/lab1/ui/fxml/FancyView.fxml").toURL());
-        loader.setLocation(new File("/home/afterwind/IdeaProjects/MAP_Lab1/src/afterwind/lab1/ui/fxml/LoginView.fxml").toURL());
+//        loader.setLocation(new File("src/java/main/afterwind/lab1/ui/fxml/FancyView.fxml").toURL());
+        loader.setLocation(new File("src/java/main/afterwind/lab1/ui/fxml/LoginView.fxml").toURL());
         scene = new Scene(loader.load(), 400, 200, Color.DARKBLUE);
         stage.setTitle("Management");
         stage.setScene(scene);

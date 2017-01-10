@@ -34,10 +34,10 @@ import javafx.util.Duration;
 public class FancyController {
 
     private SQLiteDatabase database = new SQLiteDatabase("res/data.db");
-    private CandidateService candidateService = new CandidateService(new SQLiteCandidateRepository(database, new CandidateValidator()));//new XMLRepository<>(new CandidateValidator(), new Candidate.XMLSerializer(), "/home/afterwind/IdeaProjects/MAP_Lab1/res/candidates.xml"));
+    private CandidateService candidateService = new CandidateService(new SQLiteCandidateRepository(database, new CandidateValidator()));//new XMLRepository<>(new CandidateValidator(), new Candidate.XMLSerializer(), "res/candidates.xml"));
 
-    private SectionService sectionService = new SectionService(new SQLiteSectionRepository(database, new SectionValidator()));//new FileRepository<>(new SectionValidator(), new Section.Serializer(), "/home/afterwind/IdeaProjects/MAP_Lab1/res/sections.txt"));
-    private OptionService optionService = new OptionService(new SQLiteOptionRepository(database, new OptionValidator(), candidateService.getRepo(), sectionService.getRepo()));//new FileRepository<>(new OptionValidator(), new Option.Serializer(candidateService, sectionService), "/home/afterwind/IdeaProjects/MAP_Lab1/res/options.txt"));
+    private SectionService sectionService = new SectionService(new SQLiteSectionRepository(database, new SectionValidator()));//new FileRepository<>(new SectionValidator(), new Section.Serializer(), "res/sections.txt"));
+    private OptionService optionService = new OptionService(new SQLiteOptionRepository(database, new OptionValidator(), candidateService.getRepo(), sectionService.getRepo()));//new FileRepository<>(new OptionValidator(), new Option.Serializer(candidateService, sectionService), "res/options.txt"));
 
     @FXML
     private MenuItem menuFileSaveAll;

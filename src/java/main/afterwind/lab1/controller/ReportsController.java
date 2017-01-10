@@ -118,7 +118,7 @@ public class ReportsController {
     public void handleMenuExportPDF(ActionEvent ev) {
         try {
             Document doc = new Document();
-            PdfWriter.getInstance(doc, new FileOutputStream("/home/afterwind/IdeaProjects/MAP_Lab1/res/report.pdf"));
+            PdfWriter.getInstance(doc, new FileOutputStream("res/report.pdf"));
             doc.open();
             doc.addTitle("Report on top " + report.getSize() + " most occupied sections");
             doc.add(generatePDFTable());
