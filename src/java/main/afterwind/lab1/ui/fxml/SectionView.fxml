@@ -5,7 +5,7 @@
 <?import javafx.scene.text.Font?>
 <?import java.lang.String?>
 <?import afterwind.lab1.ui.control.StateButton?>
-<fx:root type="javafx.scene.layout.VBox" spacing="5" alignment="CENTER" xmlns:fx="http://javafx.com/fxml/1" fx:controller="afterwind.lab1.controller.NewSectionController">
+<fx:root type="javafx.scene.layout.VBox" spacing="5" alignment="CENTER" xmlns:fx="http://javafx.com/fxml/1" fx:controller="afterwind.lab1.controller.SectionController">
     <fx:define>
         <String fx:id="BORDER_LIGHTGRAY"
                 fx:value="-fx-border-color:lightgray; -fx-border-width: 1; -fx-border-style: solid;"/>

@@ -23,7 +23,7 @@ public class SQLiteUserRepository extends SQLiteRepository<User> {
         statementRemove = database.getStatement("DELETE FROM Users WHERE ID=?");
         statementUpdate = database.getStatement("UPDATE Users SET Name=?, Password=? WHERE ID=?");
         statementSelectAll = database.getStatement("SELECT * FROM Users");
-            statementPermissionAdd = database.getStatement("INSERT INTO Permissions VALUES(?, ?)");
+        statementPermissionAdd = database.getStatement("INSERT INTO Permissions VALUES(?, ?)");
         statementPermissionRemove = database.getStatement("DELETE FROM Permissions WHERE UserID=? AND Permission=?");
         statementPermissionSelectAll = database.getStatement("SELECT * FROM Permissions WHERE UserID=?");
         load();

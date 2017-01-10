@@ -4,7 +4,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
 <?import java.lang.String?>
-<fx:root type="javafx.scene.layout.VBox" xmlns:fx="http://javafx.com/fxml/1" fx:controller="afterwind.lab1.controller.NewCandidateController">
+<fx:root type="javafx.scene.layout.VBox" xmlns:fx="http://javafx.com/fxml/1" fx:controller="afterwind.lab1.controller.CandidateController">
     <fx:define>
         <String fx:id="BORDER_LIGHTGRAY"
                 fx:value="-fx-border-color:lightgray; -fx-border-width: 1; -fx-border-style: solid;"/>

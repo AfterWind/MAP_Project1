@@ -19,7 +19,7 @@ import java.util.List;
 /**
  * MVC controller perntru Candidate
  */
-public class NewCandidateController extends AbstractController<Candidate> {
+public class CandidateController extends EntityController<Candidate> {
 
     @FXML
     public TableColumn columnID, columnName, columnTel, columnAddress;

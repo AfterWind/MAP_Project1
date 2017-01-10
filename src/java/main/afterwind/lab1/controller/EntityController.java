@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.function.Predicate;
 
 
-public abstract class AbstractController<T extends IIdentifiable<Integer>> {
+public abstract class EntityController<T extends IIdentifiable<Integer>> {
 
     @FXML
     public TableView<T> tableView;

@@ -4,6 +4,7 @@ import afterwind.lab1.FancyMain;
 import afterwind.lab1.Utils;
 import afterwind.lab1.database.SQLiteDatabase;
 import afterwind.lab1.exception.ValidationException;
+import afterwind.lab1.permission.Permission;
 import afterwind.lab1.permission.User;
 import afterwind.lab1.repository.sql.SQLiteUserRepository;
 import afterwind.lab1.validator.UserValidator;
@@ -80,7 +81,13 @@ public class LoginController {
             return;
         }
         try {
-            repo.add(new User(-1, fieldRegisterUsername.getText(), Utils.toMD5(fieldRegisterPassword1.getText())));
+            user = new User(-1, fieldRegisterUsername.getText(), Utils.toMD5(fieldRegisterPassword1.getText()));
+            repo.add(user);
+            repo.addPermission(user, Permission.QUERY);
+            if (user.getUsername().equals("Admin")) {
+                repo.addPermission(user, Permission.MANAGE);
+                repo.addPermission(user, Permission.MODIFY);
+            }
         } catch (ValidationException e) {
             Utils.showErrorMessage(e.getMessage());
             return;

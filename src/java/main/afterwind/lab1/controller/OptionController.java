@@ -11,7 +11,6 @@ import afterwind.lab1.service.OptionService;
 import afterwind.lab1.service.SectionService;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -20,12 +19,11 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.function.Predicate;
 
 /**
  * MVC Controller pentru Options
  */
-public class NewOptionController extends AbstractController<Option> {
+public class OptionController extends EntityController<Option> {
 
     @FXML
     public TableColumn<Option, String> idColumn;

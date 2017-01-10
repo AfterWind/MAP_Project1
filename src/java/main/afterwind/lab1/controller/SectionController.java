@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.function.Predicate;
 
 
-public class NewSectionController extends AbstractController<Section> {
+public class SectionController extends EntityController<Section> {
 
     @FXML
     public TextField nameFilterTextField, nrLocFilterTextField;
