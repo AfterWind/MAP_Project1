@@ -116,18 +116,19 @@ public class LoginController {
 
     private void launchApp(User user) {
         try {
-            FancyMain.stage.close();
+//            FancyMain.stage.close();
             FancyMain.user = user;
-            Stage stage = new Stage();
+            FancyMain.stage = new Stage();
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(new File("src/java/main/afterwind/lab1/ui/fxml/FancyView.fxml").toURL());
 //            loader.setLocation(new File("src/java/main/afterwind/lab1/ui/fxml/LoginView.fxml").toURL());
-            Scene scene = new Scene(loader.load(), 1000, 600, Color.DARKBLUE);
+            Scene scene = new Scene(loader.load(), 800, 600, Color.DARKBLUE);
             FancyMain.scene = scene;
-            stage.setTitle("Candidates Management");
-            stage.setScene(scene);
-            stage.requestFocus();
-            stage.show();
+            FancyMain.stage.setTitle("Candidates Management");
+            FancyMain.stage.setScene(scene);
+            FancyMain.stage.setResizable(false);
+            FancyMain.stage.requestFocus();
+            FancyMain.stage.show();
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
