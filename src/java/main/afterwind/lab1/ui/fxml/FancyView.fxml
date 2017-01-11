@@ -1,31 +1,27 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<?import afterwind.lab1.ui.*?>
-<?import javafx.scene.control.ToggleButton?>
-<?import javafx.scene.control.ToggleGroup?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.VBox?>
-<?import java.lang.Double?>
+<?import afterwind.lab1.ui.CandidateView?>
+<?import afterwind.lab1.ui.control.StatusBar?>
+<?import afterwind.lab1.ui.OptionView?>
+<?import afterwind.lab1.ui.ReportsView?>
+<?import afterwind.lab1.ui.SectionView?>
+<?import javafx.scene.control.*?>
 <?import javafx.scene.layout.StackPane?>
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.MenuBar?>
-<?import javafx.scene.control.Menu?>
-<?import javafx.scene.control.MenuItem?>
-<?import javafx.scene.control.RadioMenuItem?>
-<?import javafx.scene.control.SeparatorMenuItem?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 <VBox alignment="CENTER" xmlns:fx="http://javafx.com/fxml" fx:controller="afterwind.lab1.controller.FancyController">
     <fx:define>
         <ToggleGroup fx:id="toggleGroupViews"/>
     </fx:define>
     <children>
-        <MenuBar>
+        <MenuBar fx:id="menuBar">
             <Menu text="File">
-                <MenuItem text="Exit" onAction="#handleMenuExit"/>
+                <MenuItem fx:id="menuExit" text="Exit" onAction="#handleMenuExit"/>
             </Menu>
             <Menu text="View">
-                <RadioMenuItem toggleGroup="$toggleGroupViews" text="Candidates" selected="true" onAction="#handleViewChange"/>
-                <RadioMenuItem toggleGroup="$toggleGroupViews" text="Sections" onAction="#handleViewChange"/>
-                <RadioMenuItem toggleGroup="$toggleGroupViews" text="Options" onAction="#handleViewChange"/>
-                <RadioMenuItem toggleGroup="$toggleGroupViews" text="Reports" onAction="#handleViewChange"/>
+                <RadioMenuItem fx:id="menuViewCandidates" toggleGroup="$toggleGroupViews" text="Candidates" selected="true" onAction="#handleViewChange"/>
+                <RadioMenuItem fx:id="menuViewSections" toggleGroup="$toggleGroupViews" text="Sections" onAction="#handleViewChange"/>
+                <RadioMenuItem fx:id="menuViewOptions" toggleGroup="$toggleGroupViews" text="Options" onAction="#handleViewChange"/>
+                <RadioMenuItem fx:id="menuViewReports" toggleGroup="$toggleGroupViews" text="Reports" onAction="#handleViewChange"/>
             </Menu>
             <Menu text="Animations">
                 <MenuItem text="Somewhat fade" onAction="#handleAnimationFade"/>
@@ -41,5 +37,7 @@
             <OptionView fx:id="optionsView" visible="true"/>
             <ReportsView fx:id="reportsView" visible="true"/>
         </StackPane>
+        <StatusBar minHeight="40" fx:id="statusBar"
+                   text="TEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEST"  onMouseExited="#handleMouseExited" onMouseEntered="#handleMouseEntered"/>
     </children>
 </VBox>

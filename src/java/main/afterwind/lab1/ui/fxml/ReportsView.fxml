@@ -26,12 +26,12 @@
                 <Insets top="20" right="10" bottom="20" left="10"/>
             </padding>
             <StackPane>
-                <TableView fx:id="sectionReportsTable" maxWidth="610">
+                <TableView fx:id="tableReports" maxWidth="610" onMouseExited="#handleMouseExited" onMouseEntered="#handleMouseEntered">
                     <columns>
-                        <TableColumn fx:id="idColumn" text="ID" minWidth="35"/>
-                        <TableColumn fx:id="nameColumn" text="Name" minWidth="250"/>
-                        <TableColumn fx:id="nrLocColumn" text="NrLoc" minWidth="160"/>
-                        <TableColumn fx:id="nrLocOccupiedColumn" text="NrLocOccupied" minWidth="160"/>
+                        <TableColumn fx:id="columnID" text="ID" minWidth="35"/>
+                        <TableColumn fx:id="columnName" text="Name" minWidth="250"/>
+                        <TableColumn fx:id="columnSeats" text="NrLoc" minWidth="160"/>
+                        <TableColumn fx:id="columnSeatsOccupied" text="NrLocOccupied" minWidth="160"/>
                     </columns>
                     <columnResizePolicy>
                         <TableView fx:constant="UNCONSTRAINED_RESIZE_POLICY"/>
@@ -41,8 +41,8 @@
 
             <HBox alignment="CENTER" spacing="5">
                 <Label text="Top sections: "/>
-                <Slider fx:id="topSectionsSlider" value="0" maxWidth="120" showTickLabels="true" showTickMarks="true" onMouseDragged="#handleSliderDrag"/>
-                <Label fx:id="sliderValueLabel" text="   1" minWidth="40"/>
+                <Slider fx:id="sliderTopSections" value="0" maxWidth="120" showTickLabels="true" showTickMarks="true" onMouseDragged="#handleSliderDrag" onMouseExited="#handleMouseExited" onMouseEntered="#handleMouseEntered"/>
+                <Label fx:id="labelSliderValue" text="   1" minWidth="40"/>
             </HBox>
         </VBox>
     </children>

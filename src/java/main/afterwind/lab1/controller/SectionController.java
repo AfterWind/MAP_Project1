@@ -4,9 +4,9 @@ import afterwind.lab1.Utils;
 import afterwind.lab1.entity.Section;
 import afterwind.lab1.exception.ValidationException;
 import afterwind.lab1.permission.Permission;
-import afterwind.lab1.repository.FileRepository;
 import afterwind.lab1.service.SectionService;
 import afterwind.lab1.ui.control.StateButton;
+import afterwind.lab1.ui.control.StatusBar;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
@@ -22,13 +22,13 @@ import java.util.function.Predicate;
 public class SectionController extends EntityController<Section> {
 
     @FXML
-    public TextField nameFilterTextField, nrLocFilterTextField;
+    public TextField fieldFilterName, fieldFilterSeats;
     @FXML
-    public StateButton<String> nrLocState;
+    public StateButton<String> stateFilterSeats;
     @FXML
-    private TableColumn<Section, String> idColumn, nameColumn, nrLocColumn;
+    private TableColumn<Section, String> columnID, columnName, columnSeats;
     @FXML
-    private TextField nameTextField, nrLocTextField;
+    private TextField fieldName, fieldSeats;
 
     private Predicate<Integer> compTester = (diff) -> diff < 0;
 
@@ -48,15 +48,15 @@ public class SectionController extends EntityController<Section> {
      */
     @Override
     public void clearModificationTextFields() {
-        nameTextField.setText("");
-        nrLocTextField.setText("");
+        fieldName.setText("");
+        fieldSeats.setText("");
         tableView.getSelectionModel().clearSelection();
     }
 
     @Override
     public void clearFilterTextFields() {
-        nameFilterTextField.setText("");
-        nrLocFilterTextField.setText("");
+        fieldFilterName.setText("");
+        fieldFilterSeats.setText("");
         tableView.getSelectionModel().clearSelection();
     }
 
@@ -69,11 +69,11 @@ public class SectionController extends EntityController<Section> {
     public boolean checkFields(String name, String nrLoc) {
         boolean errored = false;
         if (name.equals("")) {
-            Utils.setErrorBorder(nameTextField);
+            Utils.setErrorBorder(fieldName);
             errored = true;
         }
         if (!Utils.tryParseInt(nrLoc)) {
-            Utils.setErrorBorder(nrLocTextField);
+            Utils.setErrorBorder(fieldSeats);
             errored = true;
         }
         return errored;
@@ -85,38 +85,48 @@ public class SectionController extends EntityController<Section> {
      */
     @Override
     public void showDetails(Section s) {
-        nameTextField.setText(s.getName());
-        nrLocTextField.setText(s.getNrLoc() + "");
+        fieldName.setText(s.getName());
+        fieldSeats.setText(s.getNrLoc() + "");
     }
 
     @FXML
     @Override
     public void initialize() {
         super.initialize();
-        idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
-        nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
-        nrLocColumn.setCellValueFactory(new PropertyValueFactory<>("nrLoc"));
+        columnID.setCellValueFactory(new PropertyValueFactory<>("id"));
+        columnName.setCellValueFactory(new PropertyValueFactory<>("name"));
+        columnSeats.setCellValueFactory(new PropertyValueFactory<>("nrLoc"));
 
-        nrLocState.addState("<");
-        nrLocState.addState("≤");
-        nrLocState.addState("=");
-        nrLocState.addState("≥");
-        nrLocState.addState(">");
+        stateFilterSeats.addState("<");
+        stateFilterSeats.addState("≤");
+        stateFilterSeats.addState("=");
+        stateFilterSeats.addState("≥");
+        stateFilterSeats.addState(">");
 
-        nameFilterTextField.textProperty().addListener(this::updateFilter);
-        nrLocFilterTextField.textProperty().addListener(this::updateFilter);
+        fieldFilterName.textProperty().addListener(this::updateFilter);
+        fieldFilterSeats.textProperty().addListener(this::updateFilter);
 
         disableBasedOnPermissions();
     }
 
     @Override
+    void generateStatusBarMessages(StatusBar statusBar) {
+        super.generateStatusBarMessages(statusBar);
+        statusBar.addMessage(fieldName, "The [new ]name of the [new ]section");
+        statusBar.addMessage(fieldSeats, "The [new ]number of seats of the [new ]section");
+        statusBar.addMessage(fieldFilterName, "Filters the Section by their name");
+        statusBar.addMessage(fieldFilterSeats, "Filters the Section by their number of seats");
+        statusBar.addMessage(stateFilterSeats, "Provides the condition on the number of seats for filtering");
+    }
+
+    @Override
     protected void disableBasedOnPermissions() {
         super.disableBasedOnPermissions();
-        nameTextField.setDisable(!Permission.MODIFY.check());
-        nrLocTextField.setDisable(!Permission.MODIFY.check());
+        fieldName.setDisable(!Permission.MODIFY.check());
+        fieldSeats.setDisable(!Permission.MODIFY.check());
 
-        nameFilterTextField.setDisable(!Permission.QUERY.check());
-        nrLocFilterTextField.setDisable(!Permission.MODIFY.check());
+        fieldFilterName.setDisable(!Permission.QUERY.check());
+        fieldFilterSeats.setDisable(!Permission.MODIFY.check());
     }
 
     /**
@@ -125,8 +135,8 @@ public class SectionController extends EntityController<Section> {
      */
     @Override
     public void handleAdd(ActionEvent ev) {
-        String name = nameTextField.getText();
-        String nrLocString = nrLocTextField.getText();
+        String name = fieldName.getText();
+        String nrLocString = fieldSeats.getText();
         if (checkFields(name, nrLocString)) {
             return;
         }
@@ -167,8 +177,8 @@ public class SectionController extends EntityController<Section> {
             Utils.showErrorMessage("Nu a fost selectata nicio sectie!");
             return;
         }
-        String name = nameTextField.getText();
-        String nrLocString = nrLocTextField.getText();
+        String name = fieldName.getText();
+        String nrLocString = fieldSeats.getText();
         if (checkFields(name, nrLocString)) {
             return;
         }
@@ -184,12 +194,12 @@ public class SectionController extends EntityController<Section> {
     public void updateFilter(ObservableValue<? extends String> observable, String oldValue, String newValue) {
         boolean filtered = false;
         filter = (c) -> true;
-        if (!nameFilterTextField.getText().equals("")) {
-            filter = filter.and((s) -> s.getName().toLowerCase().startsWith(nameFilterTextField.getText().toLowerCase()));
+        if (!fieldFilterName.getText().equals("")) {
+            filter = filter.and((s) -> s.getName().toLowerCase().startsWith(fieldFilterName.getText().toLowerCase()));
             filtered = true;
         }
-        if (!nrLocFilterTextField.getText().equals("") && Utils.tryParseInt(nrLocFilterTextField.getText())) {
-            int actualNrLoc = Integer.parseInt(nrLocFilterTextField.getText());
+        if (!fieldFilterSeats.getText().equals("") && Utils.tryParseInt(fieldFilterSeats.getText())) {
+            int actualNrLoc = Integer.parseInt(fieldFilterSeats.getText());
             filter = filter.and((s) -> compTester.test(s.getNrLoc() - actualNrLoc));
             filtered = true;
         }
@@ -200,8 +210,8 @@ public class SectionController extends EntityController<Section> {
     }
 
     public void handleStateChange(ActionEvent ev) {
-        nrLocState.changeState();
-        switch (nrLocState.getState()) {
+        stateFilterSeats.changeState();
+        switch (stateFilterSeats.getState()) {
             case "<":
                 compTester = (diff) -> diff < 0;
                 break;

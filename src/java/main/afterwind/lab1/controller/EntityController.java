@@ -6,14 +6,15 @@ import afterwind.lab1.entity.Option;
 import afterwind.lab1.permission.Permission;
 import afterwind.lab1.repository.FileRepository;
 import afterwind.lab1.service.AbstractService;
+import afterwind.lab1.ui.control.StatusBar;
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.Node;
+import javafx.scene.control.*;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 
@@ -23,6 +24,8 @@ import java.util.function.Predicate;
 
 public abstract class EntityController<T extends IIdentifiable<Integer>> {
 
+    private static final int itemsPerPage = 20;
+
     @FXML
     public TableView<T> tableView;
 
@@ -30,10 +33,14 @@ public abstract class EntityController<T extends IIdentifiable<Integer>> {
     public Button buttonDelete, buttonRefresh,
             buttonAdd, buttonUpdate, buttonClear,
             buttonClearFilter;
+    @FXML
+    public Pagination paginationTable;
 
     protected AbstractService<T> service;
 
     protected Predicate<T> filter = (e) -> true;
+
+    public FancyController baseController;
 
     @FXML
     public void initialize() {
@@ -43,6 +50,8 @@ public abstract class EntityController<T extends IIdentifiable<Integer>> {
         buttonDelete.setOnAction(this::handleDelete);
         buttonRefresh.setOnAction(this::handleRefresh);
         buttonClearFilter.setOnAction(this::handleClearFilter);
+
+//        paginationTable.setPageFactory(this::getTablePage);
 
         tableView.getSelectionModel().selectedItemProperty().addListener(this::handleSelectionChanged);
     }
@@ -62,6 +71,21 @@ public abstract class EntityController<T extends IIdentifiable<Integer>> {
         tableView.setDisable(!Permission.QUERY.check());
         buttonRefresh.setDisable(!Permission.QUERY.check());
         buttonClearFilter.setDisable(!Permission.QUERY.check());
+    }
+
+    void generateStatusBarMessages(StatusBar statusBar) {
+        statusBar.addMessage(buttonAdd, "Adds an entity to the repository");
+        statusBar.addMessage(buttonDelete, "Removes the selected entity from the repository");
+        statusBar.addMessage(buttonClear, "Clears the fields above");
+        statusBar.addMessage(buttonClearFilter, "Clears the filter text fields");
+        statusBar.addMessage(buttonRefresh, "Rebinds the data to the table view");
+        statusBar.addMessage(buttonUpdate, "Updates the selected entity with the data in the fields above");
+        statusBar.addMessage(tableView, "Shows all the entities from the repository and is updated real time");
+    }
+
+    private Node getTablePage(int page) {
+//        tableView.setItems(service.getRepo().getData().subList((page - 1) * itemsPerPage, page * itemsPerPage));
+        return tableView;
     }
 
     /**
@@ -121,5 +145,13 @@ public abstract class EntityController<T extends IIdentifiable<Integer>> {
         if (observable instanceof StringProperty && ((StringProperty) observable).getBean() instanceof TextField) {
             ((TextField) ((StringProperty) observable).getBean()).borderProperty().set(new Border(new BorderStroke(Color.LIGHTGRAY, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
         }
+    }
+
+    public void handleMouseEntered(MouseEvent ev) {
+        baseController.handleMouseEntered(ev);
+    }
+
+    public void handleMouseExited(MouseEvent ev) {
+        baseController.handleMouseExited(ev);
     }
 }

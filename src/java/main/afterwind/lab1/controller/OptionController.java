@@ -6,10 +6,10 @@ import afterwind.lab1.entity.Option;
 import afterwind.lab1.entity.Section;
 import afterwind.lab1.exception.ValidationException;
 import afterwind.lab1.permission.Permission;
-import afterwind.lab1.repository.FileRepository;
 import afterwind.lab1.service.CandidateService;
 import afterwind.lab1.service.OptionService;
 import afterwind.lab1.service.SectionService;
+import afterwind.lab1.ui.control.StatusBar;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
@@ -27,16 +27,16 @@ import java.util.List;
 public class OptionController extends EntityController<Option> {
 
     @FXML
-    public TableColumn<Option, String> idColumn;
+    public TableColumn<Option, String> columnID;
     @FXML
-    public TableColumn<Option, Section> sectionColumn;
+    public TableColumn<Option, Section> columnSection;
     @FXML
-    public TableColumn<Option, Candidate> candidateColumn;
+    public TableColumn<Option, Candidate> columnCandidate;
     @FXML
-    public ListView<Candidate> candidateList;
+    public ListView<Candidate> listCandidates;
     @FXML
-    public ListView<Section> sectionList;
-    public TextField candidateFilterTextField, sectionFilterTextField;
+    public ListView<Section> listSections;
+    public TextField fieldFilterCandidate, fieldFilterSection;
 
     private CandidateService candidateService;
     private SectionService sectionService;
@@ -55,8 +55,8 @@ public class OptionController extends EntityController<Option> {
         }
 
         super.showAll();
-        candidateList.setItems(candidateService.getRepo().getData());
-        sectionList.setItems(sectionService.getRepo().getData());
+        listCandidates.setItems(candidateService.getRepo().getData());
+        listSections.setItems(sectionService.getRepo().getData());
     }
 
     public void setServices(OptionService service, CandidateService candidateService, SectionService sectionService) {
@@ -69,24 +69,24 @@ public class OptionController extends EntityController<Option> {
     }
 
     public void clearFilterTextFields() {
-        candidateFilterTextField.setText("");
-        sectionFilterTextField.setText("");
+        fieldFilterCandidate.setText("");
+        fieldFilterSection.setText("");
     }
 
     @Override
     public void clearModificationTextFields() {
-        candidateList.getSelectionModel().clearSelection();
-        sectionList.getSelectionModel().clearSelection();
+        listCandidates.getSelectionModel().clearSelection();
+        listSections.getSelectionModel().clearSelection();
     }
 
     @FXML
     @Override
     public void initialize() {
         super.initialize();
-        idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
-        candidateColumn.setCellValueFactory(new PropertyValueFactory<>("candidate"));
-        sectionColumn.setCellValueFactory(new PropertyValueFactory<>("section"));
-        candidateList.setCellFactory(param -> new ListCell<Candidate>() {
+        columnID.setCellValueFactory(new PropertyValueFactory<>("id"));
+        columnCandidate.setCellValueFactory(new PropertyValueFactory<>("candidate"));
+        columnSection.setCellValueFactory(new PropertyValueFactory<>("section"));
+        listCandidates.setCellFactory(param -> new ListCell<Candidate>() {
             @Override
             protected void updateItem(Candidate item, boolean empty) {
                 super.updateItem(item, empty);
@@ -98,7 +98,7 @@ public class OptionController extends EntityController<Option> {
             }
         });
 
-        sectionList.setCellFactory(param -> new ListCell<Section>() {
+        listSections.setCellFactory(param -> new ListCell<Section>() {
             @Override
             protected void updateItem(Section item, boolean empty) {
                 super.updateItem(item, empty);
@@ -110,20 +110,30 @@ public class OptionController extends EntityController<Option> {
             }
         });
 
-        candidateFilterTextField.textProperty().addListener(this::updateFilter);
-        sectionFilterTextField.textProperty().addListener(this::updateFilter);
+        fieldFilterCandidate.textProperty().addListener(this::updateFilter);
+        fieldFilterSection.textProperty().addListener(this::updateFilter);
 
         disableBasedOnPermissions();
     }
 
     @Override
+    void generateStatusBarMessages(StatusBar statusBar) {
+        super.generateStatusBarMessages(statusBar);
+
+        statusBar.addMessage(fieldFilterCandidate, "Filters the options by their candidate's name");
+        statusBar.addMessage(fieldFilterSection, "Filters the options by their section's name");
+        statusBar.addMessage(listSections, "The [new ]section for the [new ]option");
+        statusBar.addMessage(listCandidates, "The [new ]candidate for the [new ]option");
+    }
+
+    @Override
     protected void disableBasedOnPermissions() {
         super.disableBasedOnPermissions();
-        candidateList.setDisable(!Permission.MODIFY.check());
-        sectionList.setDisable(!Permission.MODIFY.check());
+        listCandidates.setDisable(!Permission.MODIFY.check());
+        listSections.setDisable(!Permission.MODIFY.check());
 
-        candidateFilterTextField.setDisable(!Permission.QUERY.check());
-        sectionFilterTextField.setDisable(!Permission.QUERY.check());
+        fieldFilterCandidate.setDisable(!Permission.QUERY.check());
+        fieldFilterSection.setDisable(!Permission.QUERY.check());
     }
 
     /**
@@ -137,8 +147,8 @@ public class OptionController extends EntityController<Option> {
             service.remove(o);
             tableView.setItems(service.getRepo().getData());
         }
-        candidateList.getSelectionModel().select(o.getCandidate());
-        sectionList.getSelectionModel().select(o.getSection());
+        listCandidates.getSelectionModel().select(o.getCandidate());
+        listSections.getSelectionModel().select(o.getSection());
     }
 
     @Override
@@ -155,12 +165,12 @@ public class OptionController extends EntityController<Option> {
 
     @Override
     public void handleAdd(ActionEvent ev) {
-        Candidate c = candidateList.getSelectionModel().getSelectedItem();
+        Candidate c = listCandidates.getSelectionModel().getSelectedItem();
         if (c == null) {
             Utils.showErrorMessage("Nu ati selectat niciun candidat!");
             return;
         }
-        Section s = sectionList.getSelectionModel().getSelectedItem();
+        Section s = listSections.getSelectionModel().getSelectedItem();
         if (s == null) {
             Utils.showErrorMessage("Nu ati selectat nicio sectie!");
             return;
@@ -190,12 +200,12 @@ public class OptionController extends EntityController<Option> {
             Utils.showErrorMessage("Nu ati selectat nicio optiune!");
             return;
         }
-        Candidate c = candidateList.getSelectionModel().getSelectedItem();
+        Candidate c = listCandidates.getSelectionModel().getSelectedItem();
         if (c == null) {
             Utils.showErrorMessage("Nu ati selectat nici un candidat!");
             return;
         }
-        Section s = sectionList.getSelectionModel().getSelectedItem();
+        Section s = listSections.getSelectionModel().getSelectedItem();
         if (s == null) {
             Utils.showErrorMessage("Nu ati selectat nicio sectie!");
             return;
@@ -217,12 +227,12 @@ public class OptionController extends EntityController<Option> {
     public void updateFilter(ObservableValue<? extends String> observable, String oldValue, String newValue) {
         boolean filtered = false;
         filter = (c) -> true;
-        if (!candidateFilterTextField.getText().equals("")) {
-            filter = filter.and((o) -> o.getCandidate().getName().toLowerCase().startsWith(candidateFilterTextField.getText().toLowerCase()));
+        if (!fieldFilterCandidate.getText().equals("")) {
+            filter = filter.and((o) -> o.getCandidate().getName().toLowerCase().startsWith(fieldFilterCandidate.getText().toLowerCase()));
             filtered = true;
         }
-        if (!sectionFilterTextField.getText().equals("")) {
-            filter = filter.and((o) -> o.getSection().getName().toLowerCase().startsWith(sectionFilterTextField.getText().toLowerCase()));
+        if (!fieldFilterSection.getText().equals("")) {
+            filter = filter.and((o) -> o.getSection().getName().toLowerCase().startsWith(fieldFilterSection.getText().toLowerCase()));
             filtered = true;
         }
         List<Option> filteredList = service.filter(filter);

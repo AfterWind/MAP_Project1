@@ -4,12 +4,13 @@ import afterwind.lab1.Utils;
 import afterwind.lab1.entity.Candidate;
 import afterwind.lab1.exception.ValidationException;
 import afterwind.lab1.permission.Permission;
-import afterwind.lab1.repository.FileRepository;
 import afterwind.lab1.service.CandidateService;
+import afterwind.lab1.ui.control.StatusBar;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -24,18 +25,19 @@ public class CandidateController extends EntityController<Candidate> {
     @FXML
     public TableColumn columnID, columnName, columnTel, columnAddress;
     @FXML
-    public TextField nameTextField, addressTextField, telTextField;
+    public TextField fieldName, fieldAddress, fieldTelephone;
     @FXML
-    public TextField nameFilterTextField, addressFilterTextField, telFilterTextField;
+    public TextField fieldFilterName, fieldFilterAddress, fieldFilterTelephone;
 
     @FXML
     @Override
     public void initialize() {
         super.initialize();
+        fieldFilterName.textProperty().addListener(this::updateFilter);
+        fieldFilterAddress.textProperty().addListener(this::updateFilter);
+        fieldFilterTelephone.textProperty().addListener(this::updateFilter);
 
-        nameFilterTextField.textProperty().addListener(this::updateFilter);
-        addressFilterTextField.textProperty().addListener(this::updateFilter);
-        telFilterTextField.textProperty().addListener(this::updateFilter);
+//        paginationTable.setPageFactory(this::createTablePage);
 
         columnID.setCellValueFactory(new PropertyValueFactory<>("id"));
         columnName.setCellValueFactory(new PropertyValueFactory<>("name"));
@@ -46,15 +48,27 @@ public class CandidateController extends EntityController<Candidate> {
     }
 
     @Override
+    void generateStatusBarMessages(StatusBar statusBar) {
+        super.generateStatusBarMessages(statusBar);
+        statusBar.addMessage(fieldName, "The [new ]name of the [new ]candidate");
+        statusBar.addMessage(fieldAddress, "The [new ]address of the [new ]candidate");
+        statusBar.addMessage(fieldTelephone, "The [new ]telephone of the [new ]candidate");
+
+        statusBar.addMessage(fieldFilterName, "Filters the candidates by their name");
+        statusBar.addMessage(fieldFilterAddress, "Filters the candidates by their address");
+        statusBar.addMessage(fieldFilterTelephone, "Filters the candidates by their telephone number");
+    }
+
+    @Override
     protected void disableBasedOnPermissions() {
         super.disableBasedOnPermissions();
-        nameTextField.setDisable(!Permission.MODIFY.check());
-        addressTextField.setDisable(!Permission.MODIFY.check());
-        telTextField.setDisable(!Permission.MODIFY.check());
+        fieldName.setDisable(!Permission.MODIFY.check());
+        fieldAddress.setDisable(!Permission.MODIFY.check());
+        fieldTelephone.setDisable(!Permission.MODIFY.check());
 
-        nameFilterTextField.setDisable(!Permission.QUERY.check());
-        addressFilterTextField.setDisable(!Permission.QUERY.check());
-        telFilterTextField.setDisable(!Permission.QUERY.check());
+        fieldFilterName.setDisable(!Permission.QUERY.check());
+        fieldFilterAddress.setDisable(!Permission.QUERY.check());
+        fieldFilterTelephone.setDisable(!Permission.QUERY.check());
     }
 
     public void setService(CandidateService service) {
@@ -70,9 +84,9 @@ public class CandidateController extends EntityController<Candidate> {
      */
     @Override
     public void showDetails(Candidate c) {
-        nameTextField.setText(c.getName());
-        addressTextField.setText(c.getAddress());
-        telTextField.setText(c.getTelephone());
+        fieldName.setText(c.getName());
+        fieldAddress.setText(c.getAddress());
+        fieldTelephone.setText(c.getTelephone());
     }
 
     /**
@@ -80,17 +94,17 @@ public class CandidateController extends EntityController<Candidate> {
      */
     @Override
     public void clearModificationTextFields() {
-        nameTextField.setText("");
-        addressTextField.setText("");
-        telTextField.setText("");
+        fieldName.setText("");
+        fieldAddress.setText("");
+        fieldTelephone.setText("");
         tableView.getSelectionModel().clearSelection();
     }
 
     @Override
     public void clearFilterTextFields() {
-        nameFilterTextField.setText("");
-        addressFilterTextField.setText("");
-        telFilterTextField.setText("");
+        fieldFilterName.setText("");
+        fieldFilterAddress.setText("");
+        fieldFilterTelephone.setText("");
         tableView.getSelectionModel().clearSelection();
     }
 
@@ -104,20 +118,20 @@ public class CandidateController extends EntityController<Candidate> {
     public boolean checkFields(String name, String address, String tel) {
         boolean errored = false;
         if (name.equals("")) {
-            Utils.setErrorBorder(nameTextField);
+            Utils.setErrorBorder(fieldName);
             errored = true;
         }
         if (address.equals("")) {
-            Utils.setErrorBorder(addressTextField);
+            Utils.setErrorBorder(fieldAddress);
             errored = true;
         }
         if (tel.equals("")) {
-            Utils.setErrorBorder(telTextField);
+            Utils.setErrorBorder(fieldTelephone);
             errored = true;
         } else {
             for (char ch : tel.toCharArray()) {
                 if (ch < '0' || ch > '9') {
-                    Utils.setErrorBorder(telTextField);
+                    Utils.setErrorBorder(fieldTelephone);
                     errored = true;
                 }
             }
@@ -131,9 +145,9 @@ public class CandidateController extends EntityController<Candidate> {
      */
     @Override
     public void handleAdd(ActionEvent ev) {
-        String name = nameTextField.getText();
-        String address = addressTextField.getText();
-        String tel = telTextField.getText();
+        String name = fieldName.getText();
+        String address = fieldAddress.getText();
+        String tel = fieldTelephone.getText();
 
         if (checkFields(name, address, tel)) {
             return;
@@ -180,9 +194,9 @@ public class CandidateController extends EntityController<Candidate> {
             return;
         }
 
-        String name = nameTextField.getText();
-        String address = addressTextField.getText();
-        String tel = telTextField.getText();
+        String name = fieldName.getText();
+        String address = fieldAddress.getText();
+        String tel = fieldTelephone.getText();
 
         if (checkFields(name, address, tel)) {
             return;
@@ -199,21 +213,25 @@ public class CandidateController extends EntityController<Candidate> {
     public void updateFilter(ObservableValue<? extends String> observable, String oldValue, String newValue) {
         boolean filtered = false;
         filter = (c) -> true;
-        if (!nameFilterTextField.getText().equals("")) {
-            filter = filter.and((c) -> c.getName().toLowerCase().startsWith(nameFilterTextField.getText().toLowerCase()));
+        if (!fieldFilterName.getText().equals("")) {
+            filter = filter.and((c) -> c.getName().toLowerCase().startsWith(fieldFilterName.getText().toLowerCase()));
             filtered = true;
         }
-        if (!addressFilterTextField.getText().equals("")) {
-            filter = filter.and((c) -> c.getAddress().toLowerCase().startsWith(addressFilterTextField.getText().toLowerCase()));
+        if (!fieldFilterAddress.getText().equals("")) {
+            filter = filter.and((c) -> c.getAddress().toLowerCase().startsWith(fieldFilterAddress.getText().toLowerCase()));
             filtered = true;
         }
-        if (!telFilterTextField.getText().equals("")) {
-            filter = filter.and((c) -> c.getTelephone().toLowerCase().startsWith(telFilterTextField.getText().toLowerCase()));
+        if (!fieldFilterTelephone.getText().equals("")) {
+            filter = filter.and((c) -> c.getTelephone().toLowerCase().startsWith(fieldFilterTelephone.getText().toLowerCase()));
             filtered = true;
         }
 
         List<Candidate> filteredList = service.filter(filter);
         tableView.setItems(FXCollections.observableArrayList(filteredList));
         buttonClearFilter.setDisable(!filtered);
+    }
+
+    public Node createTablePage(int page) {
+        return tableView;
     }
 }

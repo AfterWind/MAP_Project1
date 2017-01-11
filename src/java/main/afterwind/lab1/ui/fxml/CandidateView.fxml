@@ -4,6 +4,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
 <?import java.lang.String?>
+<?import afterwind.lab1.ui.control.NumericTextField?>
 <fx:root type="javafx.scene.layout.VBox" xmlns:fx="http://javafx.com/fxml/1" fx:controller="afterwind.lab1.controller.CandidateController">
     <fx:define>
         <String fx:id="BORDER_LIGHTGRAY"
@@ -15,7 +16,7 @@
             <padding>
                 <Insets top="20" right="20" bottom="0" left="20"/>
             </padding>
-            <TableView fx:id="tableView" layoutY="50" maxWidth="537" minHeight="350" maxHeight="350">
+            <TableView fx:id="tableView" layoutY="50" maxWidth="537" minHeight="350" maxHeight="350" onMouseExited="#handleMouseExited" onMouseEntered="#handleMouseEntered">
                 <columns>
                     <TableColumn fx:id="columnID" text="ID" minWidth="35"/>
                     <TableColumn fx:id="columnName" text="Name" minWidth="150"/>
@@ -26,9 +27,10 @@
                     <TableView fx:constant="UNCONSTRAINED_RESIZE_POLICY"/>
                 </columnResizePolicy>
             </TableView>
+            <!--<Pagination fx:id="paginationTable"/>-->
             <HBox alignment="TOP_CENTER" spacing="5">
-                <Button fx:id="buttonDelete" text="Delete" minWidth="80" onAction="#handleDelete"/>
-                <Button fx:id="buttonRefresh" text="Refresh" minWidth="80" onAction="#handleRefresh"/>
+                <Button fx:id="buttonDelete" text="Delete" minWidth="80" onAction="#handleDelete" onMouseExited="#handleMouseExited" onMouseEntered="#handleMouseEntered"/>
+                <Button fx:id="buttonRefresh" text="Refresh" minWidth="80" onAction="#handleRefresh" onMouseExited="#handleMouseExited" onMouseEntered="#handleMouseEntered"/>
             </HBox>
         </VBox>
         <HBox alignment="BOTTOM_CENTER" spacing="15" translateY="0" GridPane.rowIndex="3">
@@ -40,18 +42,18 @@
                     <Label text="Name: " GridPane.columnIndex="0" GridPane.rowIndex="0"/>
                     <Label text="Address: " GridPane.columnIndex="0" GridPane.rowIndex="1"/>
                     <Label text="Telephone: " GridPane.columnIndex="0" GridPane.rowIndex="2"/>
-                    <TextField fx:id="nameTextField" style="$BORDER_LIGHTGRAY" GridPane.columnIndex="1"
-                               GridPane.rowIndex="0"/>
-                    <TextField fx:id="addressTextField" style="$BORDER_LIGHTGRAY"
-                               GridPane.columnIndex="1" GridPane.rowIndex="1"/>
-                    <TextField fx:id="telTextField" style="$BORDER_LIGHTGRAY" GridPane.columnIndex="1"
-                               GridPane.rowIndex="2"/>
+                    <TextField fx:id="fieldName" style="$BORDER_LIGHTGRAY" GridPane.columnIndex="1"
+                               GridPane.rowIndex="0" onMouseExited="#handleMouseExited" onMouseEntered="#handleMouseEntered"/>
+                    <TextField fx:id="fieldAddress" style="$BORDER_LIGHTGRAY"
+                               GridPane.columnIndex="1" GridPane.rowIndex="1" onMouseExited="#handleMouseExited" onMouseEntered="#handleMouseEntered"/>
+                    <NumericTextField fx:id="fieldTelephone" style="$BORDER_LIGHTGRAY" GridPane.columnIndex="1"
+                               GridPane.rowIndex="2" onMouseExited="#handleMouseExited" onMouseEntered="#handleMouseEntered"/>
                 </GridPane>
                 <HBox alignment="CENTER" spacing="5">
-                    <Button fx:id="buttonAdd" text="Add" minWidth="80" onAction="#handleAdd"/>
+                    <Button fx:id="buttonAdd" text="Add" minWidth="80" onAction="#handleAdd" onMouseExited="#handleMouseExited" onMouseEntered="#handleMouseEntered"/>
                     <Button fx:id="buttonUpdate" text="Update" minWidth="80" disable="true"
-                            onAction="#handleUpdate"/>
-                    <Button fx:id="buttonClear" text="Clear" minWidth="80" onAction="#handleClear"/>
+                            onAction="#handleUpdate" onMouseExited="#handleMouseExited" onMouseEntered="#handleMouseEntered"/>
+                    <Button fx:id="buttonClear" text="Clear" minWidth="80" onAction="#handleClear" onMouseExited="#handleMouseExited" onMouseEntered="#handleMouseEntered"/>
                 </HBox>
             </VBox>
             <VBox spacing="10">
@@ -62,16 +64,16 @@
                     <Label text="Name: " GridPane.columnIndex="0" GridPane.rowIndex="0"/>
                     <Label text="Address: " GridPane.columnIndex="0" GridPane.rowIndex="1"/>
                     <Label text="Telephone: " GridPane.columnIndex="0" GridPane.rowIndex="2"/>
-                    <TextField fx:id="nameFilterTextField" style="$BORDER_LIGHTGRAY"
-                               GridPane.columnIndex="1" GridPane.rowIndex="0"/>
-                    <TextField fx:id="addressFilterTextField" style="$BORDER_LIGHTGRAY"
-                               GridPane.columnIndex="1" GridPane.rowIndex="1"/>
-                    <TextField fx:id="telFilterTextField" style="$BORDER_LIGHTGRAY"
-                               GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+                    <TextField fx:id="fieldFilterName" style="$BORDER_LIGHTGRAY"
+                               GridPane.columnIndex="1" GridPane.rowIndex="0" onMouseExited="#handleMouseExited" onMouseEntered="#handleMouseEntered"/>
+                    <TextField fx:id="fieldFilterAddress" style="$BORDER_LIGHTGRAY"
+                               GridPane.columnIndex="1" GridPane.rowIndex="1" onMouseExited="#handleMouseExited" onMouseEntered="#handleMouseEntered"/>
+                    <NumericTextField fx:id="fieldFilterTelephone" style="$BORDER_LIGHTGRAY"
+                                      GridPane.columnIndex="1" GridPane.rowIndex="2" onMouseExited="#handleMouseExited" onMouseEntered="#handleMouseEntered"/>
                 </GridPane>
                 <HBox spacing="5" alignment="CENTER">
                     <Button fx:id="buttonClearFilter" text="Clear" minWidth="80"
-                            onAction="#handleClearFilter" disable="true"/>
+                            onAction="#handleClearFilter" disable="true" onMouseExited="#handleMouseExited" onMouseEntered="#handleMouseEntered"/>
                 </HBox>
             </VBox>
         </HBox>

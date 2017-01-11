@@ -36,7 +36,7 @@ public class FancyMain extends Application {
 //        scene = new Scene(loader.load(), 1000, 600, Color.DARKBLUE);
 
         stage.setResizable(false);
-        stage.getIcons().add(new Image(String.valueOf(new File("res/images.jpeg").toURL())));
+//        stage.getIcons().add(new Image(String.valueOf(new File("res/images.jpeg").toURL())));
         stage.setTitle("Management");
         stage.setScene(scene);
         stage.requestFocus();

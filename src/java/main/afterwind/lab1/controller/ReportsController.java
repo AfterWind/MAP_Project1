@@ -6,39 +6,34 @@ import afterwind.lab1.repository.IRepository;
 import afterwind.lab1.service.CandidateService;
 import afterwind.lab1.service.OptionService;
 import afterwind.lab1.service.SectionService;
+import afterwind.lab1.ui.control.StatusBar;
 import com.itextpdf.text.*;
-import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
-import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.input.DragEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 
 import java.io.FileOutputStream;
-import java.io.IOException;
-import java.util.Objects;
 
 public class ReportsController {
 
     @FXML
-    public TableView sectionReportsTable;
+    public TableView tableReports;
     @FXML
-    public TableColumn<Section, String> idColumn, nameColumn, nrLocColumn, nrLocOccupiedColumn;
+    public TableColumn<Section, String> columnID, columnName, columnSeats, columnSeatsOccupied;
     @FXML
-    public TextField textFieldTop;
+    public Slider sliderTopSections;
     @FXML
-    public Slider topSectionsSlider;
-    @FXML
-    public Label sliderValueLabel;
+    public Label labelSliderValue;
 
+    public FancyController baseController;
     private CandidateService candidateService;
     private SectionService sectionService;
     private OptionService optionService;
@@ -49,19 +44,24 @@ public class ReportsController {
 
     @FXML
     public void initialize() {
-        idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
-        nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
-        nrLocColumn.setCellValueFactory(new PropertyValueFactory<>("nrLoc"));
-        nrLocOccupiedColumn.setCellValueFactory(param -> new SimpleStringProperty(
+        columnID.setCellValueFactory(new PropertyValueFactory<>("id"));
+        columnName.setCellValueFactory(new PropertyValueFactory<>("name"));
+        columnSeats.setCellValueFactory(new PropertyValueFactory<>("nrLoc"));
+        columnSeatsOccupied.setCellValueFactory(param -> new SimpleStringProperty(
                 getOccupiedNrLoc(param.getValue()) + ""
         ));
 
         disableBasedOnPermissions();
     }
 
+    void generateStatusBarMessages(StatusBar statusBar) {
+        statusBar.addMessage(tableReports, "Showing the top most occupied sections");
+        statusBar.addMessage(sliderTopSections, "How many sections should be in the report (ordered by number of slots occupied)");
+    }
+
     protected void disableBasedOnPermissions() {
-        sectionReportsTable.setDisable(!Permission.QUERY.check());
-        topSectionsSlider.setDisable(!Permission.QUERY.check());
+        tableReports.setDisable(!Permission.QUERY.check());
+        sliderTopSections.setDisable(!Permission.QUERY.check());
     }
 
     public void setServices(OptionService service, CandidateService candidateService, SectionService sectionService) {
@@ -69,20 +69,20 @@ public class ReportsController {
         this.candidateService = candidateService;
         this.sectionService = sectionService;
 
-        topSectionsSlider.setMin(1);
-        topSectionsSlider.setMax(sectionService.getSize());
-        topSectionsSlider.setBlockIncrement(1D);
-        topSectionsSlider.setMajorTickUnit(Math.max(Math.floor(sectionService.getSize() / 4), 1));
-        topSectionsSlider.setMinorTickCount(1);
+        sliderTopSections.setMin(1);
+        sliderTopSections.setMax(sectionService.getSize());
+        sliderTopSections.setBlockIncrement(1D);
+        sliderTopSections.setMajorTickUnit(Math.max(Math.floor(sectionService.getSize() / 4), 1));
+        sliderTopSections.setMinorTickCount(1);
 
         if (Permission.QUERY.check()) {
-            populateTable((int) Math.floor(topSectionsSlider.getValue()));
+            populateTable((int) Math.floor(sliderTopSections.getValue()));
         }
     }
 
     public void populateTable(int top) {
         report = sectionService.getMostOccupiedSections(optionService.getRepo(), top);
-        sectionReportsTable.setItems(report.getData());
+        tableReports.setItems(report.getData());
     }
 
     private int getOccupiedNrLoc(Section s) {
@@ -146,8 +146,16 @@ public class ReportsController {
     }
 
     public void handleSliderDrag(Event ev) {
-        int top = (int) Math.floor(topSectionsSlider.getValue());
-        sliderValueLabel.setText("   " + top);
+        int top = (int) Math.floor(sliderTopSections.getValue());
+        labelSliderValue.setText("   " + top);
         populateTable(top);
+    }
+
+    public void handleMouseEntered(MouseEvent ev) {
+        baseController.handleMouseEntered(ev);
+    }
+
+    public void handleMouseExited(MouseEvent ev) {
+        baseController.handleMouseExited(ev);
     }
 }

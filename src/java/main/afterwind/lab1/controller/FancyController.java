@@ -14,6 +14,7 @@ import afterwind.lab1.ui.CandidateView;
 import afterwind.lab1.ui.OptionView;
 import afterwind.lab1.ui.ReportsView;
 import afterwind.lab1.ui.SectionView;
+import afterwind.lab1.ui.control.StatusBar;
 import afterwind.lab1.validator.CandidateValidator;
 import afterwind.lab1.validator.OptionValidator;
 import afterwind.lab1.validator.SectionValidator;
@@ -23,8 +24,10 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.RadioMenuItem;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.shape.CubicCurveTo;
 import javafx.scene.shape.MoveTo;
 import javafx.scene.shape.Path;
@@ -35,7 +38,6 @@ public class FancyController {
 
     private SQLiteDatabase database = new SQLiteDatabase("res/data.db");
     private CandidateService candidateService = new CandidateService(new SQLiteCandidateRepository(database, new CandidateValidator()));//new XMLRepository<>(new CandidateValidator(), new Candidate.XMLSerializer(), "res/candidates.xml"));
-
     private SectionService sectionService = new SectionService(new SQLiteSectionRepository(database, new SectionValidator()));//new FileRepository<>(new SectionValidator(), new Section.Serializer(), "res/sections.txt"));
     private OptionService optionService = new OptionService(new SQLiteOptionRepository(database, new OptionValidator(), candidateService.getRepo(), sectionService.getRepo()));//new FileRepository<>(new OptionValidator(), new Option.Serializer(candidateService, sectionService), "res/options.txt"));
 
@@ -43,10 +45,17 @@ public class FancyController {
     private CandidateView candidatesView;
     @FXML
     private SectionView sectionsView;
+
     @FXML
     private OptionView optionsView;
     @FXML
     private ReportsView reportsView;
+    @FXML
+    public StatusBar statusBar;
+    @FXML
+    public MenuItem menuExit, menuViewCandidates, menuViewSections, menuViewOptions, menuViewReports;
+    @FXML
+    public MenuBar menuBar;
 
     private Node current;
 
@@ -55,18 +64,38 @@ public class FancyController {
     @FXML
     public void initialize() {
         sectionsView.controller.setService(sectionService);
+        sectionsView.controller.baseController = this;
         optionsView.controller.setServices(optionService, candidateService, sectionService);
+        optionsView.controller.baseController = this;
         candidatesView.controller.setService(candidateService);
+        candidatesView.controller.baseController = this;
+        reportsView.controller.setServices(optionService, candidateService, sectionService);
+        reportsView.controller.baseController = this;
+        generateStatusBarMessages(statusBar);
 //        reportsWindow = new Stage();
 //        reportsWindow.setTitle("Reports");
 //        ReportsView reportsView = new ReportsView();
-        reportsView.controller.setServices(optionService, candidateService, sectionService);
+
 //        reportsWindow.setScene(new Scene(reportsView, 800, 400));
 
         Utils.moveRight(optionsView, Duration.millis(1000));
         Utils.moveRight(sectionsView, Duration.millis(1000));
         Utils.moveRight(reportsView, Duration.millis(1000));
         current = candidatesView;
+    }
+
+    private void generateStatusBarMessages(StatusBar statusBar) {
+        candidatesView.controller.generateStatusBarMessages(statusBar);
+        sectionsView.controller.generateStatusBarMessages(statusBar);
+        optionsView.controller.generateStatusBarMessages(statusBar);
+        reportsView.controller.generateStatusBarMessages(statusBar);
+
+        statusBar.addMessage(statusBar, "That's me. Hi!");
+        statusBar.addMessage(menuExit, "Exits the application");
+        statusBar.addMessage(menuViewCandidates, "Switches to the Candidates view");
+        statusBar.addMessage(menuViewSections, "Switches to the Sections view");
+        statusBar.addMessage(menuViewOptions, "Switches to the Options view");
+        statusBar.addMessage(menuViewReports, "Switches to the Reports view");
     }
 
     @FXML
@@ -142,5 +171,13 @@ public class FancyController {
 //        st.setByY(3);
 //        st.play();
 
+    }
+
+    public void handleMouseEntered(MouseEvent ev) {
+        statusBar.setMessage(ev.getTarget());
+    }
+
+    public void handleMouseExited(MouseEvent ev) {
+        statusBar.setText("");
     }
 }
