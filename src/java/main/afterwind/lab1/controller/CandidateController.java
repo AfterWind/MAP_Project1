@@ -4,13 +4,14 @@ import afterwind.lab1.Utils;
 import afterwind.lab1.entity.Candidate;
 import afterwind.lab1.exception.ValidationException;
 import afterwind.lab1.permission.Permission;
+import afterwind.lab1.repository.PaginatedRepository;
 import afterwind.lab1.service.CandidateService;
 import afterwind.lab1.ui.control.StatusBar;
+import afterwind.lab1.validator.CandidateValidator;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.Node;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -36,8 +37,6 @@ public class CandidateController extends EntityController<Candidate> {
         fieldFilterName.textProperty().addListener(this::updateFilter);
         fieldFilterAddress.textProperty().addListener(this::updateFilter);
         fieldFilterTelephone.textProperty().addListener(this::updateFilter);
-
-//        paginationTable.setPageFactory(this::createTablePage);
 
         columnID.setCellValueFactory(new PropertyValueFactory<>("id"));
         columnName.setCellValueFactory(new PropertyValueFactory<>("name"));
@@ -73,6 +72,8 @@ public class CandidateController extends EntityController<Candidate> {
 
     public void setService(CandidateService service) {
         this.service = service;
+        pagination.init(this::handlePageChange, 0);
+        updateNumberOfPages();
         if (Permission.QUERY.check()) {
             showAll();
         }
@@ -157,10 +158,8 @@ public class CandidateController extends EntityController<Candidate> {
         try {
             Candidate c = new Candidate(id, name, tel, address);
             service.add(c);
-            if (filter.test(c)) {
-                tableView.getItems().add(c);
-            }
             clearModificationTextFields();
+            updateNumberOfPages();
         } catch (ValidationException ex) {
             Utils.showErrorMessage(ex.getMessage());
         }
@@ -180,6 +179,7 @@ public class CandidateController extends EntityController<Candidate> {
         service.remove(c);
         tableView.getItems().remove(c);
         clearModificationTextFields();
+        updateNumberOfPages();
     }
 
     /**
@@ -225,13 +225,20 @@ public class CandidateController extends EntityController<Candidate> {
             filter = filter.and((c) -> c.getTelephone().toLowerCase().startsWith(fieldFilterTelephone.getText().toLowerCase()));
             filtered = true;
         }
+        buttonClearFilter.setDisable(!filtered);
+        if (!filtered) {
+            handleClearFilter(null);
+            return;
+        }
 
         List<Candidate> filteredList = service.filter(filter);
-        tableView.setItems(FXCollections.observableArrayList(filteredList));
-        buttonClearFilter.setDisable(!filtered);
-    }
-
-    public Node createTablePage(int page) {
-        return tableView;
+        filteredEntities = new PaginatedRepository<>(new CandidateValidator(), 13);
+        try {
+            filteredEntities.addAll(filteredList);
+        } catch (ValidationException e) {
+            throw new RuntimeException(e);
+        }
+        handlePageChange(0);
+        updateNumberOfPages();
     }
 }

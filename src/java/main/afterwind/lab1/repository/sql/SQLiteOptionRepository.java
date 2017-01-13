@@ -16,8 +16,8 @@ public class SQLiteOptionRepository extends SQLiteRepository<Option>{
     private IRepository<Section, Integer> sectionRepo;
     private IRepository<Candidate, Integer> candidateRepo;
 
-    public SQLiteOptionRepository(SQLiteDatabase database, IValidator<Option> validator, IRepository<Candidate, Integer> candidateRepo, IRepository<Section, Integer> sectionRepo) {
-        super(database, validator);
+    public SQLiteOptionRepository(SQLiteDatabase database, IValidator<Option> validator, IRepository<Candidate, Integer> candidateRepo, IRepository<Section, Integer> sectionRepo, int entitiesPerPage) {
+        super(database, validator, entitiesPerPage);
         initTable();
         this.sectionRepo = sectionRepo;
         this.candidateRepo = candidateRepo;

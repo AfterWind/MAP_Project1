@@ -17,8 +17,8 @@ public class FileRepositoryNumeroDos<T extends IIdentifiable<K>, K> extends Pagi
 
     private final String filename;
 
-    public FileRepositoryNumeroDos(IValidator<T> validator, String file) {
-        super(validator);
+    public FileRepositoryNumeroDos(IValidator<T> validator, String file, int entitiesPerPage) {
+        super(validator, entitiesPerPage);
         this.filename = file;
         read();
     }

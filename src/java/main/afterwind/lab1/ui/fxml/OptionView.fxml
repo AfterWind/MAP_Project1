@@ -13,6 +13,7 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.control.TextField?>
 <?import java.lang.String?>
+<?import afterwind.lab1.ui.control.BetterPagination?>
 <fx:root type="javafx.scene.layout.VBox" alignment="CENTER" xmlns:fx="http://javafx.com/fxml/1" fx:controller="afterwind.lab1.controller.OptionController">
     <fx:define>
         <String fx:id="BORDER_LIGHTGRAY"
@@ -34,6 +35,7 @@
                         <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
                     </columnResizePolicy>
                 </TableView>
+                <BetterPagination fx:id="pagination"/>
                 <HBox alignment="CENTER" spacing="5" AnchorPane.bottomAnchor="10">
                     <Button fx:id="buttonDelete" text="Delete" minWidth="80" onAction="#handleDelete" onMouseExited="#handleMouseExited" onMouseEntered="#handleMouseEntered"/>
                     <Button fx:id="buttonRefresh" text="Refresh" minWidth="80" onAction="#handleRefresh" onMouseExited="#handleMouseExited" onMouseEntered="#handleMouseEntered"/>

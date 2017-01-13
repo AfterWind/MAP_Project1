@@ -17,8 +17,8 @@ public class FileRepository<T extends IIdentifiable<K>, K> extends PaginatedRepo
     private final ISerializer<T> serializer;
     private final String filename;
 
-    public FileRepository(IValidator<T> validator, ISerializer<T> serializer, String file) {
-        super(validator);
+    public FileRepository(IValidator<T> validator, ISerializer<T> serializer, String file, int entitiesPerPage) {
+        super(validator, entitiesPerPage);
         this.serializer = serializer;
         this.filename = file;
         read();

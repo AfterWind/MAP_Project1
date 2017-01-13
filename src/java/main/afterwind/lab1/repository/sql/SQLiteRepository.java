@@ -23,8 +23,8 @@ public abstract class SQLiteRepository<T extends IIdentifiable<Integer>> extends
     protected PreparedStatement statementUpdate;
     protected PreparedStatement statementSelectAll;
 
-    public SQLiteRepository(SQLiteDatabase database, IValidator<T> validator) {
-        super(validator);
+    public SQLiteRepository(SQLiteDatabase database, IValidator<T> validator, int entitiesPerPage) {
+        super(validator, entitiesPerPage);
         this.database = database;
     }
 

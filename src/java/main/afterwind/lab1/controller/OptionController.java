@@ -6,10 +6,12 @@ import afterwind.lab1.entity.Option;
 import afterwind.lab1.entity.Section;
 import afterwind.lab1.exception.ValidationException;
 import afterwind.lab1.permission.Permission;
+import afterwind.lab1.repository.PaginatedRepository;
 import afterwind.lab1.service.CandidateService;
 import afterwind.lab1.service.OptionService;
 import afterwind.lab1.service.SectionService;
 import afterwind.lab1.ui.control.StatusBar;
+import afterwind.lab1.validator.OptionValidator;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
@@ -63,6 +65,8 @@ public class OptionController extends EntityController<Option> {
         this.service = service;
         this.candidateService = candidateService;
         this.sectionService = sectionService;
+        pagination.init(this::handlePageChange, 0);
+        updateNumberOfPages();
         if (Permission.QUERY.check()) {
             showAll();
         }
@@ -159,8 +163,9 @@ public class OptionController extends EntityController<Option> {
             return;
         }
         service.remove(o);
-        clearModificationTextFields();
         tableView.getItems().remove(o);
+        clearModificationTextFields();
+        updateNumberOfPages();
     }
 
     @Override
@@ -185,10 +190,11 @@ public class OptionController extends EntityController<Option> {
         try {
             Option o = new Option(service.getNextId(), s, c);
             service.add(o);
-            if (filter.test(o)) {
-                tableView.getItems().add(o);
-            }
+//            if (filter.test(o)) {
+//                tableView.getItems().add(o);
+//            }
             clearModificationTextFields();
+            updateNumberOfPages();
         } catch (ValidationException e) {
             Utils.showErrorMessage(e.getMessage());
         }
@@ -235,8 +241,21 @@ public class OptionController extends EntityController<Option> {
             filter = filter.and((o) -> o.getSection().getName().toLowerCase().startsWith(fieldFilterSection.getText().toLowerCase()));
             filtered = true;
         }
-        List<Option> filteredList = service.filter(filter);
-        tableView.setItems(FXCollections.observableArrayList(filteredList));
         buttonClearFilter.setDisable(!filtered);
+        if (!filtered) {
+            handleClearFilter(null);
+            return;
+        }
+
+        List<Option> filteredList = service.filter(filter);
+        filteredEntities = new PaginatedRepository<>(new OptionValidator(), 9);
+        try {
+            filteredEntities.addAll(filteredList);
+        } catch (ValidationException e) {
+            throw new RuntimeException(e);
+        }
+        handlePageChange(0);
+        updateNumberOfPages();
+
     }
 }

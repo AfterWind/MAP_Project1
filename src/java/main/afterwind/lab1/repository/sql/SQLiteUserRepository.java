@@ -16,8 +16,8 @@ public class SQLiteUserRepository extends SQLiteRepository<User> {
     private PreparedStatement statementPermissionRemove;
     private PreparedStatement statementPermissionSelectAll;
 
-    public SQLiteUserRepository(SQLiteDatabase database, IValidator<User> validator) {
-        super(database, validator);
+    public SQLiteUserRepository(SQLiteDatabase database, IValidator<User> validator, int entitiesPerPage) {
+        super(database, validator, entitiesPerPage);
         init();
         statementAdd = database.getStatement("INSERT INTO Users(Name, Password) VALUES(?, ?)");
         statementRemove = database.getStatement("DELETE FROM Users WHERE ID=?");

@@ -9,8 +9,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class SQLiteCandidateRepository extends SQLiteRepository<Candidate> {
-    public SQLiteCandidateRepository(SQLiteDatabase database, IValidator<Candidate> validator) {
-        super(database, validator);
+    public SQLiteCandidateRepository(SQLiteDatabase database, IValidator<Candidate> validator, int entitiesPerPage) {
+        super(database, validator, entitiesPerPage);
         initTable();
         statementAdd = database.getStatement("INSERT INTO Candidates VALUES(?, ?, ?, ?)");
         statementRemove = database.getStatement("DELETE FROM Candidates WHERE ID = ?");

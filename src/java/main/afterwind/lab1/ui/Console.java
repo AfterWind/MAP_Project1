@@ -24,8 +24,8 @@ import java.util.Scanner;
  * Stratul de "UI"
  */
 public class Console {
-    public final CandidateService candidateService = new CandidateService(new FileRepository<>(new CandidateValidator(), new Candidate.Serializer(), "/home/afterwind/IdeaProjects/MAP_Lab1/res/candidates.txt"));
-    public final SectionService sectionService = new SectionService(new FileRepositoryNumeroDos<>(new SectionValidator(), "/home/afterwind/IdeaProjects/MAP_Lab1/res/sections2.txt"));
+    public final CandidateService candidateService = new CandidateService(new FileRepository<>(new CandidateValidator(), new Candidate.Serializer(), "/home/afterwind/IdeaProjects/MAP_Lab1/res/candidates.txt", 13));
+    public final SectionService sectionService = new SectionService(new FileRepositoryNumeroDos<>(new SectionValidator(), "/home/afterwind/IdeaProjects/MAP_Lab1/res/sections2.txt", 13));
     public final OptionService optionService = new OptionService();
     private Scanner scanner = new Scanner(System.in);
 

@@ -1,19 +1,19 @@
 package afterwind.lab1.controller;
 
-import afterwind.lab1.Utils;
 import afterwind.lab1.entity.IIdentifiable;
-import afterwind.lab1.entity.Option;
 import afterwind.lab1.permission.Permission;
-import afterwind.lab1.repository.FileRepository;
+import afterwind.lab1.repository.PaginatedRepository;
 import afterwind.lab1.service.AbstractService;
+import afterwind.lab1.ui.control.BetterPagination;
 import afterwind.lab1.ui.control.StatusBar;
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.Node;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
@@ -24,22 +24,18 @@ import java.util.function.Predicate;
 
 public abstract class EntityController<T extends IIdentifiable<Integer>> {
 
-    private static final int itemsPerPage = 20;
-
     @FXML
     public TableView<T> tableView;
-
+    @FXML
+    public BetterPagination pagination;
     @FXML
     public Button buttonDelete, buttonRefresh,
             buttonAdd, buttonUpdate, buttonClear,
             buttonClearFilter;
-    @FXML
-    public Pagination paginationTable;
 
     protected AbstractService<T> service;
-
     protected Predicate<T> filter = (e) -> true;
-
+    protected PaginatedRepository<T, Integer> filteredEntities = null;
     public FancyController baseController;
 
     @FXML
@@ -51,15 +47,25 @@ public abstract class EntityController<T extends IIdentifiable<Integer>> {
         buttonRefresh.setOnAction(this::handleRefresh);
         buttonClearFilter.setOnAction(this::handleClearFilter);
 
-//        paginationTable.setPageFactory(this::getTablePage);
-
         tableView.getSelectionModel().selectedItemProperty().addListener(this::handleSelectionChanged);
     }
 
-    public void applyFilter() {
-        List<T> filteredList = service.filter(filter);
-        tableView.setItems(FXCollections.observableArrayList(filteredList));
-        buttonClearFilter.setDisable(false);
+    protected void handlePageChange(int currentPage) {
+        if (filteredEntities == null) {
+            tableView.setItems(((PaginatedRepository) service.getRepo()).getPage(currentPage));
+        } else {
+            tableView.setItems(filteredEntities.getPage(currentPage));
+        }
+    }
+
+    protected void updateNumberOfPages() {
+        int pages;
+        if (filteredEntities == null) {
+            pages = ((PaginatedRepository) service.getRepo()).getPages();
+        } else {
+            pages = filteredEntities.getPages();
+        }
+        pagination.setMaxPages(pages);
     }
 
     protected void disableBasedOnPermissions() {
@@ -83,16 +89,12 @@ public abstract class EntityController<T extends IIdentifiable<Integer>> {
         statusBar.addMessage(tableView, "Shows all the entities from the repository and is updated real time");
     }
 
-    private Node getTablePage(int page) {
-//        tableView.setItems(service.getRepo().getData().subList((page - 1) * itemsPerPage, page * itemsPerPage));
-        return tableView;
-    }
-
     /**
      * Afiseaza toti candidatii
      */
     public void showAll() {
-        tableView.setItems(FXCollections.observableArrayList(service.filter(filter)));
+//        tableView.setItems(FXCollections.observableArrayList(service.filter(filter)));
+        handlePageChange(0);
     }
 
     protected abstract void showDetails(T t);
@@ -127,6 +129,8 @@ public abstract class EntityController<T extends IIdentifiable<Integer>> {
     }
 
     public void handleClearFilter(ActionEvent ev) {
+        filteredEntities = null;
+        updateNumberOfPages();
         showAll();
         clearFilterTextFields();
         buttonClearFilter.setDisable(true);

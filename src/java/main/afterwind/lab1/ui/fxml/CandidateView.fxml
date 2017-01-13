@@ -5,6 +5,7 @@
 <?import javafx.scene.text.Font?>
 <?import java.lang.String?>
 <?import afterwind.lab1.ui.control.NumericTextField?>
+<?import afterwind.lab1.ui.control.BetterPagination?>
 <fx:root type="javafx.scene.layout.VBox" xmlns:fx="http://javafx.com/fxml/1" fx:controller="afterwind.lab1.controller.CandidateController">
     <fx:define>
         <String fx:id="BORDER_LIGHTGRAY"
@@ -27,6 +28,7 @@
                     <TableView fx:constant="UNCONSTRAINED_RESIZE_POLICY"/>
                 </columnResizePolicy>
             </TableView>
+            <BetterPagination fx:id="pagination"/>
             <!--<Pagination fx:id="paginationTable"/>-->
             <HBox alignment="TOP_CENTER" spacing="5">
                 <Button fx:id="buttonDelete" text="Delete" minWidth="80" onAction="#handleDelete" onMouseExited="#handleMouseExited" onMouseEntered="#handleMouseEntered"/>

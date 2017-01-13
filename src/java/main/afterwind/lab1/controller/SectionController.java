@@ -4,9 +4,11 @@ import afterwind.lab1.Utils;
 import afterwind.lab1.entity.Section;
 import afterwind.lab1.exception.ValidationException;
 import afterwind.lab1.permission.Permission;
+import afterwind.lab1.repository.PaginatedRepository;
 import afterwind.lab1.service.SectionService;
 import afterwind.lab1.ui.control.StateButton;
 import afterwind.lab1.ui.control.StatusBar;
+import afterwind.lab1.validator.SectionValidator;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
@@ -38,6 +40,8 @@ public class SectionController extends EntityController<Section> {
      */
     public void setService(SectionService service) {
         this.service = service;
+        pagination.init(this::handlePageChange, 0);
+        updateNumberOfPages();
         if (Permission.QUERY.check()) {
             showAll();
         }
@@ -145,9 +149,10 @@ public class SectionController extends EntityController<Section> {
         try {
             Section s = new Section(id, name, nrLoc);
             service.add(s);
-            if (filter.test(s)) {
-                tableView.getItems().add(s);
-            }
+//            if (filter.test(s)) {
+//                tableView.getItems().add(s);
+//            }
+            updateNumberOfPages();
             clearModificationTextFields();
         } catch (ValidationException e) {
             Utils.showErrorMessage(e.getMessage());
@@ -168,6 +173,7 @@ public class SectionController extends EntityController<Section> {
         service.remove(s);
         tableView.getItems().remove(s);
         clearModificationTextFields();
+        updateNumberOfPages();
     }
 
     @Override
@@ -203,10 +209,21 @@ public class SectionController extends EntityController<Section> {
             filter = filter.and((s) -> compTester.test(s.getNrLoc() - actualNrLoc));
             filtered = true;
         }
+        buttonClearFilter.setDisable(!filtered);
+        if (!filtered) {
+            handleClearFilter(null);
+            return;
+        }
 
         List<Section> filteredList = service.filter(filter);
-        tableView.setItems(FXCollections.observableArrayList(filteredList));
-        buttonClearFilter.setDisable(!filtered);
+        filteredEntities = new PaginatedRepository<>(new SectionValidator(), 14);
+        try {
+            filteredEntities.addAll(filteredList);
+        } catch (ValidationException e) {
+            throw new RuntimeException(e);
+        }
+        handlePageChange(0);
+        updateNumberOfPages();
     }
 
     public void handleStateChange(ActionEvent ev) {

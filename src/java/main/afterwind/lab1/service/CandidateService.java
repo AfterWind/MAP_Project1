@@ -66,8 +66,8 @@ public class CandidateService extends AbstractService<Candidate> {
      * @param address stringul cu care este comparat numele prin startsWith
      * @return un repository care contine toate datele filtrate
      */
-    public Repository<Candidate, Integer> filterByAddress(String address) {
-        Repository<Candidate, Integer> result = new Repository<>(new CandidateValidator());
+    public IRepository<Candidate, Integer> filterByAddress(String address) {
+        IRepository<Candidate, Integer> result = new Repository<>(new CandidateValidator());
         List<Candidate> sortedList = sort(filter((c) -> c.getAddress().startsWith(address)), (c1, c2) -> c1.getName().compareTo(c2.getName()));
         for (Candidate candidate : sortedList) {
             try {

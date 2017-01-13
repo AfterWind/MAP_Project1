@@ -13,8 +13,8 @@ public class SQLiteSectionRepository extends SQLiteRepository<Section> {
 
     private PreparedStatement statementAdd, statementRemove, statementUpdate;
 
-    public SQLiteSectionRepository(SQLiteDatabase database, IValidator<Section> validator) {
-        super(database, validator);
+    public SQLiteSectionRepository(SQLiteDatabase database, IValidator<Section> validator, int entitiesPerPage) {
+        super(database, validator, entitiesPerPage);
         this.database = database;
         initTable();
         statementAdd = database.getStatement("INSERT INTO Sections VALUES(?, ?, ?)");

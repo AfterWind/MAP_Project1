@@ -9,6 +9,7 @@ import afterwind.lab1.validator.IValidator;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
+import java.util.Collection;
 import java.util.Comparator;
 import java.util.Iterator;
 
@@ -19,11 +20,20 @@ public class PaginatedRepository<T extends IIdentifiable<K>, K> implements IRepo
     protected ObservableList<T> cachedData = null;
     protected IValidator<T> validator;
     protected int amount = 0;
-    protected int entitiesPerPage = 20;
+    public final int entitiesPerPage;
 
-    public PaginatedRepository(IValidator<T> validator) {
+    public PaginatedRepository(IValidator<T> validator, int entitiesPerPage) {
         this.validator = validator;
+        this.entitiesPerPage = entitiesPerPage;
         data.add(FXCollections.observableArrayList());
+    }
+
+    public ObservableList<T> getPage(int page) {
+        return data.get(page);
+    }
+
+    public int getPages() {
+        return data.size();
     }
 
     @Override
@@ -74,6 +84,13 @@ public class PaginatedRepository<T extends IIdentifiable<K>, K> implements IRepo
             }
         }
         normalize();
+        cachedData = null;
+    }
+
+    public void addAll(Collection<T> c) throws ValidationException {
+        for(T t : c) {
+            add(t);
+        }
     }
 
     @Override
@@ -84,6 +101,7 @@ public class PaginatedRepository<T extends IIdentifiable<K>, K> implements IRepo
                 if (t == e) {
                     it.remove();
                     normalize();
+                    cachedData = null;
                     return;
                 }
             }
@@ -139,7 +157,7 @@ public class PaginatedRepository<T extends IIdentifiable<K>, K> implements IRepo
                 previous.add(entitiesPerPage - 1, t);
             }
         }
-        if (mode == 1 && data.get(data.size() - 1).size() == 0) {
+        if (data.get(data.size() - 1).size() == 0) {
             data.remove(data.size() - 1);
         }
     }
