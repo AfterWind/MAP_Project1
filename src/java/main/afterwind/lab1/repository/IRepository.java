@@ -1,6 +1,5 @@
 package afterwind.lab1.repository;
 
-import afterwind.lab1.entity.Candidate;
 import afterwind.lab1.entity.IIdentifiable;
 import afterwind.lab1.exception.ValidationException;
 import javafx.collections.ObservableList;
@@ -44,18 +43,6 @@ public interface IRepository<T extends IIdentifiable<K>, K> {
      * @return un obiect iterabil care contine toate elementele
      */
     ObservableList<T> getData();
-
-    /**
-     * Getter pentru tableHeader
-     * @return tableHeader-ul
-     */
-    String getTableHeader();
-
-    /**
-     * Setter pentru tableHeader
-     * @param tableHeader noul tableHeader
-     */
-    void setTableHeader(String tableHeader);
 
     /**
      * Updates the entity with the data given

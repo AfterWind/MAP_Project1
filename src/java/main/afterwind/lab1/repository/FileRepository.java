@@ -12,7 +12,7 @@ import java.io.*;
  * @param <T> data
  * @param <K> key
  */
-public class FileRepository<T extends IIdentifiable<K>, K> extends Repository<T, K> {
+public class FileRepository<T extends IIdentifiable<K>, K> extends PaginatedRepository<T, K> {
 
     private final ISerializer<T> serializer;
     private final String filename;
@@ -53,7 +53,7 @@ public class FileRepository<T extends IIdentifiable<K>, K> extends Repository<T,
      */
     protected void write() {
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(filename))){
-            for (T e : data) {
+            for (T e : getData()) {
                 bw.write(serializer.serialize(e));
                 bw.newLine();
             }

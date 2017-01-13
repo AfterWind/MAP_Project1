@@ -122,7 +122,7 @@ public class LoginController {
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(new File("src/java/main/afterwind/lab1/ui/fxml/FancyView.fxml").toURL());
 //            loader.setLocation(new File("src/java/main/afterwind/lab1/ui/fxml/LoginView.fxml").toURL());
-            Scene scene = new Scene(loader.load(), 800, 650, Color.DARKBLUE);
+            Scene scene = new Scene(loader.load(), 800, 650 , Color.DARKBLUE);
             FancyMain.scene = scene;
             FancyMain.stage.setTitle("Candidates Management");
             FancyMain.stage.setScene(scene);

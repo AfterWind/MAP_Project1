@@ -13,7 +13,7 @@ import java.util.List;
  * @param <T> data
  * @param <K> key
  */
-public class FileRepositoryNumeroDos<T extends IIdentifiable<K>, K> extends Repository<T, K> {
+public class FileRepositoryNumeroDos<T extends IIdentifiable<K>, K> extends PaginatedRepository<T, K> {
 
     private final String filename;
 

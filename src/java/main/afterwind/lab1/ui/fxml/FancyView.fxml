@@ -27,6 +27,7 @@
                 <MenuItem text="Somewhat fade" onAction="#handleAnimationFade"/>
                 <MenuItem text="Move about" onAction="#handleAnimationMoveAbout"/>
                 <MenuItem text="Pop out" onAction="#handleAnimationPopOut"/>
+                <MenuItem text="Rotate" onAction="#handleAnimationRotate"/>
             </Menu>
         </MenuBar>
         <!--<SectionController fx:id="sectionsView" minHeight="400" minWidth="400"/>-->

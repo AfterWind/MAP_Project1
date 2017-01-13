@@ -16,7 +16,6 @@ public class OptionService extends AbstractService<Option> {
      */
     public OptionService(IRepository<Option, Integer> repo) {
         super(repo);
-        repo.setTableHeader(String.format("%3s | %20s | %20s", "ID", "Candidat", "Sectiune"));
     }
 
     public OptionService() {

@@ -20,7 +20,7 @@
                     <columns>
                         <TableColumn fx:id="columnID" text="ID" minWidth="35"/>
                         <TableColumn fx:id="columnName" text="Name" minWidth="250"/>
-                        <TableColumn fx:id="columnSeats" text="NrLoc" minWidth="160"/>
+                        <TableColumn fx:id="columnSeats" text="Seats" minWidth="160"/>
                     </columns>
                     <columnResizePolicy>
                         <TableView fx:constant="UNCONSTRAINED_RESIZE_POLICY"/>

@@ -118,7 +118,7 @@ public class SQLiteUserRepository extends SQLiteRepository<User> {
     }
 
     public User get(String username) {
-        for(User u : data) {
+        for(User u : getData()) {
             if (u.getUsername().equals(username)) {
                 return u;
             }

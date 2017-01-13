@@ -15,7 +15,6 @@ import java.util.List;
 
 public class Repository<T extends IIdentifiable<K>, K> implements IRepository<T, K> {
 
-    protected String tableHeader = "";
     protected ObservableList<T> data = FXCollections.observableArrayList();
     protected IValidator<T> validator;
 
@@ -30,24 +29,6 @@ public class Repository<T extends IIdentifiable<K>, K> implements IRepository<T,
     @Override
     public int getSize() {
         return data.size();
-    }
-
-    /**
-     * Setter pentru tableHeader
-     * @param tableHeader noul tableHeader
-     */
-    @Override
-    public void setTableHeader(String tableHeader) {
-        this.tableHeader = tableHeader;
-    }
-
-    /**
-     * Getter pentru tableHeader
-     * @return tableHeader-ul curent
-     */
-    @Override
-    public String getTableHeader() {
-        return tableHeader;
     }
 
     /**
@@ -114,7 +95,6 @@ public class Repository<T extends IIdentifiable<K>, K> implements IRepository<T,
         if (getSize() == 0) {
             result += "Nu exista entitati!";
         } else {
-            result += tableHeader + "\n";
             int size = getSize();
             for (int i = 0; i < size; i++) {
                 result += data.get(i).toString();

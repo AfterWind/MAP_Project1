@@ -11,6 +11,8 @@ import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
+import com.itextpdf.text.pdf.draw.DottedLineSeparator;
+import com.itextpdf.text.pdf.draw.LineSeparator;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
@@ -89,43 +91,48 @@ public class ReportsController {
         return (int) optionService.getRepo().getData().stream().filter(o -> o.getSection().getId().equals(s.getId())).count();
     }
 
-    public PdfPCell createCell(String text, Font font, boolean centered, float indent) {
-        Phrase p = new Phrase(text);
-        p.setFont(font);
+    public PdfPCell createCell(String text, Font font, boolean centered, float indent, float borderTop, float borderRight, float borderBottom, float borderLeft) {
+        Phrase p = new Phrase(text, font);
         PdfPCell cell = new PdfPCell(p);
         if (centered) {
             cell.setHorizontalAlignment(Element.ALIGN_CENTER);
         }
         cell.setIndent(indent);
-        cell.setVerticalAlignment(Element.ALIGN_CENTER);
+        cell.setVerticalAlignment(Element.ALIGN_TOP);
+        cell.setBorderWidthTop(borderTop);
+        cell.setBorderWidthRight(borderRight);
+        cell.setBorderWidthBottom(borderBottom);
+        cell.setBorderWidthLeft(borderLeft);
+        cell.setPaddingBottom(6f);
+
         return cell;
     }
 
-    public PdfPTable generatePDFTable() {
+    public PdfPTable generatePDFTable() throws DocumentException {
         PdfPTable table = new PdfPTable(4);
+        table.setSpacingBefore(10f);
+        table.setWidths(new float[] {1, 4, 3, 3});
         table.setHorizontalAlignment(Element.ALIGN_MIDDLE);
-        Font headerFont = null;
-        try {
-            headerFont = new Font();
-            headerFont.setStyle(Font.BOLD);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        table.addCell(createCell("ID", headerFont, true, 0));
-        table.addCell(createCell("Name", headerFont, true, 0));
-        table.addCell(createCell("NrLoc", headerFont, true, 0));
-        table.addCell(createCell("NrLocOccupied", headerFont, true, 0));
+
+        Font fontHeader = new Font(Font.FontFamily.COURIER, 12f, Font.BOLD, BaseColor.GRAY);
+        Font fontID = new Font(Font.FontFamily.COURIER);
+        fontID.setColor(BaseColor.RED);
+        float bottomBorder, insideBorder = 0.3f, outsideBorder = 2f;
+        table.addCell(createCell("ID", fontHeader, true, 0, outsideBorder, outsideBorder, outsideBorder, outsideBorder));
+        table.addCell(createCell("Name", fontHeader, true, 0, outsideBorder, insideBorder, outsideBorder, insideBorder));
+        table.addCell(createCell("Seats", fontHeader, true, 0, outsideBorder, insideBorder, outsideBorder, insideBorder));
+        table.addCell(createCell("Seats Occupied", fontHeader, true, 0, outsideBorder, outsideBorder, outsideBorder, insideBorder));
         for (Section s : report.getData()) {
-            table.addCell(createCell(s.getId() + "", new Font(), false, 10F));
-            table.addCell(createCell(s.getName(), new Font(), false, 10F));
-            table.addCell(createCell(s.getNrLoc() + "", new Font(), false, 10F));
-            table.addCell(createCell(getOccupiedNrLoc(s) + "", new Font(), false, 10F));
+            bottomBorder = insideBorder;
+            if (table.getRows().size() == report.getSize()) {
+                bottomBorder = outsideBorder;
+            }
+            table.addCell(createCell(s.getId() + "", fontID, true, 0, insideBorder, outsideBorder, bottomBorder, outsideBorder));
+            table.addCell(createCell(s.getName(), new Font(Font.FontFamily.COURIER), false, 10F, insideBorder, insideBorder, bottomBorder, insideBorder));
+            table.addCell(createCell(s.getNrLoc() + "", new Font(Font.FontFamily.COURIER), false, 10F, insideBorder, insideBorder, bottomBorder, insideBorder));
+            table.addCell(createCell(getOccupiedNrLoc(s) + "", new Font(Font.FontFamily.COURIER), false, 10F, insideBorder, outsideBorder, bottomBorder, insideBorder));
         }
         return table;
-    }
-
-    public void handleApply(ActionEvent ev) {
-
     }
 
     public void handleMenuExportPDF(ActionEvent ev) {
@@ -133,7 +140,15 @@ public class ReportsController {
             Document doc = new Document();
             PdfWriter.getInstance(doc, new FileOutputStream("res/report.pdf"));
             doc.open();
-            doc.addTitle("Report on top " + report.getSize() + " most occupied sections");
+            doc.addTitle("Report with top " + report.getSize() + " most occupied sections");
+            Font fp = new Font(Font.FontFamily.TIMES_ROMAN, 20f, Font.ITALIC, BaseColor.DARK_GRAY);
+            Paragraph p = new Paragraph("Report with top " + report.getSize() + " most occupied sections", fp);
+            p.setSpacingAfter(4f);
+            doc.add(p);
+
+            DottedLineSeparator separator = new DottedLineSeparator();
+            separator.setGap(1.5f);
+            doc.add(separator);
             doc.add(generatePDFTable());
             doc.close();
         } catch (Exception ex) {

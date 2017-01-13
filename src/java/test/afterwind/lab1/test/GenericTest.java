@@ -3,10 +3,7 @@ package afterwind.lab1.test;
 import afterwind.lab1.entity.Candidate;
 import afterwind.lab1.entity.Section;
 import afterwind.lab1.exception.ValidationException;
-import afterwind.lab1.repository.FileRepository;
-import afterwind.lab1.repository.FileRepositoryNumeroDos;
-import afterwind.lab1.repository.IRepository;
-import afterwind.lab1.repository.Repository;
+import afterwind.lab1.repository.*;
 import afterwind.lab1.service.SectionService;
 import afterwind.lab1.validator.CandidateValidator;
 import afterwind.lab1.validator.SectionValidator;
@@ -91,5 +88,35 @@ public class GenericTest {
         Assert.assertEquals("Failed to remove an entity from repository through controller", c2, controller.get(6));
         controller.remove(c2);
         Assert.assertEquals("Failed to remove an entity from repository through controller", null, controller.get(6));
+    }
+
+    @Test
+    public void paginatedRepositoryTest() {
+        PaginatedRepository<Section, Integer> repo = new PaginatedRepository<>(new SectionValidator());
+        for (int i = 0; i < 101; i++) {
+            try {
+                repo.add(new Section(i, "Num" + i, i * 3));
+            } catch (ValidationException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        Assert.assertTrue("Adding entities to a paginated repository does not work", repo.contains(100));
+        Assert.assertTrue("Adding entities to a paginated repository does not work", repo.contains(50));
+        Assert.assertTrue("Adding entities to a paginated repository does not work", repo.contains(30));
+
+        repo.sortBy((t1, t2) -> t2.getNrLoc() - t1.getNrLoc());
+        Assert.assertEquals("Sorting does not work", 100, (long) repo.getData().get(0).getId());
+        Assert.assertEquals("Sorting does not work", 0, (long) repo.getData().get(100).getId());
+        Assert.assertEquals("Sorting does not work", 50, (long) repo.getData().get(50).getId());
+
+        repo.remove(repo.get(15));
+        repo.remove(repo.get(60));
+        repo.remove(repo.get(100));
+        repo.remove(repo.get(30));
+        Assert.assertFalse("Removing entities from a paginated repository does not work", repo.contains(15));
+        Assert.assertFalse("Removing entities from a paginated repository does not work", repo.contains(100));
+        Assert.assertFalse("Removing entities from a paginated repository does not work", repo.contains(60));
+        Assert.assertFalse("Removing entities from a paginated repository does not work", repo.contains(30));
+
     }
 }

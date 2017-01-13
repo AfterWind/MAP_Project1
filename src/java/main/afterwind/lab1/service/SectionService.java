@@ -20,7 +20,6 @@ public class SectionService extends AbstractService<Section> {
      */
     public SectionService(IRepository<Section, Integer> repo) {
         super(repo);
-        repo.setTableHeader(String.format("%3s | %20s | %5s", "ID", "Nume", "Numar locuri"));
     }
 
     public SectionService() {
@@ -42,7 +41,6 @@ public class SectionService extends AbstractService<Section> {
                 System.out.print(ex.getMessage());
             }
         }
-        result.setTableHeader(repo.getTableHeader());
         return result;
     }
 
@@ -62,7 +60,6 @@ public class SectionService extends AbstractService<Section> {
                 System.out.print(ex.getMessage());
             }
         }
-        result.setTableHeader(repo.getTableHeader());
         return result;
     }
 

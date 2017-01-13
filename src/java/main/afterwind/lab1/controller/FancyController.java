@@ -45,7 +45,6 @@ public class FancyController {
     private CandidateView candidatesView;
     @FXML
     private SectionView sectionsView;
-
     @FXML
     private OptionView optionsView;
     @FXML
@@ -132,7 +131,7 @@ public class FancyController {
 
         PathTransition pt = new PathTransition(Duration.millis(2000), p, FancyMain.scene.getRoot());
         pt.setOrientation(PathTransition.OrientationType.ORTHOGONAL_TO_TANGENT);
-        pt.setCycleCount(Timeline.INDEFINITE);
+        pt.setCycleCount(4);
         pt.setAutoReverse(true);
         pt.play();
     }
@@ -141,22 +140,22 @@ public class FancyController {
         FadeTransition ft = new FadeTransition(Duration.millis(3000), FancyMain.scene.getRoot());
         ft.setFromValue(1.0);
         ft.setToValue(0.1);
-        ft.setCycleCount(Timeline.INDEFINITE);
+        ft.setCycleCount(4);
         ft.setAutoReverse(true);
         ft.play();
     }
 
     public void handleAnimationPopOut(ActionEvent ev) {
         Timeline t = new Timeline();
-        t.setCycleCount(Timeline.INDEFINITE);
+        t.setCycleCount(4);
 //        t.setAutoReverse(true);
-        KeyValue kv1 = new KeyValue(FancyMain.stage.minHeightProperty(), 1080);
+        KeyValue kv1 = new KeyValue(FancyMain.stage.minHeightProperty(), 650);
         KeyFrame kf1 = new KeyFrame(Duration.millis(1000), kv1);
         KeyValue kv2 = new KeyValue(FancyMain.stage.minHeightProperty(), 400);
         KeyFrame kf2 = new KeyFrame(Duration.ZERO, kv2);
         KeyValue kv3 = new KeyValue(FancyMain.stage.maxHeightProperty(), 400);
         KeyFrame kf3 = new KeyFrame(Duration.millis(1000), kv3);
-        KeyValue kv4 = new KeyValue(FancyMain.stage.maxHeightProperty(), 1080);
+        KeyValue kv4 = new KeyValue(FancyMain.stage.maxHeightProperty(), 650);
         KeyFrame kf4 = new KeyFrame(Duration.ZERO, kv4);
         t.getKeyFrames().add(kf1);
         t.getKeyFrames().add(kf2);
@@ -171,6 +170,16 @@ public class FancyController {
 //        st.setByY(3);
 //        st.play();
 
+    }
+
+    public void handleAnimationRotate(ActionEvent ev) {
+        RotateTransition rt = new RotateTransition(Duration.millis(2000));
+        rt.setFromAngle(0);
+        rt.setToAngle(355);
+        rt.setCycleCount(1);
+//        rt.setAutoReverse(true);
+        rt.setNode(FancyMain.scene.getRoot());
+        rt.play();
     }
 
     public void handleMouseEntered(MouseEvent ev) {

@@ -18,7 +18,6 @@ public class CandidateService extends AbstractService<Candidate> {
      */
     public CandidateService(IRepository<Candidate, Integer> repo) {
         super(repo);
-        repo.setTableHeader(String.format("%3s | %20s | %15s | %15s", "ID", "Nume", "Telefon", "Adresa"));
     }
 
     public CandidateService() {
@@ -40,7 +39,6 @@ public class CandidateService extends AbstractService<Candidate> {
                 System.out.print(ex.getMessage());
             }
         }
-        result.setTableHeader(repo.getTableHeader());
         return result;
     }
 
@@ -60,7 +58,6 @@ public class CandidateService extends AbstractService<Candidate> {
             }
         }
 
-        result.setTableHeader(repo.getTableHeader());
         return result;
     }
 
@@ -79,7 +76,6 @@ public class CandidateService extends AbstractService<Candidate> {
                 System.out.print(ex.getMessage());
             }
         }
-        result.setTableHeader(repo.getTableHeader());
         return result;
     }
 
