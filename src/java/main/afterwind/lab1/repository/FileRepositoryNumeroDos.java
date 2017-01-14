@@ -27,6 +27,12 @@ public class FileRepositoryNumeroDos<T extends IIdentifiable<K>, K> extends Pagi
      * Reads all the lines from a file
      */
     protected void read() {
+        File file = new File(filename);
+        if (!file.exists()) {
+            System.out.println("File " + filename + " not found... Creating");
+            write();
+            return;
+        }
         try(ObjectInputStream br = new ObjectInputStream(new FileInputStream(filename))) {
             T[] data = (T[]) br.readObject();
             for (T e : data) {
@@ -46,7 +52,7 @@ public class FileRepositoryNumeroDos<T extends IIdentifiable<K>, K> extends Pagi
      */
     protected void write() {
         try (ObjectOutputStream bw = new ObjectOutputStream(new FileOutputStream(filename))){
-            bw.writeObject(data.toArray());
+            bw.writeObject(getData().toArray());
         } catch (IOException e) {
             e.printStackTrace();
         }

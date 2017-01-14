@@ -1,5 +1,6 @@
 package afterwind.lab1;
 
+import afterwind.lab1.config.Config;
 import afterwind.lab1.permission.Permission;
 import afterwind.lab1.permission.User;
 import javafx.application.Application;
@@ -23,6 +24,8 @@ public class FancyMain extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
+        Config.init();
+
         FancyMain.stage = stage;
         FXMLLoader loader = new FXMLLoader();
         user = new User(5, "Blah", "asdf");

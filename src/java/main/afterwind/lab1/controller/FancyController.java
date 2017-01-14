@@ -2,8 +2,14 @@ package afterwind.lab1.controller;
 
 import afterwind.lab1.FancyMain;
 import afterwind.lab1.Utils;
+import afterwind.lab1.config.Config;
 import afterwind.lab1.database.SQLiteDatabase;
+import afterwind.lab1.entity.Candidate;
+import afterwind.lab1.entity.Option;
+import afterwind.lab1.entity.Section;
 import afterwind.lab1.repository.FileRepository;
+import afterwind.lab1.repository.FileRepositoryNumeroDos;
+import afterwind.lab1.repository.XMLRepository;
 import afterwind.lab1.repository.sql.SQLiteCandidateRepository;
 import afterwind.lab1.repository.sql.SQLiteOptionRepository;
 import afterwind.lab1.repository.sql.SQLiteSectionRepository;
@@ -23,7 +29,6 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
-import javafx.scene.Scene;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.RadioMenuItem;
@@ -31,15 +36,20 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.shape.CubicCurveTo;
 import javafx.scene.shape.MoveTo;
 import javafx.scene.shape.Path;
-import javafx.stage.Stage;
 import javafx.util.Duration;
 
 public class FancyController {
 
-    private SQLiteDatabase database = new SQLiteDatabase("res/data.db");
-    private CandidateService candidateService = new CandidateService(new SQLiteCandidateRepository(database, new CandidateValidator(), 13));//new XMLRepository<>(new CandidateValidator(), new Candidate.XMLSerializer(), "res/candidates.xml"));
-    private SectionService sectionService = new SectionService(new SQLiteSectionRepository(database, new SectionValidator(), 14));//new FileRepository<>(new SectionValidator(), new Section.Serializer(), "res/sections.txt"));
-    private OptionService optionService = new OptionService(new SQLiteOptionRepository(database, new OptionValidator(), candidateService.getRepo(), sectionService.getRepo(), 9));//new FileRepository<>(new OptionValidator(), new Option.Serializer(candidateService, sectionService), "res/options.txt"));
+    private static final int candidatesPerPage = 13;
+    private static final int sectionsPerPage = 14;
+    private static final int optionsPerPage = 9;
+
+    private CandidateService serviceCandidate;
+            //= new CandidateService(new SQLiteCandidateRepository(database, new CandidateValidator(), 13));//new XMLRepository<>(new CandidateValidator(), new Candidate.XMLSerializer(), "res/candidates.xml"));
+    private SectionService serviceSection;
+            //= new SectionService(new SQLiteSectionRepository(database, new SectionValidator(), 14));//new FileRepository<>(new SectionValidator(), new Section.Serializer(), "res/sections.txt"));
+    private OptionService serviceOption;
+            //= new OptionService(new SQLiteOptionRepository(database, new OptionValidator(), serviceCandidate.getRepo(), serviceSection.getRepo(), 9));//new FileRepository<>(new OptionValidator(), new Option.Serializer(serviceCandidate, serviceSection), "res/options.txt"));
 
     @FXML
     private CandidateView candidatesView;
@@ -58,17 +68,89 @@ public class FancyController {
 
     private Node current;
 
-    public FancyController() { }
+    public FancyController() {
+        CandidateValidator validatorCandidate = new CandidateValidator();
+        SectionValidator validatorSection = new SectionValidator();
+        OptionValidator validatorOption = new OptionValidator();
+        switch (Config.datasourceType) {
+            case "fileText":
+                serviceCandidate = new CandidateService(new FileRepository<>(
+                        validatorCandidate,
+                        new Candidate.Serializer(),
+                        Config.datasourcePath + "candidates.txt",
+                        candidatesPerPage));
+                serviceSection = new SectionService(new FileRepository<>(
+                        validatorSection,
+                        new Section.Serializer(),
+                        Config.datasourcePath + "sections.txt",
+                        sectionsPerPage));
+                serviceOption = new OptionService(new FileRepository<>(
+                        validatorOption,
+                        new Option.Serializer(serviceCandidate, serviceSection),
+                        Config.datasourcePath + "options.txt",
+                        optionsPerPage));
+                break;
+//            case "fileBinary":
+//                serviceCandidate = new CandidateService(new FileRepositoryNumeroDos<>(
+//                        validatorCandidate,
+//                        Config.datasourcePath + "candidates.bin",
+//                        candidatesPerPage));
+//                serviceSection = new SectionService(new FileRepositoryNumeroDos<>(
+//                        validatorSection,
+//                        Config.datasourcePath + "sections.bin",
+//                        sectionsPerPage));
+//                serviceOption = new OptionService(new FileRepositoryNumeroDos<>(
+//                        validatorOption,
+//                        Config.datasourcePath + "options.bin",
+//                        optionsPerPage));
+//                break;
+            case "fileXML":
+                serviceCandidate = new CandidateService(new XMLRepository<>(
+                        validatorCandidate,
+                        new Candidate.XMLSerializer(),
+                        Config.datasourcePath + "candidates.xml",
+                        candidatesPerPage));
+                serviceSection = new SectionService(new XMLRepository<>(
+                        validatorSection,
+                        new Section.XMLSerializer(),
+                        Config.datasourcePath + "sections.xml",
+                        sectionsPerPage));
+                serviceOption = new OptionService(new XMLRepository<>(
+                        validatorOption,
+                        new Option.XMLSerializer(serviceCandidate, serviceSection),
+                        Config.datasourcePath + "options.xml",
+                        optionsPerPage));
+                break;
+            case "sqlite":
+                SQLiteDatabase database = new SQLiteDatabase(Config.datasourcePath + "data.db");
+                serviceCandidate = new CandidateService(new SQLiteCandidateRepository(
+                        database,
+                        validatorCandidate,
+                        candidatesPerPage));
+                serviceSection = new SectionService(new SQLiteSectionRepository(
+                        database,
+                        validatorSection,
+                        sectionsPerPage));
+                serviceOption = new OptionService(new SQLiteOptionRepository(
+                        database,
+                        validatorOption,
+                        serviceCandidate.getRepo(),
+                        serviceSection.getRepo(),
+                        optionsPerPage));
+                break;
+        }
+
+    }
 
     @FXML
     public void initialize() {
-        sectionsView.controller.setService(sectionService);
+        sectionsView.controller.setService(serviceSection);
         sectionsView.controller.baseController = this;
-        optionsView.controller.setServices(optionService, candidateService, sectionService);
+        optionsView.controller.setServices(serviceOption, serviceCandidate, serviceSection);
         optionsView.controller.baseController = this;
-        candidatesView.controller.setService(candidateService);
+        candidatesView.controller.setService(serviceCandidate);
         candidatesView.controller.baseController = this;
-        reportsView.controller.setServices(optionService, candidateService, sectionService);
+        reportsView.controller.setServices(serviceOption, serviceCandidate, serviceSection);
         reportsView.controller.baseController = this;
         generateStatusBarMessages(statusBar);
 //        reportsWindow = new Stage();

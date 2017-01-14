@@ -1,5 +1,6 @@
 package afterwind.lab1.controller;
 
+import afterwind.lab1.config.Config;
 import afterwind.lab1.entity.Section;
 import afterwind.lab1.permission.Permission;
 import afterwind.lab1.repository.IRepository;
@@ -138,7 +139,7 @@ public class ReportsController {
     public void handleMenuExportPDF(ActionEvent ev) {
         try {
             Document doc = new Document();
-            PdfWriter.getInstance(doc, new FileOutputStream("res/report.pdf"));
+            PdfWriter.getInstance(doc, new FileOutputStream(Config.reportsPath + "report.pdf"));
             doc.open();
             doc.addTitle("Report with top " + report.getSize() + " most occupied sections");
             Font fp = new Font(Font.FontFamily.TIMES_ROMAN, 20f, Font.ITALIC, BaseColor.DARK_GRAY);

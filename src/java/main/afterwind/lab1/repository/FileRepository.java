@@ -28,6 +28,12 @@ public class FileRepository<T extends IIdentifiable<K>, K> extends PaginatedRepo
      * Reads all the lines from a file
      */
     protected void read() {
+        File file = new File(filename);
+        if (!file.exists()) {
+            System.out.println("File " + filename + " not found... Creating");
+            write();
+            return;
+        }
         try(BufferedReader br = new BufferedReader(new FileReader(filename))) {
             String line = br.readLine();
             while (line != null) {

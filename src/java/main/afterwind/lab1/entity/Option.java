@@ -5,6 +5,9 @@ import afterwind.lab1.service.SectionService;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 
 /**
  * O legatura intre candidat si sectiune
@@ -92,7 +95,6 @@ public class Option implements IIdentifiable<Integer> {
     }
 
     public static class Serializer implements ISerializer<Option> {
-
         private CandidateService candidateService;
         private SectionService sectionService;
 
@@ -112,6 +114,39 @@ public class Option implements IIdentifiable<Integer> {
         @Override
         public String serialize(Option e) {
             return String.format("%d|%d|%d", e.getId(), e.getSection().getId(), e.getCandidate().getId());
+        }
+    }
+
+    public static class XMLSerializer implements afterwind.lab1.entity.XMLSerializer<Option> {
+
+        private CandidateService candidateService;
+        private SectionService sectionService;
+
+        public XMLSerializer(CandidateService candidateService, SectionService sectionService) {
+            this.candidateService = candidateService;
+            this.sectionService = sectionService;
+        }
+
+        @Override
+        public Node serialize(Document doc, Option c) {
+            Element element = doc.createElement("option");
+            element.setAttribute("id", c.getId().toString());
+            element.setAttribute("candidateID", c.getCandidate().getId() + "");
+            element.setAttribute("sectionID", c.getSection().getId() + "");
+            return element;
+        }
+
+        @Override
+        public Option deserialize(Document doc, Node node) {
+            try {
+                Element element = (Element) node;
+                int id = Integer.parseInt(element.getAttribute("id"));
+                Candidate c = candidateService.get(Integer.parseInt(element.getAttribute("candidateID")));
+                Section s = sectionService.get(Integer.parseInt(element.getAttribute("sectionID")));
+                return new Option(id, s, c);
+            } catch (Exception ex) {
+                return null;
+            }
         }
     }
 }

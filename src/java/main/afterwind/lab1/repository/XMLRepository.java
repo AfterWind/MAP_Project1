@@ -23,13 +23,13 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-public class XMLRepository<T extends IIdentifiable<K>, K> extends Repository<T, K> {
+public class XMLRepository<T extends IIdentifiable<K>, K> extends PaginatedRepository<T, K> {
 
     private final XMLSerializer<T> serializer;
     private final String filename;
 
-    public XMLRepository(IValidator<T> validator, XMLSerializer<T> serializer, String file) {
-        super(validator);
+    public XMLRepository(IValidator<T> validator, XMLSerializer<T> serializer, String file, int entitiesPerPage) {
+        super(validator, entitiesPerPage);
         this.serializer = serializer;
         this.filename = file;
         read();
@@ -39,6 +39,12 @@ public class XMLRepository<T extends IIdentifiable<K>, K> extends Repository<T, 
      * Reads all the lines from a file
      */
     protected void read() {
+        File file = new File(filename);
+        if (!file.exists()) {
+            System.out.println("File " + filename + " not found... Creating");
+            write();
+            return;
+        }
         try {
             DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder docBuilder = docFactory.newDocumentBuilder();

@@ -2,6 +2,7 @@ package afterwind.lab1.controller;
 
 import afterwind.lab1.FancyMain;
 import afterwind.lab1.Utils;
+import afterwind.lab1.config.Config;
 import afterwind.lab1.database.SQLiteDatabase;
 import afterwind.lab1.exception.ValidationException;
 import afterwind.lab1.permission.Permission;
@@ -44,7 +45,7 @@ public class LoginController {
     public TextField fieldRegisterUsername;
 
     public LoginController() {
-        this.repo = new SQLiteUserRepository(new SQLiteDatabase("res/users.db"), new UserValidator(), 0);
+        this.repo = new SQLiteUserRepository(new SQLiteDatabase(Config.datasourcePath + "users.db"), new UserValidator(), 0);
     }
 
     @FXML

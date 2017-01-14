@@ -2,6 +2,9 @@ package afterwind.lab1.entity;
 
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 
 import java.io.Serializable;
 
@@ -107,6 +110,31 @@ public class Section implements IIdentifiable<Integer>, Serializable, Comparable
         @Override
         public String serialize(Section e) {
             return String.format("%d|%s|%d", e.getId(), e.getName(), e.getNrLoc());
+        }
+    }
+
+    public static class XMLSerializer implements afterwind.lab1.entity.XMLSerializer<Section> {
+
+        @Override
+        public Node serialize(Document doc, Section c) {
+            Element element = doc.createElement("section");
+            element.setAttribute("id", c.getId().toString());
+            element.setAttribute("name", c.getName());
+            element.setAttribute("seats", c.getNrLoc() + "");
+            return element;
+        }
+
+        @Override
+        public Section deserialize(Document doc, Node node) {
+            try {
+                Element element = (Element) node;
+                int id = Integer.parseInt(element.getAttribute("id"));
+                String name = element.getAttribute("name");
+                int seats = Integer.parseInt(element.getAttribute("seats"));
+                return new Section(id, name, seats);
+            } catch (Exception ex) {
+                return null;
+            }
         }
     }
 }
