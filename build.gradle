@@ -1,0 +1,48 @@
+
+apply plugin: 'java'
+apply plugin: 'idea'
+
+
+group 'afterwind'
+version '1.0-SNAPSHOT'
+
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.github.jengelman.gradle.plugins:shadow:1.2.4'
+    }
+}
+
+apply plugin: 'com.github.johnrengelman.shadow'
+
+repositories {
+    mavenCentral()
+    jcenter() //This prevents issues with transitive dependencies
+    maven {
+        url  "https://jitpack.io"
+    }
+}
+
+//noinspection GroovyAssignabilityCheck
+jar {
+    manifest {
+        attributes(
+                'Main-Class': 'afterwind.lab1.FancyMain'
+        )
+    }
+}
+
+idea {
+    module {
+        sourceDirs += file("src/java/main")
+    }
+}
+
+dependencies {
+    compile "org.xerial:sqlite-jdbc:3.7.2"
+    compile "com.itextpdf:itextpdf:5.0.6"
+    compile "com.google.code.gson:gson:1.7.2"
+    testCompile "junit:junit:4.11"
+}

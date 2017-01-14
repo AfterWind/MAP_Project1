@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.control.TextField?>
+<?import java.lang.String?>
+<?import afterwind.lab1.ui.control.BetterPagination?>
+<fx:root type="javafx.scene.layout.VBox" alignment="CENTER" xmlns:fx="http://javafx.com/fxml/1" fx:controller="afterwind.lab1.controller.OptionController">
+    <fx:define>
+        <String fx:id="BORDER_LIGHTGRAY"
+                fx:value="-fx-border-color:lightgray; -fx-border-width: 1; -fx-border-style: solid;"/>
+    </fx:define>
+    <children>
+        <VBox alignment="CENTER" spacing="5">
+            <padding>
+                <Insets top="15" right="15" left="15" bottom="15"/>
+            </padding>
+            <VBox spacing="10" maxWidth="537">
+                <TableView fx:id="tableView" onMouseExited="#handleMouseExited" onMouseEntered="#handleMouseEntered">
+                    <columns>
+                        <TableColumn fx:id="columnID" text="ID" minWidth="35"/>
+                        <TableColumn fx:id="columnCandidate" text="Candidat" minWidth="250"/>
+                        <TableColumn fx:id="columnSection" text="Sectiune" minWidth="250"/>
+                    </columns>
+                    <columnResizePolicy>
+                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
+                    </columnResizePolicy>
+                </TableView>
+                <BetterPagination fx:id="pagination"/>
+                <HBox alignment="CENTER" spacing="5" AnchorPane.bottomAnchor="10">
+                    <Button fx:id="buttonDelete" text="Delete" minWidth="80" onAction="#handleDelete" onMouseExited="#handleMouseExited" onMouseEntered="#handleMouseEntered"/>
+                    <Button fx:id="buttonRefresh" text="Refresh" minWidth="80" onAction="#handleRefresh" onMouseExited="#handleMouseExited" onMouseEntered="#handleMouseEntered"/>
+                </HBox>
+            </VBox>
+            <HBox spacing="5" alignment="CENTER">
+                <VBox spacing="5">
+                    <GridPane hgap="5" vgap="5">
+                        <HBox alignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                            <Label text="Candidati:">
+                                <font>
+                                    <Font size="17" style="-fx-font-weight: bold"/>
+                                </font>
+                            </Label>
+                        </HBox>
+                        <ListView fx:id="listCandidates" maxWidth="200" maxHeight="300" GridPane.columnIndex="1" GridPane.rowIndex="2" onMouseExited="#handleMouseExited" onMouseEntered="#handleMouseEntered"/>
+                        <HBox alignment="CENTER" GridPane.columnIndex="2" GridPane.rowIndex="1">
+                            <Label text="Sectiuni:">
+                                <font>
+                                    <Font size="17" style="-fx-font-weight: bold"/>
+                                </font>
+                            </Label>
+                        </HBox>
+                        <ListView fx:id="listSections" maxWidth="200" maxHeight="300" GridPane.columnIndex="2" GridPane.rowIndex="2" onMouseExited="#handleMouseExited" onMouseEntered="#handleMouseEntered"/>
+                    </GridPane>
+                    <HBox spacing="5" alignment="CENTER">
+                        <Button fx:id="buttonAdd" minWidth="80" text="Add" onAction="#handleAdd" onMouseExited="#handleMouseExited" onMouseEntered="#handleMouseEntered"/>
+                        <Button fx:id="buttonUpdate" disable="true" minWidth="80" text="Update"
+                                onAction="#handleUpdate" onMouseExited="#handleMouseExited" onMouseEntered="#handleMouseEntered"/>
+                        <Button fx:id="buttonClear" minWidth="80" text="Clear" onAction="#handleClear" onMouseExited="#handleMouseExited" onMouseEntered="#handleMouseEntered"/>
+                    </HBox>
+                </VBox>
+                <VBox spacing="10" alignment="CENTER">
+                    <GridPane hgap="5" vgap="5">
+                        <padding>
+                            <Insets top="20" right="0" bottom="0" left="20"/>
+                        </padding>
+                        <Label text="Candidat: " GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                        <Label text="Sectie: " GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+                        <TextField fx:id="fieldFilterCandidate" style="$BORDER_LIGHTGRAY"
+                                   GridPane.columnIndex="1" GridPane.rowIndex="0" onMouseExited="#handleMouseExited" onMouseEntered="#handleMouseEntered"/>
+                        <TextField fx:id="fieldFilterSection" style="$BORDER_LIGHTGRAY"
+                                   GridPane.columnIndex="1" GridPane.rowIndex="1" onMouseExited="#handleMouseExited" onMouseEntered="#handleMouseEntered"/>
+                    </GridPane>
+                    <HBox spacing="5" alignment="CENTER">
+                        <Button fx:id="buttonClearFilter" text="Clear" minWidth="80"
+                                onAction="#handleClearFilter" disable="true" onMouseExited="#handleMouseExited" onMouseEntered="#handleMouseEntered"/>
+                    </HBox>
+                </VBox>
+            </HBox>
+        </VBox>
+    </children>
+</fx:root>

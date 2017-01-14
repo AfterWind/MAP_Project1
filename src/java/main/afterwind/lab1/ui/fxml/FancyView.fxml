@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<?import afterwind.lab1.ui.CandidateView?>
+<?import afterwind.lab1.ui.control.StatusBar?>
+<?import afterwind.lab1.ui.OptionView?>
+<?import afterwind.lab1.ui.ReportsView?>
+<?import afterwind.lab1.ui.SectionView?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<VBox alignment="CENTER" xmlns:fx="http://javafx.com/fxml" fx:controller="afterwind.lab1.controller.FancyController">
+    <fx:define>
+        <ToggleGroup fx:id="toggleGroupViews"/>
+    </fx:define>
+    <children>
+        <MenuBar fx:id="menuBar">
+            <Menu text="File">
+                <MenuItem fx:id="menuExit" text="Exit" onAction="#handleMenuExit"/>
+            </Menu>
+            <Menu text="View">
+                <RadioMenuItem fx:id="menuViewCandidates" toggleGroup="$toggleGroupViews" text="Candidates" selected="true" onAction="#handleViewChange"/>
+                <RadioMenuItem fx:id="menuViewSections" toggleGroup="$toggleGroupViews" text="Sections" onAction="#handleViewChange"/>
+                <RadioMenuItem fx:id="menuViewOptions" toggleGroup="$toggleGroupViews" text="Options" onAction="#handleViewChange"/>
+                <RadioMenuItem fx:id="menuViewReports" toggleGroup="$toggleGroupViews" text="Reports" onAction="#handleViewChange"/>
+            </Menu>
+            <Menu text="Animations">
+                <MenuItem text="Somewhat fade" onAction="#handleAnimationFade"/>
+                <MenuItem text="Move about" onAction="#handleAnimationMoveAbout"/>
+                <MenuItem text="Pop out" onAction="#handleAnimationPopOut"/>
+                <MenuItem text="Rotate" onAction="#handleAnimationRotate"/>
+            </Menu>
+        </MenuBar>
+        <!--<SectionController fx:id="sectionsView" minHeight="400" minWidth="400"/>-->
+        <!--<OptionView fx:id="optionsView" minHeight="400" minWidth="400"/>-->
+        <StackPane minHeight="400" minWidth="800">
+            <CandidateView fx:id="candidatesView" visible="true"/>
+            <SectionView fx:id="sectionsView" visible="true"/>
+            <OptionView fx:id="optionsView" visible="true"/>
+            <ReportsView fx:id="reportsView" visible="true"/>
+        </StackPane>
+        <StatusBar minHeight="40" fx:id="statusBar"
+                   text="TEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEST"  onMouseExited="#handleMouseExited" onMouseEntered="#handleMouseEntered"/>
+    </children>
+</VBox>

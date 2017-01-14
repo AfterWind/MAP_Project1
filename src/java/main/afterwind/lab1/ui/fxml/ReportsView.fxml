@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<fx:root type="javafx.scene.layout.VBox" xmlns:fx="http://javafx.com/fxml/1" fx:controller="afterwind.lab1.controller.ReportsController">
+    <children>
+        <MenuBar>
+            <Menu text="Options">
+                <MenuItem text="Export as PDF" onAction="#handleMenuExportPDF"/>
+                <MenuItem text="Generate..." onAction="#handleMenuGenerate"/>
+            </Menu>
+        </MenuBar>
+        <VBox alignment="CENTER" spacing="10">
+            <padding>
+                <Insets top="20" right="10" bottom="20" left="10"/>
+            </padding>
+            <StackPane>
+                <TableView fx:id="tableReports" maxWidth="610" onMouseExited="#handleMouseExited" onMouseEntered="#handleMouseEntered">
+                    <columns>
+                        <TableColumn fx:id="columnID" text="ID" minWidth="35"/>
+                        <TableColumn fx:id="columnName" text="Name" minWidth="250"/>
+                        <TableColumn fx:id="columnSeats" text="Seats" minWidth="160"/>
+                        <TableColumn fx:id="columnSeatsOccupied" text="Seats Occupied" minWidth="160"/>
+                    </columns>
+                    <columnResizePolicy>
+                        <TableView fx:constant="UNCONSTRAINED_RESIZE_POLICY"/>
+                    </columnResizePolicy>
+                </TableView>
+            </StackPane>
+
+            <HBox alignment="CENTER" spacing="5">
+                <Label text="Top sections: "/>
+                <Slider fx:id="sliderTopSections" value="0" maxWidth="120" showTickLabels="true" showTickMarks="true" onMouseDragged="#handleSliderDrag" onMouseExited="#handleMouseExited" onMouseEntered="#handleMouseEntered"/>
+                <Label fx:id="labelSliderValue" text="   1" minWidth="40"/>
+            </HBox>
+        </VBox>
+    </children>
+</fx:root>
