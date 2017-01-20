@@ -6,6 +6,9 @@ import com.google.gson.stream.JsonWriter;
 
 import java.io.*;
 
+/**
+ * Simple JSON configuration file
+ */
 public class Config {
 
     public static final String path = "res/config.json";
@@ -14,6 +17,9 @@ public class Config {
     public static String datasourcePath = "res/data/";
     public static String reportsPath = "res/reports/";
 
+    /**
+     * Initializes data from the config and creates it if needed
+     */
     public static void init() {
         try {
             read();

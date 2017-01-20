@@ -5,6 +5,9 @@ import afterwind.lab1.entity.IIdentifiable;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * A user with a set of permissions to organize and protect data.
+ */
 public class User implements IIdentifiable<Integer> {
 
     public final List<Permission> permissions = new ArrayList<>();

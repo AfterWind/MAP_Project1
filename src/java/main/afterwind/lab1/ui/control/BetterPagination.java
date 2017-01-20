@@ -7,6 +7,11 @@ import javafx.scene.layout.HBox;
 
 import java.util.function.Consumer;
 
+/**
+ * Provides simple Pagination controls such as:
+ *  - Forward and Backward buttons that dynamically disable themselves
+ *  - Page counting and maximum page tracking
+ */
 public class BetterPagination extends HBox {
 
     public Button buttonPrevious;
@@ -33,6 +38,9 @@ public class BetterPagination extends HBox {
         disableBasedOnPages();
     }
 
+    /**
+     * Sets the maximum amount of pages. Updates the currentPage if needed.
+     */
     public void setMaxPages(int maxPages) {
         this.maxPages = maxPages;
         if (currentPage >= maxPages) {
@@ -41,6 +49,9 @@ public class BetterPagination extends HBox {
         disableBasedOnPages();
     }
 
+    /**
+     * Sets the currentPage. Updates buttons' disable state
+     */
     public void setCurrentPage(int page) {
         currentPage = page;
         pageChange.accept(currentPage);

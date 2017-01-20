@@ -2,6 +2,9 @@ package afterwind.lab1.permission;
 
 import afterwind.lab1.FancyMain;
 
+/**
+ * An enum of all the permission types a user can have
+ */
 public enum Permission {
 
     QUERY(1),
@@ -27,6 +30,9 @@ public enum Permission {
         }
     }
 
+    /**
+     * Checks if the user from the FancyMain class has the permission
+     */
     public boolean check() {
         return FancyMain.user.permissions.contains(this);
     }

@@ -6,7 +6,10 @@ import javafx.scene.layout.VBox;
 
 import java.io.File;
 
-    public class CandidateView extends VBox {
+/**
+ * Simple View for encapsulating the Candidates
+ */
+public class CandidateView extends VBox {
 
     public final CandidateController controller;
     public CandidateView() {

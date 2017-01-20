@@ -117,6 +117,9 @@ public class Candidate implements IIdentifiable<Integer>, Serializable, Comparab
         return getName().compareTo(o.getName());
     }
 
+    /**
+     * Custom serializer
+     */
     public static class Serializer implements ISerializer<Candidate> {
 
         @Override
@@ -134,6 +137,9 @@ public class Candidate implements IIdentifiable<Integer>, Serializable, Comparab
         }
     }
 
+    /**
+     * Serializer for XML files
+     */
     public static class XMLSerializer implements afterwind.lab1.entity.XMLSerializer<Candidate> {
 
         @Override

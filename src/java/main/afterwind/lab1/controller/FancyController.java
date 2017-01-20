@@ -45,11 +45,8 @@ public class FancyController {
     public static final int optionsPerPage = 9;
 
     private CandidateService serviceCandidate;
-            //= new CandidateService(new SQLiteCandidateRepository(database, new CandidateValidator(), 13));//new XMLRepository<>(new CandidateValidator(), new Candidate.XMLSerializer(), "res/candidates.xml"));
     private SectionService serviceSection;
-            //= new SectionService(new SQLiteSectionRepository(database, new SectionValidator(), 14));//new FileRepository<>(new SectionValidator(), new Section.Serializer(), "res/sections.txt"));
     private OptionService serviceOption;
-            //= new OptionService(new SQLiteOptionRepository(database, new OptionValidator(), serviceCandidate.getRepo(), serviceSection.getRepo(), 9));//new FileRepository<>(new OptionValidator(), new Option.Serializer(serviceCandidate, serviceSection), "res/options.txt"));
 
     @FXML
     private CandidateView candidatesView;
@@ -91,20 +88,6 @@ public class FancyController {
                         Config.datasourcePath + "options.txt",
                         optionsPerPage));
                 break;
-//            case "fileBinary":
-//                serviceCandidate = new CandidateService(new FileRepositoryNumeroDos<>(
-//                        validatorCandidate,
-//                        Config.datasourcePath + "candidates.bin",
-//                        candidatesPerPage));
-//                serviceSection = new SectionService(new FileRepositoryNumeroDos<>(
-//                        validatorSection,
-//                        Config.datasourcePath + "sections.bin",
-//                        sectionsPerPage));
-//                serviceOption = new OptionService(new FileRepositoryNumeroDos<>(
-//                        validatorOption,
-//                        Config.datasourcePath + "options.bin",
-//                        optionsPerPage));
-//                break;
             case "fileXML":
                 serviceCandidate = new CandidateService(new XMLRepository<>(
                         validatorCandidate,

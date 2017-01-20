@@ -30,14 +30,23 @@ public class PaginatedRepository<T extends IIdentifiable<K>, K> implements IRepo
         data.add(FXCollections.observableArrayList());
     }
 
+    /**
+     * Gets the ObservableList linked to the page number
+     */
     public ObservableList<T> getPage(int page) {
         return data.get(page);
     }
 
+    /**
+     * Gets the number of pages
+     */
     public int getPages() {
         return data.size();
     }
 
+    /**
+     * Gets how many entities are in the repository
+     */
     @Override
     public int getSize() {
         return amount;
@@ -79,7 +88,7 @@ public class PaginatedRepository<T extends IIdentifiable<K>, K> implements IRepo
                     posToInsert = i + 1;
                 }
             }
-            if (posToInsert != entitiesPerPage || posToInsert == entitiesPerPage && k == data.size() - 1) {
+            if (posToInsert != entitiesPerPage || k == data.size() - 1) {
                 current.add(posToInsert, e);
                 amount++;
                 break;
@@ -110,6 +119,12 @@ public class PaginatedRepository<T extends IIdentifiable<K>, K> implements IRepo
         }
     }
 
+    /**
+     * This normalizes the list to respect the condition that (where N is entitesPerPage):
+     *      - all lists must have a maximum of N entities
+     *      - all lists except the last one must have exactly N entities
+     *      - there shouldn't be an empty list in the repository unless it's the only one
+     */
     private void normalize() {
         int k;
         /**
@@ -167,6 +182,10 @@ public class PaginatedRepository<T extends IIdentifiable<K>, K> implements IRepo
         }
     }
 
+    /**
+     * CREATES a new ObservableList with all the data
+     * NOTE: This shouldn't be used for automatic updating of data
+     */
     @Override
     public ObservableList<T> getData() {
         if (cachedData != null) {
@@ -185,12 +204,18 @@ public class PaginatedRepository<T extends IIdentifiable<K>, K> implements IRepo
         Utils.genericUpdate(this, k, data);
     }
 
+    /**
+     * Clears the whole repository, removing all pages and leaving only one empty page
+     */
     public void clear() {
         amount = 0;
         data.clear();
         data.add(FXCollections.observableArrayList());
     }
 
+    /**
+     * Sorts all the ObservableLists using the given comparator
+     */
     public void sortBy(Comparator<T> comparator) {
         this.comparator = comparator;
         ObservableList<T> copy = getData();

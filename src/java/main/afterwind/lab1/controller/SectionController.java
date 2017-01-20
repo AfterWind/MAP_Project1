@@ -49,9 +49,6 @@ public class SectionController extends EntityController<Section> {
         }
     }
 
-    /**
-     * Sterge textul din fiecare TextField
-     */
     @Override
     public void clearModificationTextFields() {
         fieldName.setText("");
@@ -66,12 +63,6 @@ public class SectionController extends EntityController<Section> {
         tableView.getSelectionModel().clearSelection();
     }
 
-    /**
-     * Verifica datele din TextField-uri
-     * @param name Numele sectiunii
-     * @param nrLoc Numarul de locuri in acea sectiune
-     * @return daca datele sunt valide
-     */
     public boolean checkFields(String name, String nrLoc) {
         boolean errored = false;
         if (name.equals("")) {
@@ -85,10 +76,6 @@ public class SectionController extends EntityController<Section> {
         return errored;
     }
 
-    /**
-     * Afiseaza detalii despre o sectiune
-     * @param s Sectiunea
-     */
     @Override
     public void showDetails(Section s) {
         fieldName.setText(s.getName());
@@ -135,10 +122,6 @@ public class SectionController extends EntityController<Section> {
         fieldFilterSeats.setDisable(!Permission.MODIFY.check());
     }
 
-    /**
-     * Apelat cand se apasa pe butonul Add
-     * @param ev evenimentul
-     */
     @Override
     public void handleAdd(ActionEvent ev) {
         String name = fieldName.getText();
@@ -161,10 +144,6 @@ public class SectionController extends EntityController<Section> {
         }
     }
 
-    /**
-     * Apelat cand se apasa pe butonul Delete
-     * @param ev evenimentul
-     */
     @Override
     public void handleDelete(ActionEvent ev) {
         Section s = tableView.getSelectionModel().getSelectedItem();

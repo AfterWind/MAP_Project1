@@ -2,6 +2,9 @@ package afterwind.lab1.ui.control;
 
 import javafx.scene.control.TextField;
 
+/**
+ * Simple TextField that only accepts numbers
+ */
 public class NumericTextField extends TextField {
 
     @Override

@@ -8,7 +8,6 @@ import afterwind.lab1.exception.ValidationException;
 import afterwind.lab1.permission.Permission;
 import afterwind.lab1.permission.User;
 import afterwind.lab1.repository.sql.SQLiteUserRepository;
-import afterwind.lab1.ui.control.StatusBar;
 import afterwind.lab1.validator.UserValidator;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -129,6 +128,10 @@ public class LoginController {
         handleViewSwitch(null);
     }
 
+    /**
+     * Switches between the "Login" panel and the "Register" panel
+     * @param ev can be null
+     */
     public void handleViewSwitch(ActionEvent ev) {
         if (current == loginPanel) {
             Utils.transition(current, registerPanel, Duration.millis(2000));

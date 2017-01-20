@@ -6,6 +6,9 @@ import javafx.scene.layout.VBox;
 
 import java.io.File;
 
+/**
+ * Simple View for encapsulating the Options
+ */
 public class OptionView extends VBox {
 
     public final OptionController controller = new OptionController();

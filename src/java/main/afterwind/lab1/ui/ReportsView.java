@@ -6,6 +6,9 @@ import javafx.scene.layout.VBox;
 
 import java.io.File;
 
+/**
+ * Simple View for encapsulating the Reports
+ */
 public class ReportsView extends VBox {
 
     public final ReportsController controller;

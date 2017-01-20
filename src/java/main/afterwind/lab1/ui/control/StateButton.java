@@ -6,6 +6,9 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+/**
+ * Simple Button that retains a 'state' which can be cycled through from a list of states.
+ */
 public class StateButton<T> extends Button {
 
     private final List<T> states = new ArrayList<>();

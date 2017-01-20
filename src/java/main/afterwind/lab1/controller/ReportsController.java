@@ -16,6 +16,8 @@ import com.itextpdf.text.pdf.PdfWriter;
 import com.itextpdf.text.pdf.draw.DottedLineSeparator;
 import com.itextpdf.text.pdf.draw.LineSeparator;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ObservableValue;
+import javafx.collections.ListChangeListener;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.fxml.FXML;
@@ -34,7 +36,7 @@ import java.time.temporal.ChronoUnit;
 public class ReportsController {
 
     @FXML
-    public TableView tableReports;
+    public TableView<Section> tableReports;
     @FXML
     public TableColumn<Section, String> columnID, columnName, columnSeats, columnSeatsOccupied;
     @FXML
@@ -43,16 +45,16 @@ public class ReportsController {
     public Label labelSliderValue;
 
     public FancyController baseController;
+
     private CandidateService candidateService;
     private SectionService sectionService;
     private OptionService optionService;
 
     private IRepository<Section, Integer> report;
 
-    private Stage generateWindow;
-
     @FXML
     public void initialize() {
+        sliderTopSections.valueProperty().addListener(this::handleSliderValueChanged);
         columnID.setCellValueFactory(new PropertyValueFactory<>("id"));
         columnName.setCellValueFactory(new PropertyValueFactory<>("name"));
         columnSeats.setCellValueFactory(new PropertyValueFactory<>("nrLoc"));
@@ -89,15 +91,25 @@ public class ReportsController {
         }
     }
 
+    /**
+     * Populates the table with the top x sections
+     * @param top How many entities should be in the table
+     */
     public void populateTable(int top) {
         report = sectionService.getMostOccupiedSections(optionService.getRepo(), top);
         tableReports.setItems(report.getData());
     }
 
+    /**
+     * Gets how many seats are occupied in the section given
+     */
     private int getOccupiedNrLoc(Section s) {
         return (int) optionService.getRepo().getData().stream().filter(o -> o.getSection().getId().equals(s.getId())).count();
     }
 
+    /**
+     * Creates a cell with all those cell properties to remove clutter
+     */
     public PdfPCell createCell(String text, Font font, boolean centered, float indent, float borderTop, float borderRight, float borderBottom, float borderLeft) {
         Phrase p = new Phrase(text, font);
         PdfPCell cell = new PdfPCell(p);
@@ -115,6 +127,9 @@ public class ReportsController {
         return cell;
     }
 
+    /**
+     * Generates the PdfPTable from the generated report
+     */
     public PdfPTable generatePDFTable() throws DocumentException {
         PdfPTable table = new PdfPTable(4);
         table.setSpacingBefore(10f);
@@ -167,8 +182,8 @@ public class ReportsController {
         }
     }
 
-    public void handleSliderDrag(Event ev) {
-        int top = (int) Math.floor(sliderTopSections.getValue());
+    public void handleSliderValueChanged(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+        int top = (int) Math.floor(newValue.floatValue());
         labelSliderValue.setText("   " + top);
         populateTable(top);
     }

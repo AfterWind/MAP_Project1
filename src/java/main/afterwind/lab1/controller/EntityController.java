@@ -32,10 +32,12 @@ public abstract class EntityController<T extends IIdentifiable<Integer>> {
             buttonClearFilter;
 
     protected AbstractService<T> service;
+
+    public FancyController baseController;
+
     protected Predicate<T> filter = (e) -> true;
     protected boolean isFiltered = false;
     protected PaginatedRepository<T, Integer> filteredEntities;
-    public FancyController baseController;
 
     @FXML
     public void initialize() {
@@ -49,6 +51,10 @@ public abstract class EntityController<T extends IIdentifiable<Integer>> {
         tableView.getSelectionModel().selectedItemProperty().addListener(this::handleSelectionChanged);
     }
 
+    /**
+     * Changes the page of the TableView
+     * @param currentPage
+     */
     protected void handlePageChange(int currentPage) {
         if (isFiltered) {
             tableView.setItems(filteredEntities.getPage(currentPage));
@@ -57,6 +63,9 @@ public abstract class EntityController<T extends IIdentifiable<Integer>> {
         }
     }
 
+    /**
+     * In case of modifications, updates the number of pages if needed
+     */
     protected void updateNumberOfPages() {
         int pages;
         if (isFiltered) {
@@ -102,8 +111,15 @@ public abstract class EntityController<T extends IIdentifiable<Integer>> {
         handlePageChange(0);
     }
 
+    /**
+     * Shows details of the selected entity (in text fields for example)
+     * @param t select entity
+     */
     protected abstract void showDetails(T t);
 
+    /**
+     * Updates the filter, should remove it if there's nothing to filter by
+     */
     public abstract void updateFilter(ObservableValue<? extends String> observable, String oldValue, String newValue);
 
     public abstract void clearModificationTextFields();

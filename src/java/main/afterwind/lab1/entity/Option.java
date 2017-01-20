@@ -94,6 +94,9 @@ public class Option implements IIdentifiable<Integer> {
         }
     }
 
+    /**
+     * A custom serializer
+     */
     public static class Serializer implements ISerializer<Option> {
         private CandidateService candidateService;
         private SectionService sectionService;
@@ -117,6 +120,9 @@ public class Option implements IIdentifiable<Integer> {
         }
     }
 
+    /**
+     * A serializer for XML files
+     */
     public static class XMLSerializer implements afterwind.lab1.entity.XMLSerializer<Option> {
 
         private CandidateService candidateService;

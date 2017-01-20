@@ -6,6 +6,9 @@ import javafx.scene.layout.VBox;
 
 import java.io.File;
 
+/**
+ * Simple View for encapsulating the Sections
+ */
 public class SectionView extends VBox {
 
     public final SectionController controller = new SectionController();

@@ -99,6 +99,9 @@ public class Section implements IIdentifiable<Integer>, Serializable, Comparable
         return getName().compareTo(o.getName());
     }
 
+    /**
+     * A custom serializer
+     */
     public static class Serializer implements ISerializer<Section> {
 
         @Override
@@ -113,6 +116,9 @@ public class Section implements IIdentifiable<Integer>, Serializable, Comparable
         }
     }
 
+    /**
+     * A serializer for XML files
+     */
     public static class XMLSerializer implements afterwind.lab1.entity.XMLSerializer<Section> {
 
         @Override

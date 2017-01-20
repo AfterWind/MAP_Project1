@@ -38,6 +38,7 @@ public class OptionController extends EntityController<Option> {
     public ListView<Candidate> listCandidates;
     @FXML
     public ListView<Section> listSections;
+    @FXML
     public TextField fieldFilterCandidate, fieldFilterSection;
 
     private CandidateService candidateService;
@@ -261,6 +262,5 @@ public class OptionController extends EntityController<Option> {
         }
         handlePageChange(0);
         updateNumberOfPages();
-
     }
 }
