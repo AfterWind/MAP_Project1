@@ -45,7 +45,7 @@ public class LoginController {
     public TextField fieldRegisterUsername;
 
     public LoginController() {
-        this.repo = new SQLiteUserRepository(new SQLiteDatabase(Config.datasourcePath + "users.db"), new UserValidator(), 0);
+        this.repo = new SQLiteUserRepository(new SQLiteDatabase(Config.datasourcePath + "users.db"), new UserValidator(), 100000);
     }
 
     @FXML

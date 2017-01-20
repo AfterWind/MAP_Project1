@@ -72,6 +72,7 @@ public class CandidateController extends EntityController<Candidate> {
 
     public void setService(CandidateService service) {
         this.service = service;
+        this.filteredEntities = new PaginatedRepository<>(new CandidateValidator(), FancyController.candidatesPerPage);
         pagination.init(this::handlePageChange, 0);
         updateNumberOfPages();
         if (Permission.QUERY.check()) {
@@ -158,6 +159,9 @@ public class CandidateController extends EntityController<Candidate> {
         try {
             Candidate c = new Candidate(id, name, tel, address);
             service.add(c);
+            if (isFiltered && filter.test(c)) {
+                filteredEntities.add(c);
+            }
             clearModificationTextFields();
             updateNumberOfPages();
         } catch (ValidationException ex) {
@@ -207,32 +211,36 @@ public class CandidateController extends EntityController<Candidate> {
             tableView.getColumns().get(i).setVisible(false);
             tableView.getColumns().get(i).setVisible(true);
         }
+
+        if (isFiltered && !filter.test(c)) {
+            filteredEntities.remove(c);
+        }
     }
 
     @Override
     public void updateFilter(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-        boolean filtered = false;
+        isFiltered = false;
         filter = (c) -> true;
         if (!fieldFilterName.getText().equals("")) {
             filter = filter.and((c) -> c.getName().toLowerCase().startsWith(fieldFilterName.getText().toLowerCase()));
-            filtered = true;
+            isFiltered = true;
         }
         if (!fieldFilterAddress.getText().equals("")) {
             filter = filter.and((c) -> c.getAddress().toLowerCase().startsWith(fieldFilterAddress.getText().toLowerCase()));
-            filtered = true;
+            isFiltered = true;
         }
         if (!fieldFilterTelephone.getText().equals("")) {
             filter = filter.and((c) -> c.getTelephone().toLowerCase().startsWith(fieldFilterTelephone.getText().toLowerCase()));
-            filtered = true;
+            isFiltered = true;
         }
-        buttonClearFilter.setDisable(!filtered);
-        if (!filtered) {
+        buttonClearFilter.setDisable(!isFiltered);
+        if (!isFiltered) {
             handleClearFilter(null);
             return;
         }
 
         List<Candidate> filteredList = service.filter(filter);
-        filteredEntities = new PaginatedRepository<>(new CandidateValidator(), 13);
+        filteredEntities.clear();
         try {
             filteredEntities.addAll(filteredList);
         } catch (ValidationException e) {

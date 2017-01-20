@@ -1,6 +1,11 @@
 package afterwind.lab1;
 
+import afterwind.lab1.entity.Candidate;
+import afterwind.lab1.entity.IIdentifiable;
+import afterwind.lab1.entity.Option;
+import afterwind.lab1.entity.Section;
 import afterwind.lab1.permission.Permission;
+import afterwind.lab1.repository.IRepository;
 import javafx.animation.TranslateTransition;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
@@ -91,8 +96,24 @@ public class Utils {
         second.play();
     }
 
+    public static <T extends IIdentifiable<K>, K> void genericUpdate(IRepository<T, K> repo, K k, T data) {
+        if (data instanceof Candidate) {
+            Candidate c = (Candidate) repo.get(k);
+            c.setName(((Candidate) data).getName());
+            c.setAddress(((Candidate) data).getAddress());
+            c.setTelephone(((Candidate) data).getTelephone());
+        } else if(data instanceof Section) {
+            Section s = (Section) repo.get(k);
+            s.setName(((Section) data).getName());
+            s.setNrLoc(((Section) data).getNrLoc());
+        } else if(data instanceof Option) {
+            Option o = (Option) repo.get(k);
+            o.setCandidate(((Option) data).getCandidate());
+            o.setSection(((Option) data).getSection());
+        }
+    }
+
     public class InputOutOfRangeException extends RuntimeException {
         public InputOutOfRangeException() { super(); }
-
     }
 }

@@ -1,5 +1,6 @@
 package afterwind.lab1.repository;
 
+import afterwind.lab1.Utils;
 import afterwind.lab1.entity.Candidate;
 import afterwind.lab1.entity.IIdentifiable;
 import afterwind.lab1.entity.Option;
@@ -7,6 +8,7 @@ import afterwind.lab1.entity.Section;
 import afterwind.lab1.exception.ValidationException;
 import afterwind.lab1.validator.IValidator;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 
 import java.util.Collection;
@@ -110,7 +112,6 @@ public class PaginatedRepository<T extends IIdentifiable<K>, K> implements IRepo
 
     private void normalize() {
         int k;
-
         /**
          * -1: lists are normalized
          * 0 : one list has one extra entity
@@ -136,9 +137,10 @@ public class PaginatedRepository<T extends IIdentifiable<K>, K> implements IRepo
                 }
             }
         }
-
+        ObservableList<T> list = null;
         if (mode == 0 && data.get(data.size() - 1).size() >= entitiesPerPage) {
-            data.add(FXCollections.observableArrayList());
+            list = FXCollections.observableArrayList();
+            data.add(list);
         }
 
         k++;
@@ -160,6 +162,9 @@ public class PaginatedRepository<T extends IIdentifiable<K>, K> implements IRepo
         if (data.get(data.size() - 1).size() == 0) {
             data.remove(data.size() - 1);
         }
+        if (list != null) {
+//            list.addListener((ListChangeListener<? super T>) (c) -> normalize());
+        }
     }
 
     @Override
@@ -177,35 +182,24 @@ public class PaginatedRepository<T extends IIdentifiable<K>, K> implements IRepo
 
     @Override
     public void update(K k, T data) {
-        if (data instanceof Candidate) {
-            Candidate c = (Candidate) get(k);
-            c.setName(((Candidate) data).getName());
-            c.setAddress(((Candidate) data).getAddress());
-            c.setTelephone(((Candidate) data).getTelephone());
-        } else if(data instanceof Section) {
-            Section s = (Section) get(k);
-            s.setName(((Section) data).getName());
-            s.setNrLoc(((Section) data).getNrLoc());
-        } else if(data instanceof Option) {
-            Option o = (Option) get(k);
-            o.setCandidate(((Option) data).getCandidate());
-            o.setSection(((Option) data).getSection());
-        }
+        Utils.genericUpdate(this, k, data);
+    }
+
+    public void clear() {
+        amount = 0;
+        data.clear();
+        data.add(FXCollections.observableArrayList());
     }
 
     public void sortBy(Comparator<T> comparator) {
         this.comparator = comparator;
-        ObservableList<ObservableList<T>> copy = FXCollections.observableArrayList(data);
-        data.clear();
-        amount = 0;
-        data.add(FXCollections.observableArrayList());
-        for(ObservableList<T> list : copy) {
-            for(T t : list) {
-                try {
-                    add(t);
-                } catch (ValidationException e) {
-                    throw new RuntimeException(e);
-                }
+        ObservableList<T> copy = getData();
+        clear();
+        for(T t : copy) {
+            try {
+                add(t);
+            } catch (ValidationException e) {
+                throw new RuntimeException(e);
             }
         }
     }

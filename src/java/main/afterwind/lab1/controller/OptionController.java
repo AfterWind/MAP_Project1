@@ -65,6 +65,7 @@ public class OptionController extends EntityController<Option> {
         this.service = service;
         this.candidateService = candidateService;
         this.sectionService = sectionService;
+        this.filteredEntities = new PaginatedRepository<>(new OptionValidator(), FancyController.optionsPerPage);
         pagination.init(this::handlePageChange, 0);
         updateNumberOfPages();
         if (Permission.QUERY.check()) {
@@ -163,7 +164,7 @@ public class OptionController extends EntityController<Option> {
             return;
         }
         service.remove(o);
-        tableView.getItems().remove(o);
+//        tableView.getItems().remove(o);
         clearModificationTextFields();
         updateNumberOfPages();
     }
@@ -190,9 +191,9 @@ public class OptionController extends EntityController<Option> {
         try {
             Option o = new Option(service.getNextId(), s, c);
             service.add(o);
-//            if (filter.test(o)) {
-//                tableView.getItems().add(o);
-//            }
+            if (isFiltered && filter.test(o)) {
+                filteredEntities.add(o);
+            }
             clearModificationTextFields();
             updateNumberOfPages();
         } catch (ValidationException e) {
@@ -226,29 +227,32 @@ public class OptionController extends EntityController<Option> {
             tableView.getColumns().get(i).setVisible(false);
             tableView.getColumns().get(i).setVisible(true);
         }
+        if (isFiltered && !filter.test(o)) {
+            filteredEntities.remove(o);
+        }
         buttonUpdate.setDisable(true);
     }
 
     @Override
     public void updateFilter(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-        boolean filtered = false;
+        isFiltered = false;
         filter = (c) -> true;
         if (!fieldFilterCandidate.getText().equals("")) {
             filter = filter.and((o) -> o.getCandidate().getName().toLowerCase().startsWith(fieldFilterCandidate.getText().toLowerCase()));
-            filtered = true;
+            isFiltered = true;
         }
         if (!fieldFilterSection.getText().equals("")) {
             filter = filter.and((o) -> o.getSection().getName().toLowerCase().startsWith(fieldFilterSection.getText().toLowerCase()));
-            filtered = true;
+            isFiltered = true;
         }
-        buttonClearFilter.setDisable(!filtered);
-        if (!filtered) {
+        buttonClearFilter.setDisable(!isFiltered);
+        if (!isFiltered) {
             handleClearFilter(null);
             return;
         }
 
         List<Option> filteredList = service.filter(filter);
-        filteredEntities = new PaginatedRepository<>(new OptionValidator(), 9);
+        filteredEntities.clear();
         try {
             filteredEntities.addAll(filteredList);
         } catch (ValidationException e) {

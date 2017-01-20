@@ -40,6 +40,7 @@ public class SectionController extends EntityController<Section> {
      */
     public void setService(SectionService service) {
         this.service = service;
+        this.filteredEntities = new PaginatedRepository<>(new SectionValidator(), FancyController.sectionsPerPage);
         pagination.init(this::handlePageChange, 0);
         updateNumberOfPages();
         if (Permission.QUERY.check()) {
@@ -149,9 +150,9 @@ public class SectionController extends EntityController<Section> {
         try {
             Section s = new Section(id, name, nrLoc);
             service.add(s);
-//            if (filter.test(s)) {
-//                tableView.getItems().add(s);
-//            }
+            if (isFiltered && filter.test(s)) {
+                filteredEntities.add(s);
+            }
             updateNumberOfPages();
             clearModificationTextFields();
         } catch (ValidationException e) {
@@ -171,7 +172,7 @@ public class SectionController extends EntityController<Section> {
             return;
         }
         service.remove(s);
-        tableView.getItems().remove(s);
+//        tableView.getItems().remove(s);
         clearModificationTextFields();
         updateNumberOfPages();
     }
@@ -194,29 +195,31 @@ public class SectionController extends EntityController<Section> {
             tableView.getColumns().get(i).setVisible(false);
             tableView.getColumns().get(i).setVisible(true);
         }
+        if (isFiltered && !filter.test(s)) {
+            filteredEntities.remove(s);
+        }
     }
 
     @Override
     public void updateFilter(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-        boolean filtered = false;
         filter = (c) -> true;
         if (!fieldFilterName.getText().equals("")) {
             filter = filter.and((s) -> s.getName().toLowerCase().startsWith(fieldFilterName.getText().toLowerCase()));
-            filtered = true;
+            isFiltered = true;
         }
         if (!fieldFilterSeats.getText().equals("") && Utils.tryParseInt(fieldFilterSeats.getText())) {
             int actualNrLoc = Integer.parseInt(fieldFilterSeats.getText());
             filter = filter.and((s) -> compTester.test(s.getNrLoc() - actualNrLoc));
-            filtered = true;
+            isFiltered = true;
         }
-        buttonClearFilter.setDisable(!filtered);
-        if (!filtered) {
+        buttonClearFilter.setDisable(!isFiltered);
+        if (!isFiltered) {
             handleClearFilter(null);
             return;
         }
 
         List<Section> filteredList = service.filter(filter);
-        filteredEntities = new PaginatedRepository<>(new SectionValidator(), 14);
+        filteredEntities.clear();
         try {
             filteredEntities.addAll(filteredList);
         } catch (ValidationException e) {

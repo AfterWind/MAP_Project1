@@ -35,6 +35,7 @@ public abstract class EntityController<T extends IIdentifiable<Integer>> {
 
     protected AbstractService<T> service;
     protected Predicate<T> filter = (e) -> true;
+    protected boolean isFiltered = false;
     protected PaginatedRepository<T, Integer> filteredEntities = null;
     public FancyController baseController;
 
@@ -51,19 +52,19 @@ public abstract class EntityController<T extends IIdentifiable<Integer>> {
     }
 
     protected void handlePageChange(int currentPage) {
-        if (filteredEntities == null) {
-            tableView.setItems(((PaginatedRepository) service.getRepo()).getPage(currentPage));
-        } else {
+        if (isFiltered) {
             tableView.setItems(filteredEntities.getPage(currentPage));
+        } else {
+            tableView.setItems(((PaginatedRepository) service.getRepo()).getPage(currentPage));
         }
     }
 
     protected void updateNumberOfPages() {
         int pages;
-        if (filteredEntities == null) {
-            pages = ((PaginatedRepository) service.getRepo()).getPages();
-        } else {
+        if (isFiltered) {
             pages = filteredEntities.getPages();
+        } else {
+            pages = ((PaginatedRepository) service.getRepo()).getPages();
         }
         pagination.setMaxPages(pages);
     }
@@ -76,7 +77,7 @@ public abstract class EntityController<T extends IIdentifiable<Integer>> {
 
         tableView.setDisable(!Permission.QUERY.check());
         buttonRefresh.setDisable(!Permission.QUERY.check());
-        buttonClearFilter.setDisable(!Permission.QUERY.check());
+//        buttonClearFilter.setDisable(!Permission.QUERY.check());
     }
 
     void generateStatusBarMessages(StatusBar statusBar) {
@@ -136,7 +137,7 @@ public abstract class EntityController<T extends IIdentifiable<Integer>> {
     }
 
     public void handleClearFilter(ActionEvent ev) {
-        filteredEntities = null;
+        isFiltered = false;
         updateNumberOfPages();
         showAll();
         clearFilterTextFields();

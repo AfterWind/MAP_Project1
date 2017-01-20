@@ -40,9 +40,9 @@ import javafx.util.Duration;
 
 public class FancyController {
 
-    private static final int candidatesPerPage = 13;
-    private static final int sectionsPerPage = 14;
-    private static final int optionsPerPage = 9;
+    public static final int candidatesPerPage = 13;
+    public static final int sectionsPerPage = 14;
+    public static final int optionsPerPage = 9;
 
     private CandidateService serviceCandidate;
             //= new CandidateService(new SQLiteCandidateRepository(database, new CandidateValidator(), 13));//new XMLRepository<>(new CandidateValidator(), new Candidate.XMLSerializer(), "res/candidates.xml"));
