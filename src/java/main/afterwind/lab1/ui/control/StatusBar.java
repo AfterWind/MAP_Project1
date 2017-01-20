@@ -12,7 +12,7 @@ public class StatusBar extends Label {
     public final Map<EventTarget, String> messages = new HashMap<>();
 
     public StatusBar() {
-        this.setTextFill(Color.RED);
+        this.setTextFill(Color.BLACK);
     }
 
     public void setMessage(EventTarget n) {
