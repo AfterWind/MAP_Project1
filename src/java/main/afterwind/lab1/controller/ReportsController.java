@@ -1,5 +1,6 @@
 package afterwind.lab1.controller;
 
+import afterwind.lab1.Utils;
 import afterwind.lab1.config.Config;
 import afterwind.lab1.entity.Section;
 import afterwind.lab1.permission.Permission;
@@ -23,7 +24,12 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 
+import java.io.File;
 import java.io.FileOutputStream;
+import java.time.Instant;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 
 public class ReportsController {
 
@@ -138,8 +144,10 @@ public class ReportsController {
 
     public void handleMenuExportPDF(ActionEvent ev) {
         try {
+            File file = new File(Config.reportsPath + "report_"+ ZonedDateTime.now().truncatedTo(ChronoUnit.SECONDS).format(DateTimeFormatter.ISO_LOCAL_DATE_TIME) +".pdf");
+
             Document doc = new Document();
-            PdfWriter.getInstance(doc, new FileOutputStream(Config.reportsPath + "report.pdf"));
+            PdfWriter.getInstance(doc, new FileOutputStream(file));
             doc.open();
             doc.addTitle("Report with top " + report.getSize() + " most occupied sections");
             Font fp = new Font(Font.FontFamily.TIMES_ROMAN, 20f, Font.ITALIC, BaseColor.DARK_GRAY);
@@ -152,6 +160,8 @@ public class ReportsController {
             doc.add(separator);
             doc.add(generatePDFTable());
             doc.close();
+
+            Utils.showInfoMessage("The report has been generated and was saved: \nreports/" + file.getName());
         } catch (Exception ex) {
             ex.printStackTrace();
         }
