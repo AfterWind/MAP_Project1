@@ -217,6 +217,7 @@ public class CandidateController extends EntityController<Candidate> {
 
         if (isFiltered && !filter.test(c)) {
             filteredEntities.remove(c);
+            updateNumberOfPages();
         }
     }
 
@@ -249,7 +250,7 @@ public class CandidateController extends EntityController<Candidate> {
         } catch (ValidationException e) {
             throw new RuntimeException(e);
         }
-        handlePageChange(0);
         updateNumberOfPages();
+        pagination.setCurrentPage(0);
     }
 }

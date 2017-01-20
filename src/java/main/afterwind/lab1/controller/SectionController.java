@@ -177,6 +177,7 @@ public class SectionController extends EntityController<Section> {
         }
         if (isFiltered && !filter.test(s)) {
             filteredEntities.remove(s);
+            updateNumberOfPages();
         }
     }
 
@@ -205,7 +206,7 @@ public class SectionController extends EntityController<Section> {
         } catch (ValidationException e) {
             throw new RuntimeException(e);
         }
-        handlePageChange(0);
+        pagination.setCurrentPage(0);
         updateNumberOfPages();
     }
 

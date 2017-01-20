@@ -23,11 +23,20 @@
                 <RadioMenuItem fx:id="menuViewOptions" toggleGroup="$toggleGroupViews" text="Options" onAction="#handleViewChange"/>
                 <RadioMenuItem fx:id="menuViewReports" toggleGroup="$toggleGroupViews" text="Reports" onAction="#handleViewChange"/>
             </Menu>
-            <Menu text="Animations">
-                <MenuItem text="Somewhat fade" onAction="#handleAnimationFade"/>
-                <MenuItem text="Move about" onAction="#handleAnimationMoveAbout"/>
-                <MenuItem text="Pop out" onAction="#handleAnimationPopOut"/>
-                <MenuItem text="Rotate" onAction="#handleAnimationRotate"/>
+            <Menu text="Time Travel">
+                <Menu text="No, wait">
+                    <Menu text="It's not what you think it is">
+                        <Menu text="Please don't">
+                            <Menu text="DON'T GO THERE">
+                                <Menu text="LAST CHANCE">
+                                    <Menu text="I WARNED YOU">
+                                        <MenuItem text="Rave party" onAction="#handleAnimationMoveAbout"/>
+                                    </Menu>
+                                </Menu>
+                            </Menu>
+                        </Menu>
+                    </Menu>
+                </Menu>
             </Menu>
         </MenuBar>
         <!--<SectionController fx:id="sectionsView" minHeight="400" minWidth="400"/>-->
@@ -39,6 +48,6 @@
             <ReportsView fx:id="reportsView" visible="true"/>
         </StackPane>
         <StatusBar minHeight="40" fx:id="statusBar"
-                   text="TEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEST"  onMouseExited="#handleMouseExited" onMouseEntered="#handleMouseEntered"/>
+                   text=""  onMouseExited="#handleMouseExited" onMouseEntered="#handleMouseEntered"/>
     </children>
 </VBox>

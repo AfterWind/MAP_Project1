@@ -231,6 +231,7 @@ public class OptionController extends EntityController<Option> {
         }
         if (isFiltered && !filter.test(o)) {
             filteredEntities.remove(o);
+            updateNumberOfPages();
         }
         buttonUpdate.setDisable(true);
     }
@@ -260,7 +261,7 @@ public class OptionController extends EntityController<Option> {
         } catch (ValidationException e) {
             throw new RuntimeException(e);
         }
-        handlePageChange(0);
+        pagination.setCurrentPage(0);
         updateNumberOfPages();
     }
 }

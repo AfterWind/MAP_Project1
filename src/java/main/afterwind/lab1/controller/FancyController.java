@@ -24,19 +24,29 @@ import afterwind.lab1.ui.control.StatusBar;
 import afterwind.lab1.validator.CandidateValidator;
 import afterwind.lab1.validator.OptionValidator;
 import afterwind.lab1.validator.SectionValidator;
+import com.sun.javafx.scene.control.skin.TableHeaderRow;
+import com.sun.javafx.scene.control.skin.TableViewSkin;
 import javafx.animation.*;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
-import javafx.scene.control.MenuBar;
-import javafx.scene.control.MenuItem;
-import javafx.scene.control.RadioMenuItem;
+import javafx.scene.Parent;
+import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.CubicCurveTo;
 import javafx.scene.shape.MoveTo;
 import javafx.scene.shape.Path;
 import javafx.util.Duration;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 public class FancyController {
 
@@ -182,62 +192,78 @@ public class FancyController {
     }
 
     public void handleAnimationMoveAbout(ActionEvent ev) {
-        Path p = new Path();
-        p.getElements().add(new MoveTo(20, 20));
-        p.getElements().add(new CubicCurveTo(380, 0, 380, 120, 300, 120));
-        p.getElements().add(new CubicCurveTo(0, 120, 0, 240, 380, 240));
+        FancyMain.stage.setTitle(FancyMain.stage.getTitle() + " (RAVE mode activated)");
+        Random r = new Random(System.currentTimeMillis());
 
-        PathTransition pt = new PathTransition(Duration.millis(2000), p, FancyMain.scene.getRoot());
-        pt.setOrientation(PathTransition.OrientationType.ORTHOGONAL_TO_TANGENT);
-        pt.setCycleCount(4);
-        pt.setAutoReverse(true);
-        pt.play();
-    }
+        List<Node> nodes = getAllNodes(FancyMain.scene.getRoot());
 
-    public void handleAnimationFade(ActionEvent ev) {
-        FadeTransition ft = new FadeTransition(Duration.millis(3000), FancyMain.scene.getRoot());
-        ft.setFromValue(1.0);
-        ft.setToValue(0.1);
-        ft.setCycleCount(4);
-        ft.setAutoReverse(true);
-        ft.play();
-    }
+        for (int i = 0; i < nodes.size(); i++) {
+            Path p = new Path();
+            p.getElements().add(new MoveTo(300, 100));
+            p.getElements().add(new CubicCurveTo(r.nextInt(300), 0, 100, 120, r.nextInt(500), r.nextInt(500)));
+            p.getElements().add(new CubicCurveTo(0, r.nextInt(250), 0, 240, r.nextInt(500), r.nextInt(500)));
 
-    public void handleAnimationPopOut(ActionEvent ev) {
-        Timeline t = new Timeline();
-        t.setCycleCount(4);
-//        t.setAutoReverse(true);
-        KeyValue kv1 = new KeyValue(FancyMain.stage.minHeightProperty(), 650);
-        KeyFrame kf1 = new KeyFrame(Duration.millis(1000), kv1);
-        KeyValue kv2 = new KeyValue(FancyMain.stage.minHeightProperty(), 400);
-        KeyFrame kf2 = new KeyFrame(Duration.ZERO, kv2);
-        KeyValue kv3 = new KeyValue(FancyMain.stage.maxHeightProperty(), 400);
-        KeyFrame kf3 = new KeyFrame(Duration.millis(1000), kv3);
-        KeyValue kv4 = new KeyValue(FancyMain.stage.maxHeightProperty(), 650);
-        KeyFrame kf4 = new KeyFrame(Duration.ZERO, kv4);
-        t.getKeyFrames().add(kf1);
-        t.getKeyFrames().add(kf2);
-        t.getKeyFrames().add(kf3);
-        t.getKeyFrames().add(kf4);
-        t.play();
+            Path p2 = new Path();
+            p2.getElements().add(new MoveTo(r.nextInt(300), 100));
+            p2.getElements().add(new MoveTo(500, 300));
 
-//        ScaleTransition st = new ScaleTransition(Duration.millis(2000), FancyMain.stage.hei);
-//        st.setAutoReverse(true);
-//        st.setCycleCount(Timeline.INDEFINITE);
-//        st.setFromY(1);
-//        st.setByY(3);
-//        st.play();
+            Path p3 = new Path();
+            p3.getElements().add(new MoveTo(300, r.nextInt(300)));
+            p3.getElements().add(new MoveTo(r.nextInt(500), 100));
 
-    }
+            Path p4 = new Path();
+            p4.getElements().add(new MoveTo(300, r.nextInt(300)));
+            p4.getElements().add(new MoveTo(500, r.nextInt(1000)));
 
-    public void handleAnimationRotate(ActionEvent ev) {
-        RotateTransition rt = new RotateTransition(Duration.millis(2000));
-        rt.setFromAngle(0);
-        rt.setToAngle(355);
-        rt.setCycleCount(1);
-//        rt.setAutoReverse(true);
-        rt.setNode(FancyMain.scene.getRoot());
-        rt.play();
+            Path p5 = new Path();
+            p5.getElements().add(new MoveTo(500, r.nextInt(300)));
+            p5.getElements().add(new MoveTo(r.nextInt(500), 100));
+
+            List<Path> paths = new ArrayList<>();
+            paths.add(p);
+            paths.add(p);
+            paths.add(p);
+            paths.add(p2);
+            paths.add(p3);
+            paths.add(p4);
+            paths.add(p5);
+
+            Node n = nodes.get(i);//nodes.get(r.nextInt(nodes.size()));
+            if (!(n instanceof TableView)) {
+                PathTransition pt = new PathTransition(Duration.millis(2000), paths.get(r.nextInt(paths.size())), n);
+                pt.setOrientation(PathTransition.OrientationType.ORTHOGONAL_TO_TANGENT);
+                pt.setCycleCount(Animation.INDEFINITE);
+                pt.setAutoReverse(true);
+                pt.play();
+            }
+
+            if (r.nextBoolean()) {
+                FadeTransition ft = new FadeTransition(Duration.millis(r.nextInt(2000)), n);
+                ft.setFromValue(1.0);
+                ft.setToValue(0.5);
+                ft.setCycleCount(Animation.INDEFINITE);
+                ft.setAutoReverse(true);
+                ft.play();
+            }
+            if (r.nextBoolean()) {
+                RotateTransition rt = new RotateTransition(Duration.millis(2000));
+                rt.setFromAngle(0);
+                rt.setToAngle(r.nextInt(340));
+                rt.setCycleCount(Animation.INDEFINITE);
+                rt.setAutoReverse(true);
+                rt.setNode(n);
+                rt.play();
+            }
+
+            if (r.nextBoolean() || n instanceof TableView) {
+                ScaleTransition st = new ScaleTransition(Duration.millis(300), n);
+                st.setByX(Math.min(n instanceof TableView ? 0.5 : r.nextDouble(), 3));
+                st.setByY(Math.min(n instanceof TableView ? 1 : r.nextDouble(), 2));
+                st.setAutoReverse(true);
+                st.setCycleCount(Animation.INDEFINITE);
+                st.play();
+            }
+        }
     }
 
     public void handleMouseEntered(MouseEvent ev) {
@@ -246,5 +272,39 @@ public class FancyController {
 
     public void handleMouseExited(MouseEvent ev) {
         statusBar.setText("");
+    }
+
+    public List<Node> getAllNodes(Parent root) {
+        List<Node> nodes = new ArrayList<>();
+        nodes.add(root);
+        boolean hadParents;
+        do {
+            hadParents = false;
+            int size = nodes.size();
+            for (int i = 0; i < size; i++) {
+                if (nodes.get(i) instanceof Parent && !(nodes.get(i) instanceof TableView)) {
+                    boolean added = false;
+                    for (Node n : ((Parent) nodes.get(i)).getChildrenUnmodifiable()) {
+                        if (n instanceof Button || n instanceof Slider || n instanceof ListView || n instanceof TableView
+                                || n instanceof VBox || n instanceof HBox || n instanceof Pane) {
+                            nodes.add(n);
+                            added = true;
+
+
+//                            if (!(n instanceof VBox || n instanceof HBox)) {
+//                                added = true;
+//                            }
+                        }
+                    }
+                    if (added) {
+                        hadParents = true;
+                        nodes.remove(i);
+                        i--;
+                        size--;
+                    }
+                }
+            }
+        } while (hadParents);
+        return nodes;
     }
 }
