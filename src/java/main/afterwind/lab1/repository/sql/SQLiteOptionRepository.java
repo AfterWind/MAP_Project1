@@ -1,5 +1,6 @@
 package afterwind.lab1.repository.sql;
 
+import afterwind.lab1.Utils;
 import afterwind.lab1.database.SQLiteDatabase;
 import afterwind.lab1.entity.Candidate;
 import afterwind.lab1.entity.Option;
@@ -22,12 +23,17 @@ public class SQLiteOptionRepository extends SQLiteRepository<Option>{
         this.sectionRepo = sectionRepo;
         this.candidateRepo = candidateRepo;
 
+        initRemoveStatement();
         statementAdd = database.getStatement("INSERT INTO Options VALUES(?, ?, ?)");
-        statementRemove = database.getStatement("DELETE FROM Options WHERE ID = ?");
         statementUpdate = database.getStatement("UPDATE Options SET CandidateID = ?, SectionID = ? WHERE ID = ?");
         statementSelectAll = database.getStatement("SELECT * FROM Options");
 
         load();
+    }
+
+    @Override
+    protected void initRemoveStatement() {
+        statementRemove = database.getStatement("DELETE FROM Options WHERE ID = ?");
     }
 
     private void initTable() {
@@ -74,6 +80,7 @@ public class SQLiteOptionRepository extends SQLiteRepository<Option>{
             statementAdd.execute();
             super.add(o);
         } catch (SQLException e) {
+            Utils.showErrorMessage("An unexpected error occurred!");
             throw new RuntimeException(e);
         }
     }
@@ -87,6 +94,7 @@ public class SQLiteOptionRepository extends SQLiteRepository<Option>{
             statementUpdate.execute();
             super.update(key, data);
         } catch (SQLException e) {
+            Utils.showErrorMessage("An unexpected error occurred!");
             throw new RuntimeException(e);
         }
     }

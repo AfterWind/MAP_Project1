@@ -1,5 +1,6 @@
 package afterwind.lab1.repository.sql;
 
+import afterwind.lab1.Utils;
 import afterwind.lab1.database.SQLiteDatabase;
 import afterwind.lab1.entity.Candidate;
 import afterwind.lab1.exception.ValidationException;
@@ -12,11 +13,16 @@ public class SQLiteCandidateRepository extends SQLiteRepository<Candidate> {
     public SQLiteCandidateRepository(SQLiteDatabase database, IValidator<Candidate> validator, int entitiesPerPage) {
         super(database, validator, entitiesPerPage);
         initTable();
+        initRemoveStatement();
         statementAdd = database.getStatement("INSERT INTO Candidates VALUES(?, ?, ?, ?)");
-        statementRemove = database.getStatement("DELETE FROM Candidates WHERE ID = ?");
         statementUpdate = database.getStatement("UPDATE Candidates SET Name = ?, Address = ?, Telephone = ? WHERE ID = ?");
         statementSelectAll = database.getStatement("SELECT * FROM Candidates");
         load();
+    }
+
+    @Override
+    protected void initRemoveStatement() {
+        statementRemove = database.getStatement("DELETE FROM Candidates WHERE ID = ?");
     }
 
     private void initTable() {
@@ -58,6 +64,7 @@ public class SQLiteCandidateRepository extends SQLiteRepository<Candidate> {
             statementAdd.execute();
             super.add(c);
         } catch (SQLException e) {
+            Utils.showErrorMessage("An unexpected error occurred!");
             throw new RuntimeException(e);
         }
     }
@@ -73,6 +80,7 @@ public class SQLiteCandidateRepository extends SQLiteRepository<Candidate> {
             statementUpdate.execute();
             super.update(key, data);
         } catch (SQLException e) {
+            Utils.showErrorMessage("An unexpected error occurred!");
             throw new RuntimeException(e);
         }
     }

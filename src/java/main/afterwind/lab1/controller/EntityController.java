@@ -8,7 +8,6 @@ import afterwind.lab1.ui.control.BetterPagination;
 import afterwind.lab1.ui.control.StatusBar;
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ObservableValue;
-import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -18,7 +17,6 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 
-import java.util.List;
 import java.util.function.Predicate;
 
 
@@ -36,7 +34,7 @@ public abstract class EntityController<T extends IIdentifiable<Integer>> {
     protected AbstractService<T> service;
     protected Predicate<T> filter = (e) -> true;
     protected boolean isFiltered = false;
-    protected PaginatedRepository<T, Integer> filteredEntities = null;
+    protected PaginatedRepository<T, Integer> filteredEntities;
     public FancyController baseController;
 
     @FXML
@@ -55,7 +53,7 @@ public abstract class EntityController<T extends IIdentifiable<Integer>> {
         if (isFiltered) {
             tableView.setItems(filteredEntities.getPage(currentPage));
         } else {
-            tableView.setItems(((PaginatedRepository) service.getRepo()).getPage(currentPage));
+            tableView.setItems(((PaginatedRepository<T, Integer>) service.getRepo()).getPage(currentPage));
         }
     }
 
@@ -88,20 +86,19 @@ public abstract class EntityController<T extends IIdentifiable<Integer>> {
         statusBar.addMessage(buttonRefresh, "Rebinds the data to the table view");
         statusBar.addMessage(buttonUpdate, "Updates the selected entity with the data in the fields above");
         statusBar.addMessage(pagination.buttonNext, "Advances to the next page");
-        pagination.buttonNext.setOnMouseEntered(this::handleMouseEntered);
-        pagination.buttonNext.setOnMouseExited(this::handleMouseExited);
         statusBar.addMessage(pagination.buttonPrevious, "Goes back to the previous page");
-        pagination.buttonPrevious.setOnMouseEntered(this::handleMouseEntered);
-        pagination.buttonPrevious.setOnMouseExited(this::handleMouseExited);
         statusBar.addMessage(tableView, "Shows all the entities from the repository and is updated real time");
 
+        pagination.buttonNext.setOnMouseEntered(this::handleMouseEntered);
+        pagination.buttonNext.setOnMouseExited(this::handleMouseExited);
+        pagination.buttonPrevious.setOnMouseEntered(this::handleMouseEntered);
+        pagination.buttonPrevious.setOnMouseExited(this::handleMouseExited);
     }
 
     /**
      * Afiseaza toti candidatii
      */
     public void showAll() {
-//        tableView.setItems(FXCollections.observableArrayList(service.filter(filter)));
         handlePageChange(0);
     }
 

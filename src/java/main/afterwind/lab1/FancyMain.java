@@ -28,11 +28,6 @@ public class FancyMain extends Application {
 
         FancyMain.stage = stage;
         FXMLLoader loader = new FXMLLoader();
-        user = new User(5, "Blah", "asdf");
-        user.permissions.add(Permission.QUERY);
-        user.permissions.add(Permission.MANAGE);
-        user.permissions.add(Permission.MODIFY);
-
         loader.setLocation(new File("src/java/main/afterwind/lab1/ui/fxml/LoginView.fxml").toURL());
 //        loader.setLocation(new File("src/java/main/afterwind/lab1/ui/fxml/FancyView.fxml").toURL());
         scene = new Scene(loader.load(), 400.0D, 200.0D, Color.DARKBLUE);

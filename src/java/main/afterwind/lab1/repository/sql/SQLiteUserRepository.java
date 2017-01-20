@@ -1,5 +1,6 @@
 package afterwind.lab1.repository.sql;
 
+import afterwind.lab1.Utils;
 import afterwind.lab1.database.SQLiteDatabase;
 import afterwind.lab1.exception.ValidationException;
 import afterwind.lab1.permission.Permission;
@@ -19,14 +20,19 @@ public class SQLiteUserRepository extends SQLiteRepository<User> {
     public SQLiteUserRepository(SQLiteDatabase database, IValidator<User> validator, int entitiesPerPage) {
         super(database, validator, entitiesPerPage);
         init();
+        initRemoveStatement();
         statementAdd = database.getStatement("INSERT INTO Users(Name, Password) VALUES(?, ?)");
-        statementRemove = database.getStatement("DELETE FROM Users WHERE ID=?");
         statementUpdate = database.getStatement("UPDATE Users SET Name=?, Password=? WHERE ID=?");
         statementSelectAll = database.getStatement("SELECT * FROM Users");
         statementPermissionAdd = database.getStatement("INSERT INTO Permissions VALUES(?, ?)");
         statementPermissionRemove = database.getStatement("DELETE FROM Permissions WHERE UserID=? AND Permission=?");
         statementPermissionSelectAll = database.getStatement("SELECT * FROM Permissions WHERE UserID=?");
         load();
+    }
+
+    @Override
+    protected void initRemoveStatement() {
+        statementRemove = database.getStatement("DELETE FROM Users WHERE ID=?");
     }
 
     private void load() {
@@ -80,6 +86,7 @@ public class SQLiteUserRepository extends SQLiteRepository<User> {
             }
             super.add(e);
         } catch (SQLException e1) {
+            Utils.showErrorMessage("An unexpected error occurred!");
             throw new RuntimeException(e1);
         }
     }
@@ -93,6 +100,7 @@ public class SQLiteUserRepository extends SQLiteRepository<User> {
             statementUpdate.execute();
             super.update(integer, data);
         } catch (SQLException e) {
+            Utils.showErrorMessage("An unexpected error occurred!");
             throw new RuntimeException(e);
         }
     }
@@ -103,6 +111,7 @@ public class SQLiteUserRepository extends SQLiteRepository<User> {
             statementPermissionAdd.setInt(2, permission.id);
             statementPermissionAdd.execute();
         } catch (SQLException e) {
+            Utils.showErrorMessage("An unexpected error occurred!");
             throw new RuntimeException(e);
         }
     }
@@ -113,6 +122,7 @@ public class SQLiteUserRepository extends SQLiteRepository<User> {
             statementPermissionRemove.setInt(2, permission.id);
             statementPermissionRemove.execute();
         } catch (SQLException e) {
+            Utils.showErrorMessage("An unexpected error occurred!");
             throw new RuntimeException(e);
         }
     }

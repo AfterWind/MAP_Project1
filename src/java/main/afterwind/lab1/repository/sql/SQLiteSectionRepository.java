@@ -1,5 +1,6 @@
 package afterwind.lab1.repository.sql;
 
+import afterwind.lab1.Utils;
 import afterwind.lab1.database.SQLiteDatabase;
 import afterwind.lab1.entity.Section;
 import afterwind.lab1.exception.ValidationException;
@@ -11,18 +12,21 @@ import java.sql.SQLException;
 
 public class SQLiteSectionRepository extends SQLiteRepository<Section> {
 
-    private PreparedStatement statementAdd, statementRemove, statementUpdate;
-
     public SQLiteSectionRepository(SQLiteDatabase database, IValidator<Section> validator, int entitiesPerPage) {
         super(database, validator, entitiesPerPage);
         this.database = database;
         initTable();
+        initRemoveStatement();
         statementAdd = database.getStatement("INSERT INTO Sections VALUES(?, ?, ?)");
-        statementRemove = database.getStatement("DELETE FROM Sections WHERE ID = ?");
         statementUpdate = database.getStatement("UPDATE Sections SET Name = ?, Seats = ? WHERE ID = ?");
         statementSelectAll = database.getStatement("SELECT * FROM Sections");
 
         load();
+    }
+
+    @Override
+    protected void initRemoveStatement() {
+        statementRemove = database.getStatement("DELETE FROM Sections WHERE ID = ?");
     }
 
     private void initTable() {
@@ -62,6 +66,7 @@ public class SQLiteSectionRepository extends SQLiteRepository<Section> {
             statementAdd.execute();
             super.add(s);
         } catch (SQLException e) {
+            Utils.showErrorMessage("An unexpected error occurred!");
             throw new RuntimeException(e);
         }
     }
@@ -75,6 +80,7 @@ public class SQLiteSectionRepository extends SQLiteRepository<Section> {
             statementUpdate.execute();
             super.update(key, data);
         } catch (SQLException e) {
+            Utils.showErrorMessage("An unexpected error occurred!");
             throw new RuntimeException(e);
         }
     }

@@ -24,7 +24,9 @@ import java.util.List;
 public class CandidateController extends EntityController<Candidate> {
 
     @FXML
-    public TableColumn columnID, columnName, columnTel, columnAddress;
+    public TableColumn<Candidate, Integer> columnID;
+    @FXML
+    public TableColumn<Candidate, String> columnName, columnTel, columnAddress;
     @FXML
     public TextField fieldName, fieldAddress, fieldTelephone;
     @FXML
@@ -181,7 +183,7 @@ public class CandidateController extends EntityController<Candidate> {
             return;
         }
         service.remove(c);
-        tableView.getItems().remove(c);
+//        tableView.getItems().remove(c);
         clearModificationTextFields();
         updateNumberOfPages();
     }

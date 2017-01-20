@@ -72,6 +72,7 @@ public class FancyController {
         CandidateValidator validatorCandidate = new CandidateValidator();
         SectionValidator validatorSection = new SectionValidator();
         OptionValidator validatorOption = new OptionValidator();
+        FancyMain.stage.setOnCloseRequest((c) -> handleMenuExit(null));
         switch (Config.datasourceType) {
             case "fileText":
                 serviceCandidate = new CandidateService(new FileRepository<>(
@@ -139,7 +140,6 @@ public class FancyController {
                         optionsPerPage));
                 break;
         }
-
     }
 
     @FXML
@@ -153,11 +153,6 @@ public class FancyController {
         reportsView.controller.setServices(serviceOption, serviceCandidate, serviceSection);
         reportsView.controller.baseController = this;
         generateStatusBarMessages(statusBar);
-//        reportsWindow = new Stage();
-//        reportsWindow.setTitle("Reports");
-//        ReportsView reportsView = new ReportsView();
-
-//        reportsWindow.setScene(new Scene(reportsView, 800, 400));
 
         Utils.moveRight(optionsView, Duration.millis(1000));
         Utils.moveRight(sectionsView, Duration.millis(1000));
@@ -181,7 +176,6 @@ public class FancyController {
 
     @FXML
     public void handleViewChange(ActionEvent ev) {
-//        resetViews();
         if (ev.getSource() instanceof RadioMenuItem) {
             FancyMain.stage.setTitle(((RadioMenuItem) ev.getSource()).getText() + " Management");
             if (((RadioMenuItem) ev.getSource()).getText().equals("Candidates")) {
@@ -201,7 +195,6 @@ public class FancyController {
     }
 
     public void handleMenuExit(ActionEvent ev) {
-//        ((Stage) candidateButton.getScene().getWindow()).close();
         Platform.exit();
     }
 

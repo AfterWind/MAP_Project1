@@ -1,5 +1,6 @@
 package afterwind.lab1.repository.sql;
 
+import afterwind.lab1.Utils;
 import afterwind.lab1.database.SQLiteDatabase;
 import afterwind.lab1.entity.Candidate;
 import afterwind.lab1.entity.IIdentifiable;
@@ -28,14 +29,22 @@ public abstract class SQLiteRepository<T extends IIdentifiable<Integer>> extends
         this.database = database;
     }
 
+    protected abstract void initRemoveStatement();
+
     @Override
     public void remove(T e) {
         try {
             statementRemove.setInt(1, e.getId());
-            statementRemove.execute();
+            statementRemove.executeUpdate();
             super.remove(e);
         } catch (SQLException ex) {
-            throw new RuntimeException(ex);
+            if (ex.getMessage().contains("foreign key constraint failed")) {
+                initRemoveStatement();
+                Utils.showErrorMessage("You cannot delete this entity because it is linked\nto other entities in this program!");
+            } else {
+                Utils.showErrorMessage("An unexpected error occurred!");
+                throw new RuntimeException(ex);
+            }
         }
     }
 }
