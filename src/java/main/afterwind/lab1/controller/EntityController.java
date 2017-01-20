@@ -86,7 +86,14 @@ public abstract class EntityController<T extends IIdentifiable<Integer>> {
         statusBar.addMessage(buttonClearFilter, "Clears the filter text fields");
         statusBar.addMessage(buttonRefresh, "Rebinds the data to the table view");
         statusBar.addMessage(buttonUpdate, "Updates the selected entity with the data in the fields above");
+        statusBar.addMessage(pagination.buttonNext, "Advances to the next page");
+        pagination.buttonNext.setOnMouseEntered(this::handleMouseEntered);
+        pagination.buttonNext.setOnMouseExited(this::handleMouseExited);
+        statusBar.addMessage(pagination.buttonPrevious, "Goes back to the previous page");
+        pagination.buttonPrevious.setOnMouseEntered(this::handleMouseEntered);
+        pagination.buttonPrevious.setOnMouseExited(this::handleMouseExited);
         statusBar.addMessage(tableView, "Shows all the entities from the repository and is updated real time");
+
     }
 
     /**
