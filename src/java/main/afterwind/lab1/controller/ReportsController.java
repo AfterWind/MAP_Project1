@@ -167,10 +167,6 @@ public class ReportsController {
         }
     }
 
-    public void handleMenuGenerate(ActionEvent ev) {
-
-    }
-
     public void handleSliderDrag(Event ev) {
         int top = (int) Math.floor(sliderTopSections.getValue());
         labelSliderValue.setText("   " + top);

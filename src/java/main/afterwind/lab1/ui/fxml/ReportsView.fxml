@@ -9,7 +9,6 @@
         <MenuBar>
             <Menu text="Options">
                 <MenuItem text="Export as PDF" onAction="#handleMenuExportPDF"/>
-                <MenuItem text="Generate..." onAction="#handleMenuGenerate"/>
             </Menu>
         </MenuBar>
         <VBox alignment="CENTER" spacing="10">
