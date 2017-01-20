@@ -8,18 +8,22 @@ import afterwind.lab1.exception.ValidationException;
 import afterwind.lab1.permission.Permission;
 import afterwind.lab1.permission.User;
 import afterwind.lab1.repository.sql.SQLiteUserRepository;
+import afterwind.lab1.ui.control.StatusBar;
 import afterwind.lab1.validator.UserValidator;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
@@ -27,8 +31,15 @@ import java.io.File;
 
 public class LoginController {
 
-    private SQLiteUserRepository repo;
     private Node current;
+    private SQLiteUserRepository repo;
+
+    @FXML
+    public Button buttonLogin;
+    @FXML
+    public Button buttonRegister;
+    @FXML
+    public Text statusBar;
     @FXML
     public HBox loginPanel;
     @FXML
@@ -73,6 +84,19 @@ public class LoginController {
             Utils.showErrorMessage("Parola incorecta!");
             return;
         }
+
+        fieldPassword.setText("");
+        fieldUsername.setText("");
+
+        fieldPassword.setDisable(true);
+        fieldUsername.setDisable(true);
+        buttonLogin.setDisable(true);
+        buttonRegister.setDisable(true);
+
+        statusBar.setFill(Color.DARKBLUE);
+        statusBar.setFont(new Font("Arial", 24));
+        statusBar.setText("You are now logged in!");
+
         launchApp(user);
     }
 

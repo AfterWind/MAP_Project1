@@ -41,6 +41,7 @@ public class SectionController extends EntityController<Section> {
     public void setService(SectionService service) {
         this.service = service;
         this.filteredEntities = new PaginatedRepository<>(new SectionValidator(), FancyController.sectionsPerPage);
+        this.filteredEntities.sortBy((t1, t2) -> t1.getId() - t2.getId());
         pagination.init(this::handlePageChange, 0);
         updateNumberOfPages();
         if (Permission.QUERY.check()) {

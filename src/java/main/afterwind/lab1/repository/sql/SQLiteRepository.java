@@ -27,6 +27,7 @@ public abstract class SQLiteRepository<T extends IIdentifiable<Integer>> extends
     public SQLiteRepository(SQLiteDatabase database, IValidator<T> validator, int entitiesPerPage) {
         super(validator, entitiesPerPage);
         this.database = database;
+        this.sortBy((t1, t2) -> t1.getId() - t2.getId());
     }
 
     protected abstract void initRemoveStatement();

@@ -66,6 +66,7 @@ public class OptionController extends EntityController<Option> {
         this.candidateService = candidateService;
         this.sectionService = sectionService;
         this.filteredEntities = new PaginatedRepository<>(new OptionValidator(), FancyController.optionsPerPage);
+        this.filteredEntities.sortBy((t1, t2) -> t1.getId() - t2.getId());
         pagination.init(this::handlePageChange, 0);
         updateNumberOfPages();
         if (Permission.QUERY.check()) {

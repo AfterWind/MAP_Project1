@@ -75,6 +75,7 @@ public class CandidateController extends EntityController<Candidate> {
     public void setService(CandidateService service) {
         this.service = service;
         this.filteredEntities = new PaginatedRepository<>(new CandidateValidator(), FancyController.candidatesPerPage);
+        this.filteredEntities.sortBy((t1, t2) -> t1.getId() - t2.getId());
         pagination.init(this::handlePageChange, 0);
         updateNumberOfPages();
         if (Permission.QUERY.check()) {
